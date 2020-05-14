@@ -1,0 +1,490 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+* {
+    font-family: 'Quicksand', sans-serif;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #111;
+    color: #eee;
+    text-align: center;
+    overflow: hidden;
+}
+
+.select {
+    user-select: all;
+    cursor: pointer;
+}
+
+.wrapper {
+    width: 80%;
+    max-width: 1024px;
+    margin: auto;
+}
+
+ul {
+    list-style-type: none;
+}
+
+/* links */
+.show {
+    color: #2E86C1;
+    font-weight: bold;
+    border-bottom: solid 1px rgba(0, 0, 0, 0);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.show:hover {
+    border-bottom: solid 1px #2E86C1
+}
+
+a {
+    text-decoration: none;
+    color: #003
+}
+
+/* Header & menu */
+
+header {
+    background-color: rgba(24, 24, 24, .7);
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+}
+
+header a {
+    color: white;
+}
+
+header nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.nav-brand {
+    position: absolute;
+    left: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.nav-brand img {
+    margin-right: 5px;
+}
+
+nav ul {
+    margin: 0;
+    padding: 5px;
+}
+
+li.menu-entry,
+form>button {
+    display: inline-block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    border-radius: 3px 3px 0 0;
+    box-shadow: inset 0 -1px 0 #FFC107;
+    cursor: pointer;
+    transition: .25s;
+}
+
+li.menu-entry:hover,
+li.selected,
+form>button:hover {
+    box-shadow: inset 0 -60px 0 #FFC107, 0 0 2px black;
+    border-radius: 3px;
+}
+
+#menu-pages {
+    border-left: 1px solid #FFC107;
+}
+
+#menu-toggler {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 32px;
+    z-index: 30;
+    transition: .5s;
+}
+
+#menu-toggler div {
+    width: 30px;
+    height: 3px;
+    background-color: yellow;
+    border-radius: 1.5px;
+    margin: 5px 0;
+}
+
+.flip {
+    transform: rotateX(180deg);
+}
+
+/* Footer */
+
+footer {
+    background-color: rgb(24, 24, 24);
+    box-shadow: 0 0 5px black;
+    padding: 20px;
+}
+
+footer a {
+    color: rgb(0, 157, 255);
+}
+
+footer a:visited {
+    color: rgb(0, 157, 255);
+}
+
+/* Copyleft */
+
+.copyleft {
+    display: inline-block;
+    transform: rotate(180deg);
+}
+
+.copyleft::after {
+    content: "\00a9";
+}
+
+/* Content */
+
+#logo {
+    display: block;
+    background: url('/assets/logo_512.png');
+    background-size: cover;
+    margin: auto;
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+}
+
+h2 {
+    font-weight: normal;
+}
+
+small {
+    font-weight: lighter;
+}
+
+.page {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    z-index: 0;
+    transition: 1s;
+}
+
+.page>div {
+    overflow-y: auto;
+}
+
+.page>div>*:first-child {
+    margin-top: 60px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #499bea 0%, #207ce5 100%);
+}
+
+::-webkit-scrollbar-track {
+    background-color: #333;
+}
+
+.page-up {
+    transform: translateY(-100vh) scale(.8);
+    opacity: 0;
+}
+
+.page-down {
+    transform: translateY(100vh) scale(.8);
+    opacity: 0;
+}
+
+.page-left {
+    transform: translateX(-100vw) scale(.8);
+}
+
+.page-right {
+    transform: translateX(100vw) scale(.8);
+}
+
+.page-current {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 1;
+}
+
+.block {
+    background: #222;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+/* Projects section */
+
+.projects {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: space-evenly;
+}
+
+.projects ul {
+    background-color: #FDFEFE;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 24px;
+    color: black;
+    width: 256px;
+    min-height: 256px;
+    padding: 10px;
+    margin: 20px;
+    box-shadow: 0 5px #D0D3D4;
+    transition: 1s;
+}
+
+.discover {
+    transform: scale(0);
+}
+
+/* buttons */
+
+.button {
+    display: block;
+    margin: 10px;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: inset 0 -1px 0 var(--box-shadow-color);
+    border-radius: 3px 3px 0 0;
+    background-color: var(--background-color);
+    color: black;
+    transition: .3s;
+}
+
+.button:hover {
+    border-radius: 3px;
+    box-shadow: inset 0 -64px 0 var(--box-shadow-color);
+}
+
+.green {
+    --background-color: rgba(39, 174, 95, 0.5);
+    --box-shadow-color: #1E8449;
+}
+
+.yellow {
+    --background-color: rgba(212, 172, 13, 0.5);
+    --box-shadow-color: #B7950B;
+}
+
+.red {
+    --background-color: rgba(169, 49, 38, 0.5);
+    --box-shadow-color: #7B241C;
+}
+
+.blue {
+    --background-color: rgba(135, 78, 160, 0.5);
+    --box-shadow-color: #633974;
+}
+
+.purple {
+    --background-color: rgba(109, 52, 131, 0.5);
+    --box-shadow-color: #5B2C6F;
+}
+
+.white {
+    --background-color: rgba(238, 238, 238, 0.5);
+    --box-shadow-color: #DDDDDD;
+}
+
+.orange {
+    --background-color: rgba(214, 138, 16, 0.5);
+    --box-shadow-color: #b9770e;
+}
+
+/* Table */
+
+table {
+    border: none;
+    width: 100%;
+}
+
+td,
+th {
+    height: 40px;
+}
+
+th {
+    border-bottom: solid 1px white;
+}
+
+/* Scroll arrow
+* https://codepen.io/matthewhirsch/pen/qOxmoz
+*/
+.scroll-down {
+    position: absolute;
+    left: 50%;
+    bottom: 32px;
+    transform: translate(-50%, 0%);
+}
+
+.scroll-arrow {
+    display: block;
+    margin-left: calc(50% - 13px / 2);
+    margin-bottom: 16px;
+    transform: rotate(45deg);
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+    width: 13px;
+    height: 13px;
+    animation: fade_move_down 4s ease-in-out infinite;
+}
+
+
+/* Animated scroll arrow animation */
+@keyframes fade_move_down {
+    0% {
+        transform: translate(0, -10px) rotate(45deg);
+    }
+
+    50% {
+        transform: translate(0, 10px) rotate(45deg);
+    }
+
+    100% {
+        transform: translate(0, -10px) rotate(45deg);
+    }
+}
+
+/* Forms */
+form>input {
+    background-color: #eee;
+    border-radius: 3px;
+    border: none;
+    height: 32px;
+    padding: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+form>textarea {
+    background-color: #eee;
+    border-radius: 3px;
+    border: none;
+    padding: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+form>button {
+    background: transparent;
+    border: none;
+    /* width: 100%; */
+    height: 32px;
+    line-height: 0;
+    margin: 0 auto 5px auto;
+}
+
+/*
+* For weird people blocking scripts
+*     (I'm jocking)
+*/
+.noscript {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Flex boxes */
+
+.flex {
+    display: flex;
+}
+
+.flex-row {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+/* Tooltip https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltip-text {
+    transform: scale(0);
+    transform-origin: bottom center;
+    opacity: 0;
+
+    transition: .3s;
+
+    width: 100px;
+
+    background-color: white;
+    color: black;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .5);
+
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    font-size: 12px;
+
+    position: absolute;
+
+    bottom: 100%;
+    left: 50%;
+    margin-left: -50px
+        /* use half of the width to center the tooltip */
+}
+
+.tooltip .tooltip-text::after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
+
+.toggle-tooltip:hover>.tooltip-text {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.toggle-tooltip:active>.tooltip-text {
+    transform: scale(.8);
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+    <%- include('includes/head'); %>
+
+    <body>
+        <%- include('includes/header'); %>
+
+        <main>
+            <%- include(`pages/${locals.page}`); %>
+        </main>
+
+        <span class="noscript">
+            <noscript>This website requires JavaScript to work properly, please check your browser's settings and enable it.</noscript>
+        </span>
+
+        <div class="stars">
+            <div class="stars1"></div>
+            <div class="stars2"></div>
+            <div class="stars3"></div>
+        </div>
+
+        <script src="/scripts/util.min.js"></script>
+        <script src="/scripts/stars.min.js"></script>
+        <script src="/scripts/main.min.js"></script>
+    </body>
+
+</html>

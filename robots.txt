@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /cours/
+Disallow: /scripts/
+Disallow: /assets/
+Disallow: /styles/
+
+User-agent: *
+Allow: /
+
+Sitemap: https://quozul.dev/sitemap.xml

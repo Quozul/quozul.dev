@@ -1,0 +1,16 @@
+{
+    "name": "quozul.dev",
+    "version": "1.0.0",
+    "description": "Quozul's website",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Quozul",
+    "license": "ISC",
+    "dependencies": {
+        "easyxml": "^2.0.1",
+        "ejs": "^3.1.2",
+        "express": "^4.17.1"
+    }
+}

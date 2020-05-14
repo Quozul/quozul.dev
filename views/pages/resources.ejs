@@ -1,0 +1,72 @@
+<% function fileSize(size) {
+    units = ['B', 'kB', 'MB', 'GB', 'TB'];
+    unit = 0;
+
+    while (size > 1024) {
+        size /= 1024;
+        unit++;
+    }
+
+    return Math.round(size, 2) + ' ' + units[unit];
+}
+
+function recursive_dir_scan(directory) {
+    let files = [];
+    
+    fs.readdirSync(directory).forEach(file => {
+        const path = directory + '/' + file;
+        const stats = fs.statSync(path);
+        if (stats.isDirectory())
+            files = files.concat(recursive_dir_scan(path));
+        else
+            files.push({path: directory, name: file, time: new Date(stats.mtime).getTime(), size: fileSize(stats.size)});
+    });
+
+    return files;
+} %>
+
+<section id="sec1" class="page page-current" name="Resources">
+    <div>
+        <h1>Resources</h1>
+        <div class="wrapper block">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Modified date</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        const path = '../downloads';
+                        let latest_path = '';
+
+                        let files = recursive_dir_scan(path);
+
+                        files.sort(function(a, b) {
+                            return a['path'].localeCompare(b['path']);
+                        });
+                        
+                        files.forEach(file => {
+                            const p = file['path'].replace(path, '');
+                            if (p != latest_path) {
+                                let indent = '';
+                                const c = p.match(new RegExp('/', 'g'));
+                                for (let i = 0; i < c.length; i++) indent += '→ ' ;
+                                %>
+                    <tr>
+                        <th><%= indent + p %></th>
+                    </tr>
+                    <% latest_path = p; } %>
+                    <tr>
+                        <td><a class="show" href="/download<%= p + '/' + file['name'] %>"><%= file['name'] %></a></td>
+                        <td class="date"><%= file['time']; %></td>
+                        <td><%= file['size']; %></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
