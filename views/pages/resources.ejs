@@ -19,7 +19,7 @@ function recursive_dir_scan(directory) {
         if (stats.isDirectory())
             files = files.concat(recursive_dir_scan(path));
         else
-            files.push({path: directory, name: file, time: new Date(stats.mtime).getTime(), size: fileSize(stats.size)});
+            files.push({path: directory, name: file, time: new Date(stats.mtime).getTime(), size: prettyBytes(stats.size)});
     });
 
     return files;
@@ -53,10 +53,11 @@ function recursive_dir_scan(directory) {
                             if (p != latest_path) {
                                 let indent = '';
                                 const c = p.match(new RegExp('/', 'g'));
-                                for (let i = 0; i < c.length; i++) indent += '→ ' ;
+                                for (let i = 0; i < c.length; i++) indent += '→ ';
                                 %>
                     <tr>
-                        <th><%= indent + p %></th>
+                        <th><%= indent + p; %></th>
+                        <th colspan="2"><a class="show" href="/folder<%= p; %>">Download folder</a></th>
                     </tr>
                     <% latest_path = p; } %>
                     <tr>
