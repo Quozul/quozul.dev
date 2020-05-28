@@ -5,10 +5,14 @@
 
     <body>
         <%- include('includes/header'); %>
-        <script src="/scripts/util.min.js"></script>
 
         <main>
-            <%- include(`pages/${locals.page}`); %>
+            <section id="sec1" class="page page-current" name="404">
+                <div class="wrapper block">
+                    <h1>404</h1>
+                    <p>The resource you have requested is unavailable or doesn't exists.</p>
+                </div>
+            </section>
         </main>
 
         <span class="noscript">
@@ -21,6 +25,7 @@
             <div class="stars3"></div>
         </div>
 
+        <script src="/scripts/util.min.js"></script>
         <script src="/scripts/stars.min.js"></script>
         <script src="/scripts/main.min.js"></script>
     </body>

@@ -136,8 +136,7 @@ form>button:hover {
 /* Footer */
 
 footer {
-    background-color: rgb(24, 24, 24);
-    box-shadow: 0 0 5px black;
+    background-color: rgba(24, 24, 24, .7);
     padding: 20px;
 }
 
