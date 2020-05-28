@@ -45,7 +45,7 @@ function scroll(dir) {
     if (dir) {
         if (Math.abs(scroll - cur.firstElementChild.scrollHeight) > 1) return;
         const next = cur.nextElementSibling;
-        if (next == undefined) return;
+        if (next == undefined || next.id == '') return;
 
         next.classList.add('page-current');
         next.classList.remove('page-down');
@@ -54,7 +54,7 @@ function scroll(dir) {
     } else { // scroll up
         if (cur.firstElementChild.scrollTop != 0) return;
         const prev = cur.previousElementSibling;
-        if (prev == undefined) return;
+        if (prev == undefined || prev.id == '') return;
 
         prev.classList.add('page-current');
         cur.classList.add('page-down');

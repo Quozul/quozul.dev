@@ -64,118 +64,48 @@
 <!-- noAjax -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
-    request('/statistics/countries').then(res => {
+    function chart(id, res, x) {
         let labels = [], data = [];
-        JSON.parse(res.response).forEach(c => {
-            labels.push(c.country != null ? c.country : 'Unknown');
+        JSON.parse(res).forEach(c => {
+            labels.push(c.data != null ? c.data : 'Unknown');
             data.push(c.count);
         });
 
-        const ctx = document.getElementById('countries').getContext('2d');
-        const myChart = new Chart(ctx, {
+        new Chart(document.getElementById(id).getContext('2d'), {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Visits per country',
+                    label: 'Visits per ' + id,
                     data: data,
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
                 }]
+            },
+            options: {
+                scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
             }
         });
+    }
+
+    request('/statistics/countries').then(res => {
+        chart('countries', res.response);
     });
 
     request('/statistics/resources').then(res => {
-        let labels = [], data = [];
-        JSON.parse(res.response).forEach(c => {
-            labels.push(c.page);
-            data.push(c.count);
-        });
-
-        const ctx = document.getElementById('resources').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Visits per page',
-                    data: data,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            }
-        });
+        chart('resources', res.response);
     });
 
     request('/statistics/hours').then(res => {
-        let labels = [], data = [];
-        JSON.parse(res.response).forEach(c => {
-            labels.push(c.hour);
-            data.push(c.count);
-        });
-
-        const ctx = document.getElementById('hours').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Visits per hour',
-                    data: data,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            }
-        });
+        chart('hours', res.response);
     });
 
     request('/statistics/browsers').then(res => {
-        let labels = [], data = [];
-        JSON.parse(res.response).forEach(c => {
-            labels.push(c.browser != null ? c.browser : 'Unknown');
-            data.push(c.count);
-        });
-
-        const ctx = document.getElementById('browsers').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Visits per browsers',
-                    data: data,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            }
-        });
+        chart('browsers', res.response);
     });
 
     request('/statistics/os').then(res => {
-        let labels = [], data = [];
-        JSON.parse(res.response).forEach(c => {
-            labels.push(c.os != null ? c.os : 'Unknown');
-            data.push(c.count);
-        });
-
-        const ctx = document.getElementById('os').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Visits per os',
-                    data: data,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            }
-        });
+        chart('os', res.response);
     });
 </script>

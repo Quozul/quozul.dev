@@ -25,18 +25,29 @@ const pages = ['home', 'resources', 'guess_the_color'];
 
 app.set('view engine', 'ejs');
 
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+}
+
+const m = (v) => v != undefined ? `'${escapeHtml(v)}'` : null;
+
 app.use(function (req, res, next) {
     const ip = req.headers['x-forwarded-for'];
     const location = geoip.lookup(ip);
-
-    // if (location == null) { next(); return; }
 
     const ua = UAParser(req.headers["user-agent"]);
     const time = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const url = req.url;
 
-
-    connection.query(`insert into visits (date, ip, page, country, city, browser_name, browser_version, os_name, os_version) values ('${time}', ${ip != undefined ? `'${ip}'` : null}, '${url}', ${location != null ? `'${location.country}'` : null}, ${location != null ? `'${location.city}'` : null}, '${ua.browser.name}', '${ua.browser.version}', '${ua.os.name}', '${ua.os.version}');`, function (error, results, fields) {
+    connection.query(`insert into visits (date, ip, page, country, city, browser_name, browser_version, os_name, os_version) values (${m(time)}, ${m(ip)}, ${m(url)}, ${m(location != null ? location.country : null)}, ${m(location != null ? location.city : null)}, ${m(ua.browser.name)}, ${m(ua.browser.version)}, ${m(ua.os.name)}, ${m(ua.os.version)});`, function (error, results, fields) {
         if (error) throw error;
     });
     next();
@@ -72,23 +83,23 @@ app.get('/download/*', function (req, res, next) {
 app.get('/statistics/:stats', function (req, res, next) {
     switch (req.params.stats) {
         case 'countries':
-            connection.query(`select country, count(*) as count from visits group by country order by count desc;`, (err, r) => res.send(r));
+            connection.query(`select country as data, count(*) as count from (select country from visits group by date) as t group by country order by count desc;`, (err, r) => res.send(r));
             break;
 
         case 'hours':
-            connection.query(`select extract(HOUR from date) as hour, count(*) as count from visits group by hour order by count desc;`, (err, r) => res.send(r));
+            connection.query(`select hour as data, count(*) as count from (select extract(HOUR from date) as hour from visits group by date) as t group by hour order by hour;`, (err, r) => res.send(r));
             break;
 
         case 'resources':
-            connection.query(`select page, count(*) as count from visits group by page order by count desc;`, (err, r) => res.send(r));
+            connection.query(`select page as data, count(*) as count from (select page from visits group by date) as t group by page order by count desc;`, (err, r) => res.send(r));
             break;
 
         case 'browsers':
-            connection.query(`select browser_name as browser, count(*) as count from visits group by browser order by count desc;`, (err, r) => res.send(r));
+            connection.query(`select browser as data, count(*) as count from (select browser_name as browser from visits group by date) as t group by browser order by count desc;`, (err, r) => res.send(r));
             break;
 
         case 'os':
-            connection.query(`select concat(os_name, ' ', os_version) as os, count(*) as count from visits group by os;`, (err, r) => res.send(r));
+            connection.query(`select os as data, count(*) as count from (select concat(os_name, ' ', os_version) as os from visits group by date) as t group by os order by count desc;`, (err, r) => res.send(r));
             break;
 
         default:
