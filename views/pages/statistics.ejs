@@ -8,6 +8,11 @@
                 Scroll down to see them.
             </p>
         </div>
+
+        <div class="scroll-down">
+            <div class="scroll-arrow"></div>
+            Scroll down
+        </div>
     </div>
 </section>
 
@@ -64,48 +69,49 @@
 <!-- noAjax -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
-    function chart(id, res, x) {
-        let labels = [], data = [];
-        JSON.parse(res).forEach(c => {
+    function chart(id, res, type = 'bar') {
+        let labels = [], data = [], colors = [];
+        res.forEach(c => {
             labels.push(c.data != null ? c.data : 'Unknown');
             data.push(c.count);
+            colors.push(`rgba(${rangedRandom(0, 255)}, ${rangedRandom(0, 255)}, ${rangedRandom(0, 255)}, .2)`)
         });
 
         new Chart(document.getElementById(id).getContext('2d'), {
-            type: 'bar',
+            type: type,
             data: {
                 labels: labels,
                 datasets: [{
                     label: 'Visits per ' + id,
                     data: data,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    backgroundColor: colors,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
-                scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
+                // scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
             }
         });
     }
 
     request('/statistics/countries').then(res => {
-        chart('countries', res.response);
+        chart('countries', JSON.parse(res.response).slice(0, 10));
     });
 
     request('/statistics/resources').then(res => {
-        chart('resources', res.response);
+        chart('resources', JSON.parse(res.response).slice(0, 10));
     });
 
     request('/statistics/hours').then(res => {
-        chart('hours', res.response);
+        chart('hours', JSON.parse(res.response));
     });
 
     request('/statistics/browsers').then(res => {
-        chart('browsers', res.response);
+        chart('browsers', JSON.parse(res.response).slice(0, 10), 'pie');
     });
 
     request('/statistics/os').then(res => {
-        chart('os', res.response);
+        chart('os', JSON.parse(res.response).slice(0, 10), 'pie');
     });
 </script>
