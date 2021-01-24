@@ -32,9 +32,11 @@ function recursiveDirScan(string $directory): array
 
 header("Content-type:application/json");
 $dir = $_SERVER['DOCUMENT_ROOT'];
-//$dir = "C:\\Users\\erwan\\Documents\\projects\\ts\\Genetic Algorithm";
+//$dir = "/home/erwan/public";
+
+$files = recursiveDirScan($dir);
 
 echo json_encode([[
     'path' => '',
-    'dir' => recursiveDirScan($dir),
+    'dir' => $files,
 ]]);

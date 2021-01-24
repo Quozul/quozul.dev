@@ -9,9 +9,6 @@ async function buildTree(elements, appendTo, path) {
         const filePath = document.createElement('a');
 
         filePath.innerText = element.path;
-        filePath.href = fullPath;
-        filePath.target = '_blank';
-        filePath.classList.add('show');
         fileContent.append(filePath);
 
         if (element.dir !== undefined) {
@@ -21,12 +18,26 @@ async function buildTree(elements, appendTo, path) {
             filePath.addEventListener('click', (e) => {
                 const element = fileContent.querySelector('.content');
                 element.classList.toggle('expand');
+
+                const arrow = fileContent.querySelector('.arrow');
+                arrow.classList.toggle('right');
+                arrow.classList.toggle('down');
                 e.preventDefault();
             });
+
+            // Add folder icon
+            const i = document.createElement('i');
+            i.classList.add('arrow', 'right');
+            filePath.prepend(i);
 
             buildTree(element.dir, fileContent, fullPath);
         } else {
             // Is file
+            // Create link
+            filePath.href = fullPath;
+            filePath.target = '_blank';
+            filePath.classList.add('show');
+
             const fileInfo = document.createElement('span');
             fileInfo.innerText = getReadableFileSizeString(element.size) + ' - ' + new Date(element.time * 1000).toLocaleString();
 
