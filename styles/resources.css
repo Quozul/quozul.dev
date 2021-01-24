@@ -2,6 +2,15 @@
     text-align: left;
 }
 
+.folder .content {
+    height: 0;
+    overflow-y: hidden;
+}
+
+.content.expand {
+    height: auto;
+}
+
 .file, .folder {
     margin-left: 1em;
 }

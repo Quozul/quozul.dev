@@ -17,6 +17,13 @@ async function buildTree(elements, appendTo, path) {
         if (element.dir !== undefined) {
             // Is directory
             fileContent.classList.add('folder');
+
+            filePath.addEventListener('click', (e) => {
+                const element = fileContent.querySelector('.content');
+                element.classList.toggle('expand');
+                e.preventDefault();
+            });
+
             buildTree(element.dir, fileContent, fullPath);
         } else {
             // Is file
@@ -50,11 +57,9 @@ function getResources() {
     fetch('/api/resources.php')
         .then((res) => res.json())
         .then((json) => {
-            console.log(json);
-
             const tree = document.getElementById('resource-tree');
 
-            buildTree(json, tree, '/~erwan');
+            buildTree(json[0].dir, tree, '/~erwan');
         });
 }
 
