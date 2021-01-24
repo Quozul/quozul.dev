@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quozul.dev</title>
+    <meta charset="utf-8">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <!-- Custom scripts -->
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/stars.js"></script>
+    <script src="/scripts/utils.js"></script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/styles/stars.css">
+    <link rel="stylesheet" href="/styles/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="/assets/icon.png">
+    <meta name="description" content="Hi, I'm a full stack web developper. I'm still at school for now but here's my website. Come check it out !">
+    <meta name="author" content="Erwan Le Gloannec">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+        * {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .copyleft {
+            display: inline-block;
+            transform: rotate(180deg);
+        }
+
+        .copyleft::after {
+            content: "\00a9";
+        }
+
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100 justify-content-between">
+    <header class="container">
+        <div class="mt-3 rounded shadow-lg p-0 backdrop-blur">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="/">
+                        <img src="/assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                        Quozul.dev
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="https://quozul.dev/">Quozul.dev</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://experiments.quozul.dev/">Experiments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://resources.quozul.dev/">Resources</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="sec1" class="page page-current" name="Home">
+            <div class="text-white">
+                <span id="logo">&nbsp;</span>
+                <h1>Random developper</h1>
+                <h2>Quozul</small></h2>
+
+                <div class="scroll-down">
+                    <div class="scroll-arrow"></div>
+                    Scroll down
+                </div>
+            </div>
+        </section>
+
+        <section id="sec2" class="page page-down" name="Projects">
+            <div>
+                <h1 class="text-white">Projects</h1>
+                <div class="projects container">
+                    <ul>
+                        <li><a href="https://github.com/Quozul/OnDemandServer" target="_blank" class="button orange" rel="noopener">OnDemandServer</a>
+                        </li>
+                        <li>Start and stop Minecraft servers on demand.</li>
+                        <li><b>Date:</b> December 20, 2020</li>
+                        <li><b>Language:</b> English</li>
+                        <li><b>Compatibility:</b> BungeeCord plugin</li>
+                        <li><a class="show" href="https://resources.quozul.dev">Check resources for download</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="https://github.com/Quozul/epic-bot" target="_blank" class="button green" rel="noopener">epic-bot</a></li>
+                        <li>A multi function Discord bot.</li>
+                        <li><b>Date:</b> June 06, 2020</li>
+                        <li><b>Language:</b> French, English</li>
+                        <li><a class="show" href="https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8" target="_blank" rel="noopener">Invite the bot</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="https://github.com/Quozul/meeTech" target="_blank" class="button blue" rel="noopener">MeeTech</a>
+                        </li>
+                        <li>Computer hardware website.</li>
+                        <li><b>Date:</b> January 22, 2020</li>
+                        <li><b>Language:</b> French</li>
+                        <li><b>Compatibility:</b> Web browser</li>
+                        <li><a class="show" href="https://meetech.quozul.dev" target="_blank" rel="noopener">Visit</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="https://github.com/Quozul/Audio-Visualizer" target="_blank" class="button red" rel="noopener">Audio-Visualizer</a></li>
+                        <li>Audio visualizer in C#.</li>
+                        <li><b>Date:</b> December 6, 2019</li>
+                        <li><b>Language:</b> English</li>
+                        <li><b>Compatibility:</b> Windows</li>
+                        <li><a class="show" href="https://resources.quozul.dev">Check resources for download</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="https://github.com/Quozul/Pak" target="_blank" class="button yellow" rel="noopener">Pak</a>
+                        </li>
+                        <li>Text based game in Java.</li>
+                        <li><b>Date:</b> June 1, 2019</li>
+                        <li><b>Language:</b> English</li>
+                        <li><b>Compatibility:</b> It's Java, everywhere</li>
+                        <li><a class="show" href="https://resources.quozul.dev">Check resources for download</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="https://github.com/Quozul/Pirikium" target="_blank" class="button purple" rel="noopener">Pirikium</a></li>
+                        <li>Top-down shooter game.</li>
+                        <li><b>Date:</b> July 27, 2018</li>
+                        <li><b>Language:</b> English, French & Polish</li>
+                        <li><b>Compatibility:</b> Should work everywhere</li>
+                        <li><a class="show" href="https://github.com/Quozul/Pirikium/releases/latest" target="_blank" rel="noopener">Fast download</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="https://github.com/Quozul/" target="_blank" class="button white" rel="noopener">GitHub</a>
+                        </li>
+                        <li>More projects on <a class="show" href="https://github.com/Quozul/" target="_blank" rel="noopener">GitHub</a>.</li>
+                        <li>Or on the <a class="show" href="https://resources.quozul.dev">resources</a> page.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec3" class="page page-down" name="Contact">
+            <div class="container">
+                <h1 class="text-white">Contact</h1>
+                <hr>
+
+                <div class="bg-dark-quozul rounded shadow-lg p-3">
+                    <!--<form method="post">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
+                            <label for="email">E-mail address</label>
+                        </div>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="message" name="message"></textarea>
+                            <label for="message">Message</label>
+                        </div>
+                    </form>-->
+
+                    <div class="text-light">
+                        <h4>Other informations :</h4>
+                        <hr>
+                        <p>Contact by mail: <a href="mailto:quozul@outlook.com" class="show">quozul@outlook.com</a> or add me on
+                            Discord: <u class="select">Quozul#1174</u>.</p>
+                        <p>You can find me on almost all social media under the username <u class="select">Quozul</u>.<br><small>I hope to see you
+                                around ;)</small></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--<div class="bg-dark col mt-3 p-5 rounded shadow-lg">
+            <h1>Title</h1>
+            <hr>
+            <p class="text-muted">Description</p>
+        </div>-->
+    </main>
+
+    <footer class="container">
+        <div class="mt-3 mb-3 text-center p-3 container shadow-lg rounded backdrop-blur text-white">
+            <span class="copyleft"></span> Copyleft - Quozul
+        </div>
+    </footer>
+
+    <div class="bubbles"></div>
+</body>
+
+</html>

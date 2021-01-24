@@ -1,0 +1,30 @@
+.folder {
+    text-align: left;
+}
+
+.file, .folder {
+    margin-left: 1em;
+}
+
+.file {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.icon {
+    margin-right: 1px;
+    height: 1em;
+}
+
+/* File info */
+
+.file > span {
+    display: none;
+}
+
+@media (min-width: 576px) {
+    .file > span {
+        display: block;
+    }
+}
