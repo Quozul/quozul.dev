@@ -68,3 +68,14 @@
 .down {
     transform: rotate(45deg);
 }
+
+/* Copyleft */
+
+.copyleft {
+    display: inline-block;
+    transform: rotate(180deg);
+}
+
+.copyleft::after {
+    content: "\00a9";
+}

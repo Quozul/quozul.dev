@@ -36,8 +36,6 @@ function scroll(dir) {
         next.classList.remove('page-down');
 
         cur.classList.add('page-up');
-
-        moveStars(-20);
     } else { // scroll up
         if (cur.firstElementChild.scrollTop != 0) return;
         const prev = cur.previousElementSibling;
@@ -47,8 +45,6 @@ function scroll(dir) {
         cur.classList.add('page-down');
 
         cur.classList.remove('page-up');
-
-        moveStars(20);
     }
 
     cur.classList.remove('page-current');
