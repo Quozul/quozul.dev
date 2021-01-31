@@ -1,0 +1,36 @@
+.loading {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 2em;
+}
+.loading .bar {
+  --animation-time: 500ms;
+  width: 0.5em;
+  height: 0.5em;
+  margin: 0.25em;
+  border-radius: 0.25em;
+  transform: translateY(-50%);
+  transform-origin: center center;
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.5);
+  animation: loadingBar var(--animation-time);
+}
+
+@keyframes loadingBar {
+  from {
+    height: 0.5em;
+    background-color: var(--start-color);
+  }
+  50% {
+    height: 2em;
+  }
+  to {
+    height: 0.5em;
+    background-color: var(--mid-color);
+  }
+}
+
+/*# sourceMappingURL=loading.css.map */
