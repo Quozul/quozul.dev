@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /experiments/
+Disallow: /~erwan/
+Disallow: /includes/
+Disallow: /pages/
+Disallow: /assets/
+Disallow: /api/
+Disallow: /styles/
+Disallow: /scripts/
+
+Sitemap: https://quozul.dev/sitemap.xml
