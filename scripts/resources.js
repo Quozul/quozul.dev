@@ -34,7 +34,8 @@ async function buildTree(elements, appendTo, path) {
         } else {
             // Is file
             // Create link
-            filePath.href = fullPath;
+            //filePath.href = fullPath;
+            filePath.addEventListener('click', (e) => viewFile(e, fullPath));
             filePath.target = '_blank';
             filePath.classList.add('show');
 
@@ -62,6 +63,47 @@ async function buildTree(elements, appendTo, path) {
     }
 
     appendTo.append(div);
+}
+
+function viewFile(e, filePath) {
+    const content = document.getElementById('resource-content');
+    const spinner = document.getElementById('spinner');
+    const title = document.getElementById('resource-modal-label');
+    const downloadButton = document.getElementById('resource-download-button');
+
+    spinner.classList.remove('d-none');
+    spinner.classList.add('d-flex');
+
+    downloadButton.href = filePath;
+    title.innerText = filePath.split('/').pop();
+    content.innerHTML = '';
+
+    const modal = new bootstrap.Modal(document.getElementById('resource-modal'));
+    modal.show();
+
+    fetch(filePath)
+        .then(res => {
+            const contentType = res.headers.get('content-type');
+
+            spinner.classList.add('d-none');
+            spinner.classList.remove('d-flex');
+
+            switch (contentType.split('/')[0]) {
+                case 'image':
+                    content.innerHTML = `<img src="${filePath}" class="img-fluid">`;
+                    break;
+                case 'text':
+                    res.text().then(txt => {
+                        if (contentType === "text/markdown") {
+                            const converter = new showdown.Converter();
+                            content.innerHTML = converter.makeHtml(txt);
+                        } else {
+                            content.innerHTML = `<pre>${txt}</pre>`;
+                        }
+                    });
+                    break;
+            }
+        })
 }
 
 function getResources() {

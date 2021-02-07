@@ -1,6 +1,7 @@
 $maxTime: 500;
 $width: .5em;
 $maxHeight: $width * 4;
+$fadeOut: .5s;
 
 .loading {
   display: flex;
@@ -14,12 +15,16 @@ $maxHeight: $width * 4;
   height: $maxHeight;
 
   .bar {
+    --mid-color: black;
     --animation-time: 500ms;
 
     width: $width;
     height: $width;
     margin: $width / 2;
     border-radius: $width / 2;
+
+    background-color: var(--mid-color);
+    transition: $fadeOut background-color;
 
     transform: translateY(-50%);
     transform-origin: center center;

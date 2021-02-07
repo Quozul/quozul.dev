@@ -1,15 +1,10 @@
 function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-}
-
-const bars = document.querySelectorAll('.bar');
-for (const bar of bars) {
-    setAnimationTime(bar);
 }
 
 function setAnimationTime(element) {
@@ -22,5 +17,32 @@ function setAnimationTime(element) {
 
     element.style.setProperty('--start-color', element.style.getPropertyValue('--mid-color'));
     element.style.setProperty('--mid-color', getRandomColor());
-    setTimeout(setAnimationTime, time, element);
+
+    // If loading element have the animate class, then request next animation
+    if (element.parentElement.classList.contains('animate')) {
+        element.setAttribute('timeout', setTimeout(setAnimationTime, time, element));
+    }
+}
+
+function clearTimeouts(loading) {
+    const bars = loading.querySelectorAll('.bar');
+    for (const bar of bars) {
+        clearTimeout(bar.getAttribute('timeout'));
+    }
+}
+
+function toggleLoading(id) {
+    const load = document.getElementById(id);
+
+    const isAnimated = load.classList.contains('animate');
+    load.classList.toggle('animate');
+
+    if (!isAnimated) {
+        const bars = load.querySelectorAll('.bar');
+        for (const bar of bars) {
+            setAnimationTime(bar);
+        }
+    } else {
+        clearTimeouts(load);
+    }
 }
