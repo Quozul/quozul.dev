@@ -287,35 +287,6 @@ th {
     }
 }
 
-/* Forms */
-form>input {
-    background-color: #eee;
-    border-radius: 3px;
-    border: none;
-    height: 32px;
-    padding: 5px;
-    margin-bottom: 5px;
-    width: 100%;
-}
-
-form>textarea {
-    background-color: #eee;
-    border-radius: 3px;
-    border: none;
-    padding: 5px;
-    margin-bottom: 5px;
-    width: 100%;
-}
-
-form>button {
-    background: transparent;
-    border: none;
-    /* width: 100%; */
-    height: 32px;
-    line-height: 0;
-    margin: 0 auto 5px auto;
-}
-
 /*
 * For weird people blocking scripts
 *     (I'm jocking)
