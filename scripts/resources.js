@@ -107,7 +107,7 @@ function viewFile(e, filePath) {
 }
 
 function getResources() {
-    fetch('/api/resources.php')
+    fetch('/api/resources')
         .then((res) => res.json())
         .then((json) => {
             const tree = document.getElementById('resource-tree');
