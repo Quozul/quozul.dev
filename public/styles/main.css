@@ -71,7 +71,7 @@ a.show-link:hover {
 
 #logo {
     display: block;
-    background: url('/assets/icon.png');
+    background: url('/public/assets/icon.png');
     background-size: cover;
     margin: auto;
     width: 64px;

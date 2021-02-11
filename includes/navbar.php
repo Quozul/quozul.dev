@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img src="/assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            <img src="/public/assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
             Experiments
         </a>
 
