@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/Token.php';
+require __DIR__ . '/UUID.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/utils.php';
 
 class User
@@ -21,7 +22,9 @@ class User
         $hashed_password = hash('sha256', $password);
         $username = mysqli_escape_string($connection, $username);
 
-        $sql = "insert into `user` (username, password) values ('$username', '$hashed_password')";
+        $uuid = (new UUID())->v4(openssl_random_pseudo_bytes(16));
+
+        $sql = "insert into `user` (id_user, username, password) values ('$uuid', '$username', '$hashed_password')";
 
         return mysqli_query($connection, $sql);
     }
@@ -57,7 +60,7 @@ class User
 
         $token->create(
             ['alg' => 'HS256', 'typ' => 'JWT'],
-            ['username' => $this->username, 'password' => $this->password, 'exp' => time() + 3600]
+            ['username' => $this->username, 'password' => $this->password, 'expiry' => time() + 3600]
         );
 
         return $token->get();

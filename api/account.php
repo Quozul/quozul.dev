@@ -43,7 +43,7 @@ switch ($_SESSION['action'])
 
         $row = $request->fetch_all(MYSQLI_ASSOC);
 
-        echo json_encode(json_encode($row));
+        echo json_encode($row);
         break;
 
     default:

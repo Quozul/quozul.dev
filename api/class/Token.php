@@ -55,6 +55,10 @@ class Token
 
     function validate(): bool
     {
+        if ($this->payload['expiry'] < time()) {
+            return false;
+        }
+
         $signature = hash_hmac('sha256', $this->headers_encoded . "." . $this->payload_encoded, SECRET, true);
         $signature_encoded = rtrim(base64url_encode($signature), "=");
 

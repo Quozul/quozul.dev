@@ -67,6 +67,7 @@ function validate() {
     authenticatedFetch('/api/account/validate')
         .then(json => {
             if (json.valid) alert('Your token is valid!');
+            else alert('Your token is not valid!');
         })
         .catch(status => {
             alert(status);
@@ -94,7 +95,12 @@ function isLoggedIn() {
                 const token = window.localStorage.getItem('token');
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 document.getElementById('logInStatus').innerText = "Logged in as " + payload.username;
+            } else {
+                document.getElementById('logInStatus').innerText = "Log in";
             }
+        })
+        .catch(err => {
+            document.getElementById('logInStatus').innerText = "Log in";
         });
 }
 
