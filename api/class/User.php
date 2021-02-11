@@ -29,6 +29,22 @@ class User
         return mysqli_query($connection, $sql);
     }
 
+    function log($id_user, $connection) {
+        $useragent = mysqli_escape_string($connection, $_SERVER['HTTP_USER_AGENT']);
+        $remote_address = mysqli_escape_string($connection, $_SERVER['REMOTE_ADDR']);
+
+        $sql = "insert into `history_useragent` (useragent) values ('$useragent') ON DUPLICATE KEY UPDATE id_history_useragent = LAST_INSERT_ID(id_history_useragent)";
+        mysqli_query($connection, $sql);
+        $useragent_id = mysqli_insert_id($connection);
+
+        $sql = "insert into `history_ip` (ip) values ('$remote_address') ON DUPLICATE KEY UPDATE id_history_ip = LAST_INSERT_ID(id_history_ip)";
+        mysqli_query($connection, $sql);
+        $address_id = mysqli_insert_id($connection);
+
+        $sql = "insert into `history_login` (useragent, ip, user) values ($useragent_id, $address_id, '$id_user')";
+        mysqli_query($connection, $sql);
+    }
+
     /**
      * Generate a new JWT
      * @param $username
@@ -42,7 +58,7 @@ class User
         $hashed_password = hash('sha256', $password);
         $username = mysqli_escape_string($connection, $username);
 
-        $sql = "select username, password from `user`
+        $sql = "select id_user, username, password from `user`
             where username COLLATE latin1_general_cs = '$username' and password COLLATE latin1_general_cs = '$hashed_password'";
 
         $request = mysqli_query($connection, $sql);
@@ -52,6 +68,8 @@ class User
         if (is_null($row)) {
             return false;
         }
+
+        $this->log($row['id_user'], $connection);
 
         $this->username = $username;
         $this->password = $password;
