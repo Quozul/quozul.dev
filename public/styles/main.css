@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap');
 
 * {
     font-family: 'Quicksand', sans-serif;
@@ -12,10 +12,10 @@ body {
     justify-content: space-between;
     margin: 0;
     min-height: 100vh;
-    background-color: #111;
-    color: #eee;
+    background-color: #334;
     text-align: center;
     overflow: hidden;
+    z-index: 100;
 }
 
 .select {
@@ -34,118 +34,26 @@ ul {
 }
 
 /* links */
-.show {
+a {
+    text-decoration: none;
+    color: #003;
+}
+
+a:hover {
+    color: #003;
+}
+
+a.show-link {
     color: #2E86C1;
     font-weight: bold;
     border-bottom: solid 1px rgba(0, 0, 0, 0);
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.2s border-bottom-color;
 }
 
-.show:hover {
-    border-bottom: solid 1px #2E86C1
-}
-
-a {
-    text-decoration: none;
-    color: #003
-}
-
-/* Header & menu */
-
-header {
-    background-color: rgba(24, 24, 24, .7);
-    position: fixed;
-    width: 100%;
-    z-index: 10;
-}
-
-header a {
-    color: white;
-}
-
-header nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-}
-
-.nav-brand {
-    position: absolute;
-    left: 32px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.nav-brand img {
-    margin-right: 5px;
-}
-
-nav ul {
-    margin: 0;
-    padding: 5px;
-}
-
-li.menu-entry,
-form>button {
-    display: inline-block;
-    padding: 15px;
-    color: white;
-    text-decoration: none;
-    margin: 0 20px;
-    border-radius: 3px 3px 0 0;
-    box-shadow: inset 0 -1px 0 #FFC107;
-    cursor: pointer;
-    transition: .25s;
-}
-
-li.menu-entry:hover,
-li.selected,
-form>button:hover {
-    box-shadow: inset 0 -60px 0 #FFC107, 0 0 2px black;
-    border-radius: 3px;
-}
-
-#menu-pages {
-    border-left: 1px solid #FFC107;
-}
-
-#menu-toggler {
-    display: none;
-    cursor: pointer;
-    position: absolute;
-    right: 32px;
-    z-index: 30;
-    transition: .5s;
-}
-
-#menu-toggler div {
-    width: 30px;
-    height: 3px;
-    background-color: yellow;
-    border-radius: 1.5px;
-    margin: 5px 0;
-}
-
-.flip {
-    transform: rotateX(180deg);
-}
-
-/* Footer */
-
-footer {
-    background-color: rgba(24, 24, 24, .7);
-    padding: 20px;
-}
-
-footer a {
-    color: rgb(0, 157, 255);
-}
-
-footer a:visited {
-    color: rgb(0, 157, 255);
+a.show-link:hover {
+    color: #2E86C1;
+    border-bottom: solid 1px #2E86C1;
 }
 
 /* Copyleft */
@@ -163,7 +71,7 @@ footer a:visited {
 
 #logo {
     display: block;
-    background: url('/assets/logo_512.png');
+    background: url('/public/assets/icon.png');
     background-size: cover;
     margin: auto;
     width: 64px;
@@ -189,7 +97,7 @@ small {
     flex-direction: column;
     justify-content: space-around;
     z-index: 0;
-    transition: 1s;
+    transition: 1s transform, 1s opacity;
 }
 
 .page>div {
@@ -197,7 +105,11 @@ small {
 }
 
 .page>div>*:first-child {
-    margin-top: 60px;
+    margin-top: 88px;
+}
+
+.page>div>*:last-child {
+    margin-bottom: 88px;
 }
 
 /* Scrollbar */
@@ -263,11 +175,7 @@ small {
     padding: 10px;
     margin: 20px;
     box-shadow: 0 5px #D0D3D4;
-    transition: 1s;
-}
-
-.discover {
-    transform: scale(0);
+    /*transition: 1s;*/
 }
 
 /* buttons */
@@ -282,7 +190,7 @@ small {
     border-radius: 3px 3px 0 0;
     background-color: var(--background-color);
     color: black;
-    transition: .3s;
+    transition: .3s box-shadow;
 }
 
 .button:hover {
@@ -347,7 +255,7 @@ th {
 .scroll-down {
     position: absolute;
     left: 50%;
-    bottom: 32px;
+    bottom: 10%;
     transform: translate(-50%, 0%);
 }
 
@@ -377,35 +285,6 @@ th {
     100% {
         transform: translate(0, -10px) rotate(45deg);
     }
-}
-
-/* Forms */
-form>input {
-    background-color: #eee;
-    border-radius: 3px;
-    border: none;
-    height: 32px;
-    padding: 5px;
-    margin-bottom: 5px;
-    width: 100%;
-}
-
-form>textarea {
-    background-color: #eee;
-    border-radius: 3px;
-    border: none;
-    padding: 5px;
-    margin-bottom: 5px;
-    width: 100%;
-}
-
-form>button {
-    background: transparent;
-    border: none;
-    /* width: 100%; */
-    height: 32px;
-    line-height: 0;
-    margin: 0 auto 5px auto;
 }
 
 /*
@@ -486,4 +365,90 @@ form>button {
 
 .toggle-tooltip:active>.tooltip-text {
     transform: scale(.8);
+}
+
+/* Utilities */
+
+.backdrop-blur {
+    position: relative;
+    z-index: 100;
+}
+
+.backdrop-blur::before {
+    content: " ";
+    display: block;
+    z-index: -10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    border-radius: .25rem;
+    background-image: linear-gradient(to top, rgba(17, 17, 34, .5), rgba(34, 34, 51, .5));
+}
+
+.bg-dark-quozul {
+    background-image: linear-gradient(to top, rgba(17, 17, 34, .5), rgba(34, 34, 51, .5))!important;
+}
+
+/* Header footer */
+
+header, footer {
+    z-index: 10;
+}
+
+/* Bubbles */
+
+.bubbles {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    text-align: right;
+}
+
+.bubble {
+    position: relative;
+    color: transparent;
+    padding-right: 0;
+    transition: .2s padding-right, .2s color;
+    cursor: pointer;
+}
+
+@media (min-width: 576px) {
+    .bubble:hover, .bubble.selected:focus {
+        color: white;
+        padding-right: 3em;
+    }
+}
+
+.bubble::before {
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: block;
+    content: " ";
+    background-color: transparent;
+    border: solid 1px white;
+    width: 1em;
+    height: 1em;
+    border-radius: 100%;
+}
+
+.bubble:hover::before, .bubble.selected::before {
+    background-color: white;
+    transition: .2s background-color;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none!important;
+        animation: none!important;
+    }
 }

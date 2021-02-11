@@ -20,21 +20,6 @@ function link(url) {
     });
 }
 
-function discorvers() {
-    const discovers = document.getElementsByClassName('page-current')[0].getElementsByClassName('discover');
-    const elems = [];
-    for (const key in discovers)
-        if (discovers.hasOwnProperty(key)) {
-            elems.push(discovers[key]);
-        }
-
-    elems.forEach((e, i) => {
-        setTimeout(function () {
-            e.classList.remove('discover');
-        }, i * 50);
-    });
-}
-
 function scroll(dir) {
     const cur = document.getElementsByClassName('page-current')[0];
     const stars = document.getElementsByClassName('stars')[0];
@@ -64,11 +49,11 @@ function scroll(dir) {
 
     cur.classList.remove('page-current');
 
-    discorvers();
-
-    document.getElementsByClassName('selected')[0].classList.remove('selected');
+    document.getElementsByClassName('selected')[0]?.classList.remove('selected');
     const i = getChildNumber(document.getElementsByClassName('page-current')[0]);
-    document.getElementsByClassName('menu-entry')[i].classList.add('selected');
+    document.getElementsByClassName('menu-entry')[i]?.classList.add('selected');
+
+    document.getElementsByClassName('bubble')[i]?.classList.add('selected');
 }
 
 document.addEventListener('wheel', function (e) {
@@ -113,31 +98,7 @@ function scrollto(button, id, select) {
         button.classList.add('selected');
     else
         document.getElementById('menu').childNodes[getChildNumber(document.getElementsByClassName('page-current')[0])].classList.add('selected');
-
-    discorvers();
-
-    togglePhoneMenu();
 }
-
-function togglePhoneMenu() {
-    const e = document.getElementById('menu');
-    if (e.style.transform == 'translateY(0px)')
-        e.style.transform = '';
-    else
-        e.style.transform = 'translateY(0px)';
-
-    if (this.classList.contains('flip'))
-        this.classList.remove('flip');
-    else
-        this.classList.add('flip');
-};
-
-const menuEntries = document.getElementById('menu').children;
-for (const key in menuEntries)
-    if (menuEntries.hasOwnProperty(key))
-        menuEntries[key].addEventListener('click', function () {
-            document.getElementById('menu').style.transform = '';
-        });
 
 // Phone scroll
 (function () {
@@ -182,29 +143,6 @@ for (const key in menuEntries)
 //     document.getElementsByClassName('stars')[0].style.transform = `translateX(${e.x / 100}px) translateY(${e.y / 100}px)`;
 // });
 
-// Generate menu
-function generateMenu() {
-    const pages = document.getElementsByClassName('page');
-    const menu = document.getElementById('menu-sections');
-
-    menu.innerHTML = '';
-
-    for (const key in pages)
-        if (pages.hasOwnProperty(key)) {
-            const page = pages[key];
-            const pageName = page.getAttribute('name');
-            const pageId = page.getAttribute('id');
-
-            const node = document.createElement('li');
-            node.innerHTML = pageName;
-            node.classList.add('menu-entry');
-            node.setAttribute('onclick', `scrollto(this, '${pageId}')`);
-            if (key == 0)
-                node.classList.add('selected');
-            menu.appendChild(node);
-        }
-}
-
 function handleDates() {
     const dates = document.getElementsByClassName('date');
     for (const key in dates)
@@ -212,6 +150,27 @@ function handleDates() {
             const element = dates[key];
             element.innerHTML = new Date(parseInt(element.innerHTML)).toLocaleString();
         }
+}
+
+function generateMenu() {
+    const bubbles = document.getElementsByClassName('bubbles')[0];
+    const pages = document.getElementsByClassName('page');
+
+    for (const key in pages) {
+        if (pages.hasOwnProperty(key)) {
+            const page = pages[key];
+            const pageName = page.getAttribute('name');
+            const pageId = page.getAttribute('id');
+
+            const node = document.createElement('div');
+            node.innerText = pageName;
+            node.classList.add('bubble');
+            node.setAttribute('onclick', `scrollto(this, '${pageId}')`);
+            if (key == 0)
+                node.classList.add('selected');
+            bubbles.appendChild(node);
+        }
+    }
 }
 
 window.addEventListener('load', generateMenu);

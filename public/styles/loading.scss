@@ -1,0 +1,52 @@
+$maxTime: 500;
+$width: .5em;
+$maxHeight: $width * 4;
+$fadeOut: .5s;
+
+.loading {
+  display: flex;
+  flex-direction: row;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  height: $maxHeight;
+
+  .bar {
+    --mid-color: black;
+    --animation-time: 500ms;
+
+    width: $width;
+    height: $width;
+    margin: $width / 2;
+    border-radius: $width / 2;
+
+    background-color: var(--mid-color);
+    transition: $fadeOut background-color;
+
+    transform: translateY(-50%);
+    transform-origin: center center;
+
+    box-shadow: 0 0 $width / 2 rgba(0, 0, 0, .5);
+
+    animation: loadingBar var(--animation-time);
+  }
+}
+
+@keyframes loadingBar {
+  from {
+    height: $width;
+    background-color: var(--start-color);
+  }
+
+  50% {
+    height: $maxHeight;
+  }
+
+  to {
+    height: $width;
+    background-color: var(--mid-color);
+  }
+}

@@ -11,19 +11,33 @@ function generateStars(c, count) {
     str = str.slice(0, -2);
     str += ';';
 
-    document.getElementsByClassName(c)[0].style.cssText = '--shadows-small: ' + str;
+    const div = document.createElement('div');
+    div.style.cssText = '--shadows-small: ' + str;
+    div.classList.add(c);
+
+    return div;
 }
 
-function allStars() {
+async function allStars() {
     const width = this.innerWidth;
     const height = this.innerHeight;
 
     const surface = width * height / 1000;
 
-    generateStars('stars1', surface / 10 / this.devicePixelRatio);
-    generateStars('stars2', surface / 20 / this.devicePixelRatio);
-    generateStars('stars3', surface / 40 / this.devicePixelRatio);
+    const div = document.createElement('div');
+    div.classList.add('stars');
+
+    div.append(generateStars('stars1', surface / 10 / this.devicePixelRatio));
+    div.append(generateStars('stars2', surface / 20 / this.devicePixelRatio));
+    div.append(generateStars('stars3', surface / 40 / this.devicePixelRatio));
+
+    const stars = document.getElementsByClassName('stars');
+    for (const star of stars) {
+        star.outerHTML = '';
+    }
+
+    document.body.append(div);
 }
 
-window.addEventListener('resize', allStars);
+//window.addEventListener('resize', allStars);
 window.addEventListener('load', allStars);

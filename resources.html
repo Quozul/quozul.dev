@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Quozul's resources</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
+    <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="/public/scripts/utils.js"></script>
+    <script src="/public/scripts/fileIcons.js"></script>
+    <script src="/public/scripts/resources.js"></script>
+    <script src="/public/scripts/account.js"></script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/public/styles/resources.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="/public/assets/icon.png">
+
+    <meta name="description" content="My collection of publicly available files.">
+    <meta name="author" content="Quozul">
+    <link rel="canonical" href="https://resources.quozul.dev/">
+</head>
+
+<body class="d-flex flex-column min-vh-100 justify-content-between">
+<header class="container">
+    <div class="mt-3 rounded shadow-lg p-0 bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="/public/assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                    Resources
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://quozul.dev/">Quozul.dev</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://experiments.quozul.dev/">Experiments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="https://resources.quozul.dev/resources.php">Resources</a>
+                        </li>
+                    </ul>
+
+                    <a class="text-white ms-auto" id="logInStatus" href="https://account.quozul.dev/profile">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="modal fade" id="resource-modal" tabindex="-1" aria-labelledby="resource-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resource-modal-label">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="resource-content" class="text-start"></div>
+                    <div class="d-flex justify-content-center" id="spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-primary" id="resource-download-button" target="_blank">Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-dark col mt-3 p-5 rounded shadow-lg">
+        <h1 class="text-white">Resources</h1>
+        <p class="text-muted">Collection of publicly available files.</p>
+        <hr>
+        <div class="" id="resource-tree"></div>
+    </div>
+</main>
+
+<footer class="container">
+    <div class="mt-3 mb-3 text-center p-3 container shadow-lg rounded bg-dark text-white">
+        <div>
+            File icons from <a href="https://github.com/PKief/vscode-material-icon-theme" class="show">vscode-material-icon-theme</a>
+        </div>
+        <span class="copyleft"></span> Copyleft - Quozul
+    </div>
+</footer>
+</body>
+
+</html>

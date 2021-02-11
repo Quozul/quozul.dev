@@ -1,10 +1,8 @@
 User-agent: *
-Disallow: /cours/
-Disallow: /scripts/
-Disallow: /assets/
-Disallow: /styles/
-
-User-agent: *
-Allow: /
+Disallow: /experiments/
+Disallow: /~erwan/
+Disallow: /includes/
+Disallow: /pages/
+Disallow: /api/
 
 Sitemap: https://quozul.dev/sitemap.xml

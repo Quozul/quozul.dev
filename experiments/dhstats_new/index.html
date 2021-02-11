@@ -1,0 +1,127 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<header></header>
+
+<main>
+    <div class="row m-0">
+        <div class="col-8 p-0" style="overflow-y: scroll; height: 100vh;">
+            <!-- File loading -->
+
+            <form>
+                <div class="mb-3">
+                    <label for="file-input" class="form-label">Load DHT file</label>
+                    <input class="form-control" type="file" id="file-input">
+                </div>
+
+                <div class="mb-3">
+                    <label for="stats-input" class="form-label">Load statistics file</label>
+                    <input class="form-control" type="file" id="stats-input">
+                </div>
+
+                <button type="button" class="btn btn-primary" id="analyse-btn" disabled>Analyse file</button>
+                <button type="button" class="btn btn-primary" id="download-btn" disabled>Download XLSX</button>
+                <button type="button" class="btn btn-primary" id="export-btn" disabled>Export stats</button>
+            </form>
+
+            <!-- Verbose -->
+
+            <div id="ram-usage">Memory usage: 0 MB</div>
+            <div id="info">&nbsp;</div>
+            <b>Logs:</b>
+            <div id="log" style="overflow-y: scroll; height: 256px;"></div>
+
+            <!-- Chart -->
+
+            <form id="chartify-form" onsubmit="return false;">
+                <div class="mb-3">
+                    <label for="chartify-channel">Channel</label>
+                    <select id="chartify-channel" name="channel" class="form-select">
+                        <option>Please load a file first</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="chartify-value">Value</label>
+                    <select id="chartify-value" name="value"  class="form-select">
+                        <optgroup label="Message statistics">
+                            <option value="messages">Messages</option>
+                            <option value="total">Total messages</option>
+                            <option value="embeds">Embeds</option>
+                            <option value="total_embeds">Total embeds</option>
+                        </optgroup>
+                        <optgroup label="Other statistics">
+                            <option value="userStats">Messages per user</option>
+                            <option value="words">Words</option>
+                            <option value="hours">Hours</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="chartify-view">View</label>
+                    <select id="chartify-view" name="view"  class="form-select">
+                        <option value="line">Line</option>
+                        <option value="bar">Bar</option>
+                        <option value="pie">Pie</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="chartify-btn">Chartify!</button>
+            </form>
+
+            <canvas id="chart"></canvas>
+
+            <!--<form id="chartify-range">
+                <input type="range" class="form-range" name="slider" id="chartify-range-slider" value="0" min="0" max="0">
+                <input type="number" class="form-range" name="size" id="chartify-range-size" value="0" min="0" max="0">
+            </form>-->
+        </div>
+
+        <div class="col-4 p-0">
+            <div><h1>No data is being sent to the server!</h1>
+                <b>Instructions</b>
+                <ol>
+                    <li>Choose a file</li>
+                    <li>(Optional) Select genders of the users</li>
+                    <li>Analyse the file</li>
+                    <li>Download the excel file or chartify!</li>
+                </ol>
+                <b>Analysing speeds (283.704 messages over 95 channels)</b>
+                <ol>
+                    <li>Xiaomi Mi A2 lite: took <13 seconds</li>
+                    <li>Ryzen 5 1600x: took <1 second</li>
+                    <li>Ryzen 9 5950x: took <.5 second</li>
+                </ol>
+            </div>
+
+            <!-- User list -->
+            <b>User genders</b>
+            <p class="text-muted">This is an optionnal step.</p>
+            <ul id="genders" class="list-group" style="overflow-y: scroll;"></ul>
+        </div>
+    </div>
+</main>
+
+<footer></footer>
+
+<!-- Scripts -->
+<script src="scripts/utils.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+
+<script src="scripts/dist/171.js"></script>
+<script src="scripts/dist/main.js"></script>
+<script src="scripts/dist/WorkerWeb.worker.js"></script>
+
+<script src="scripts/main.js"></script>
+</body>
+</html>
