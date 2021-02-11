@@ -1,13 +1,14 @@
 <?php
-require __DIR__ . '/class/User.php';
+require_once __DIR__ . '/class/User.php';
 
 switch ($_SESSION['action'])
 {
     case 'create':
         $user = new User();
         $create = $user->create($_POST['username'], $_POST['password']);
+        $login = $user->login($_POST['username'], $_POST['password']);
 
-        echo json_encode(["created" => $create]);
+        echo json_encode(["created" => $create, "token" => $login]);
         break;
 
     case 'login':

@@ -17,14 +17,14 @@ CREATE TABLE `history_ip` (
   `ip` varchar(45) COLLATE latin1_general_cs DEFAULT NULL,
   PRIMARY KEY (`id_history_ip`),
   UNIQUE KEY `ip_UNIQUE` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
 
 CREATE TABLE `history_useragent` (
   `id_history_useragent` int(11) NOT NULL AUTO_INCREMENT,
   `useragent` varchar(1024) COLLATE latin1_general_cs DEFAULT NULL,
   PRIMARY KEY (`id_history_useragent`),
   UNIQUE KEY `useragent_UNIQUE` (`useragent`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
 
 CREATE TABLE `history_login` (
   `id_history_login` int(11) NOT NULL AUTO_INCREMENT,
@@ -36,7 +36,7 @@ CREATE TABLE `history_login` (
   KEY `useragent_idx` (`useragent`),
   KEY `ip_idx` (`ip`),
   KEY `user` (`user`),
-  CONSTRAINT `ip` FOREIGN KEY (`ip`) REFERENCES `history_ip` (`id_history_ip`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `user` FOREIGN KEY (`user`) REFERENCES `user` (`id_user`),
-  CONSTRAINT `useragent` FOREIGN KEY (`useragent`) REFERENCES `history_useragent` (`id_history_useragent`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
+  CONSTRAINT `ip` FOREIGN KEY (`ip`) REFERENCES `history_ip` (`id_history_ip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user` FOREIGN KEY (`user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `useragent` FOREIGN KEY (`useragent`) REFERENCES `history_useragent` (`id_history_useragent`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;

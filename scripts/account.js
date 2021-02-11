@@ -8,7 +8,8 @@ function signup(form) {
         .then(res => res.json())
         .then(json => {
             if (json.created) {
-                alert('Account created, you can now login.');
+                alert('Account created.');
+                window.localStorage.setItem('token', json.token);
                 isLoggedIn();
             } else alert('Account not created. Username may already be used.');
         });
