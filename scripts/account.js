@@ -43,6 +43,11 @@ function login(form) {
     return false;
 }
 
+function logout() {
+    window.localStorage.removeItem('token');
+    isLoggedIn();
+}
+
 function authenticatedFetch(url, method = 'GET', body = undefined) {
     const token = window.localStorage.getItem('token');
     if (token === null) return new Promise((_, r) => r(403));
@@ -79,7 +84,7 @@ function validate() {
 function list() {
     authenticatedFetch('/api/account/list')
         .then(json => {
-            console.log(json);
+            alert(json.map(u => u.username));
         })
         .catch(status => {
             alert(status);
@@ -104,7 +109,11 @@ function isLoggedIn() {
         });
 }
 
-window.addEventListener('load', isLoggedIn);
+function init() {
+    isLoggedIn();
+}
+
+window.addEventListener('load', init);
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
