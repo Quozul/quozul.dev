@@ -21,7 +21,7 @@ function rangedRandom(min, max) {
  * @param {string} url String containing the url
  * @param {string} query String containing the query parameters
  */
-function request(url, query) {
+function request(url, query = '') {
     return new Promise(function (resolve, reject) {
         let req = new XMLHttpRequest();
         req.onreadystatechange = function () {

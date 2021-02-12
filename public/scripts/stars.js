@@ -2,8 +2,8 @@
 function generateStars(c, count) {
     let str = '';
 
-    const width = this.innerWidth;
-    const height = this.innerHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
     for (let i = 0; i < count; i++)
         str += Math.round(rangedRandom(0, width)) + 'px ' + Math.round(rangedRandom(0, height)) + 'px #FFF, ';

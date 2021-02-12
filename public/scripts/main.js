@@ -165,7 +165,8 @@ function generateMenu() {
             const node = document.createElement('div');
             node.innerText = pageName;
             node.classList.add('bubble');
-            node.setAttribute('onclick', `scrollto(this, '${pageId}')`);
+            node.addEventListener('click', () => scrollto(node, pageId));
+            //node.setAttribute('onclick', `scrollto(this, '${pageId}')`);
             if (key == 0)
                 node.classList.add('selected');
             bubbles.appendChild(node);
