@@ -1,5 +1,5 @@
 postMessage(['Thread started...', 12]);
-importScripts('/scripts/utils.min.js');
+importScripts('/public/scripts/utils.min.js');
 
 onmessage = function (message) {
     const file = message.data;

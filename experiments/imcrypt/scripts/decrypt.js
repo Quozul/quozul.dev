@@ -1,4 +1,4 @@
-importScripts('/scripts/utils.min.js');
+importScripts('/public/scripts/utils.min.js');
 
 onmessage = function (message) {
     const imageData = message.data.data;

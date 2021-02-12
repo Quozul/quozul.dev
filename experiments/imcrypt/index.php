@@ -48,11 +48,9 @@
 
                         <form>
                             <div class="form-file">
-                                <input type="file" class="form-file-input" id="encrypt-input">
-                                <label class="form-file-label shadow-sm cursor-pointer" for="encrypt-input">
-                                    <span class="form-file-text">Choose file...</span>
-                                    <span class="form-file-button">Browse</span>
-                                </label>
+                                <div class="mb-3">
+                                    <input class="form-control" type="file" id="encrypt-input">
+                                </div>
                                 <small class="form-text">
                                     *Your files are not uploaded to any online services, they will be processed inside your browser.
                                 </small>
@@ -77,11 +75,10 @@
 
                         <form>
                             <div class="form-file">
-                                <input type="file" class="form-file-input" id="decrypt-input">
-                                <label class="form-file-label shadow-sm" for="decrypt-input">
-                                    <span class="form-file-text">Choose file...</span>
-                                    <span class="form-file-button">Browse</span>
-                                </label>
+                                <div class="mb-3">
+                                    <input class="form-control" type="file" id="decrypt-input">
+                                </div>
+
                                 <small class="form-text">
                                     *Your files are not uploaded to any online services, they will be processed inside your browser.
                                 </small>

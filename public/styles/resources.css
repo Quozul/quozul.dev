@@ -1,26 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap');
 
-* {
-    font-family: 'Quicksand', sans-serif;
-    box-sizing: border-box;
+a {
     user-select: none;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 0;
-    min-height: 100vh;
-    background-color: #334;
-    color: white;
-    text-align: center;
-    overflow: hidden;
-    z-index: 100;
-}
-
-.bg-dark {
-    background-color: #343a40!important;
+    cursor: pointer;
 }
 
 .folder {

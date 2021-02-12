@@ -7,6 +7,7 @@
          $page_name = 'Experiments - DHT stats';
          include $_SERVER['DOCUMENT_ROOT'] . '/includes/head.php';
         ?>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
     </head>
 
     <body class="d-flex flex-column min-vh-100 justify-content-between" style="background-color: #334;">
@@ -14,16 +15,18 @@
             <div class="bg-dark mt-3 rounded shadow-lg p-0">
                 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/navbar.php';?>
 
-                <div class="bg-dark p-3 border-top rounded">
+                <hr class="m-0">
+
+                <div class="bg-dark p-3 rounded">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pills-upload-tab" data-toggle="pill" href="#upload-tab" role="tab" aria-controls="upload-tab" aria-selected="true">Upload data</a>
+                            <a class="nav-link active" id="pills-upload-tab" data-bs-toggle="pill" href="#upload-tab" role="tab" aria-controls="upload-tab" aria-selected="true">Upload data</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link disabled" id="pills-view-tab" data-toggle="pill" href="#view-tab" role="tab" aria-controls="view-tab" aria-selected="false">View data</a>
+                            <a class="nav-link disabled" id="pills-view-tab" data-bs-toggle="pill" href="#view-tab" role="tab" aria-controls="view-tab" aria-selected="false">View data</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link disabled" id="pills-download-tab" data-toggle="pill" href="#download-tab" role="tab" aria-controls="download-tab" aria-selected="false">Download CSVs</a>
+                            <a class="nav-link disabled" id="pills-download-tab" data-bs-toggle="pill" href="#download-tab" role="tab" aria-controls="download-tab" aria-selected="false">Download CSVs</a>
                         </li>
                     </ul>
                 </div>
@@ -57,11 +60,9 @@
                     <h3>Upload</h3>
                     <form>
                         <div class="form-file">
-                            <input type="file" class="form-file-input" id="file-input">
-                            <label class="form-file-label" for="file-input">
-                                <span class="form-file-text">Choose file...</span>
-                                <span class="form-file-button">Browse</span>
-                            </label>
+                            <div class="mb-3">
+                                <input class="form-control" type="file" id="file-input">
+                            </div>
                             <small class="form-text">
                                 *Your data is not uploaded to any online services, it will be analysed inside your browser.
                             </small>
