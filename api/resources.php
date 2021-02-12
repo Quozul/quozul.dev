@@ -31,8 +31,11 @@ function recursiveDirScan(string $directory): array
 }
 
 header("Content-type:application/json");
-$dir = $_SERVER['DOCUMENT_ROOT'];
-//$dir = "/home/erwan/public";
+
+if (PHP_OS === "WINNT")
+    $dir = $_SERVER['DOCUMENT_ROOT'];
+else
+    $dir = "/home/erwan/public";
 
 $files = recursiveDirScan($dir);
 

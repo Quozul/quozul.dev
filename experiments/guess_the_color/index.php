@@ -53,13 +53,17 @@
                         </div>
                     </div>
 
-                    <div id="colors" class="row d-flex justify-content-around mt-3">
+                    <div id="colors" class="row d-flex justify-content-around my-3">
                         <span class="color-circle">&nbsp;</span>
                         <span class="color-circle">&nbsp;</span>
                         <span class="color-circle">&nbsp;</span>
                         <span class="color-circle">&nbsp;</span>
                         <span class="color-circle">&nbsp;</span>
                     </div>
+
+                    <small>
+                        By playing the game, you allow the website to store a cookie on your computer (used for saving your game progression).
+                    </small>
                 </div>
             </div>
         </main>

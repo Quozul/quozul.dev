@@ -52,7 +52,7 @@ async function buildTree(elements, appendTo, path) {
 
                 const icons = getFileIcon(fileExt);
 
-                img.src = `/assets/icons/${icons[0]?.name}.svg`;
+                img.src = `/public/assets/icons/${icons[0]?.name}.svg`;
                 img.classList.add('icon');
 
                 filePath.prepend(img);
