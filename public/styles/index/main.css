@@ -12,12 +12,6 @@ body {
     cursor: pointer;
 }
 
-.wrapper {
-    width: 80%;
-    max-width: 1024px;
-    margin: auto;
-}
-
 ul {
     list-style-type: none;
 }
@@ -106,14 +100,6 @@ small {
     width: 8px;
 }
 
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #499bea 0%, #207ce5 100%);
-}
-
-::-webkit-scrollbar-track {
-    background-color: #333;
-}
-
 .page-up {
     transform: translateY(-100vh) scale(.8);
     opacity: 0;
@@ -124,23 +110,9 @@ small {
     opacity: 0;
 }
 
-.page-left {
-    transform: translateX(-100vw) scale(.8);
-}
-
-.page-right {
-    transform: translateX(100vw) scale(.8);
-}
-
 .page-current {
     transform: translateX(0) translateY(0) scale(1);
     opacity: 1;
-}
-
-.block {
-    background: #222;
-    border-radius: 3px;
-    padding: 10px;
 }
 
 /* Projects section */
@@ -202,11 +174,6 @@ small {
     --box-shadow-color: #7B241C;
 }
 
-.blue {
-    --background-color: rgba(135, 78, 160, 0.5);
-    --box-shadow-color: #633974;
-}
-
 .purple {
     --background-color: rgba(109, 52, 131, 0.5);
     --box-shadow-color: #5B2C6F;
@@ -223,20 +190,6 @@ small {
 }
 
 /* Table */
-
-table {
-    border: none;
-    width: 100%;
-}
-
-td,
-th {
-    height: 40px;
-}
-
-th {
-    border-bottom: solid 1px white;
-}
 
 /* Scroll arrow
 * https://codepen.io/matthewhirsch/pen/qOxmoz
@@ -280,23 +233,8 @@ th {
 * For weird people blocking scripts
 *     (I'm jocking)
 */
-.noscript {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
 
 /* Flex boxes */
-
-.flex {
-    display: flex;
-}
-
-.flex-row {
-    flex-direction: row;
-    justify-content: space-between;
-}
 
 .image {
     width: 100%;
@@ -305,56 +243,6 @@ th {
 }
 
 /* Tooltip https://www.w3schools.com/css/css_tooltip.asp */
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip .tooltip-text {
-    transform: scale(0);
-    transform-origin: bottom center;
-    opacity: 0;
-
-    transition: .3s;
-
-    width: 100px;
-
-    background-color: white;
-    color: black;
-    box-shadow: 0 0 2px rgba(0, 0, 0, .5);
-
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    font-size: 12px;
-
-    position: absolute;
-
-    bottom: 100%;
-    left: 50%;
-    margin-left: -50px
-        /* use half of the width to center the tooltip */
-}
-
-.tooltip .tooltip-text::after {
-    content: " ";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
-}
-
-.toggle-tooltip:hover>.tooltip-text {
-    transform: scale(1);
-    opacity: 1;
-}
-
-.toggle-tooltip:active>.tooltip-text {
-    transform: scale(.8);
-}
 
 /* Utilities */
 
