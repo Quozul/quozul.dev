@@ -2,6 +2,6 @@ ErrorDocument 404 /errors/404.html
 ErrorDocument 403 /errors/403.html
 
 SetEnv HTTP_MYSQL_HOST "localhost"
-SetEnv HTTP_MYSQL_USER "root"
-SetEnv HTTP_MYSQL_PASS "root"
+SetEnv HTTP_MYSQL_USER "erwan"
+SetEnv HTTP_MYSQL_PASS "mysql"
 SetEnv HTTP_MYSQL_DB "quozul.dev"
