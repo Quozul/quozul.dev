@@ -15,14 +15,14 @@ if ("sha256=" . hash_hmac("sha256", $json, "SECRET") === $_SERVER["HTTP_X_HUB_SI
             $repository_name = $tab["repository"]["name"];
             $default_branch = $tab["repository"]["default_branch"];
 
-            $command = "cd /var/www/$repository_name && git pull origin $default_branch";
+            $command = "sudo ./pull.sh $repository_name $default_branch";
 
             $output = [];
             $result_code = NULL;
 
             $res = exec($command, $output, $result_code);
 
-            echo join("\n", $output);
+            var_dump($output);
 
             http_response_code(200);
             break;
