@@ -13,6 +13,9 @@ switch ($before) {
     case 'resources' :
         require __DIR__ . '/api/resources.php';
         break;
+    case 'experiments' :
+        require __DIR__ . '/api/experiments.php';
+        break;
     case 'account' :
         require __DIR__ . '/api/account.php';
         break;

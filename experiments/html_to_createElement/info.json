@@ -1,4 +1,5 @@
 {
     "name": "HTML to createElement",
-    "description": "Convert HTML code to JavaScript document.createElement functions."
+    "description": "Convert HTML code to JavaScript document.createElement functions.",
+    "date": "2021-03-31"
 }

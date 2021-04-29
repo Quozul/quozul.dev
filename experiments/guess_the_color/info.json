@@ -1,4 +1,5 @@
 {
     "name": "Guess the color",
-    "description": "Little game where you have to guess a color from its RGB code."
+    "description": "Little game where you have to guess a color from its RGB code.",
+    "date": "2020-01-10"
 }

@@ -15,7 +15,7 @@ if ("sha256=" . hash_hmac("sha256", $json, "SECRET") === $_SERVER["HTTP_X_HUB_SI
             $repository_name = $tab["repository"]["name"];
             $default_branch = $tab["repository"]["default_branch"];
 
-            $command = "sudo ./pull.sh $repository_name $default_branch";
+            $command = "./pull.sh $repository_name $default_branch";
 
             $output = [];
             $result_code = NULL;
