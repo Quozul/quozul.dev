@@ -11,18 +11,21 @@ function recursiveDirScan(string $directory): array
         $path = $directory . '/' . $file;
 
         if (is_dir($path)) {
+            $metadata = json_decode(file_get_contents($path . '/metadata.json'));
+
             array_unshift($files, [
                 'path' => $file,
-                'dir' => recursiveDirScan($path)
+                'dir' => recursiveDirScan($path),
+                'metadata' => $metadata,
             ]);
-        } else {
+        } else if ($file !== 'metadata.json') {
             $size = filesize($path);
             $time = filemtime($path);
 
             array_push($files, [
                 'path' => $file,
                 'size' => $size,
-                'time' => $time
+                'time' => $time,
             ]);
         }
     }

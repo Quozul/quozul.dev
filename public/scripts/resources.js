@@ -1,4 +1,4 @@
-async function buildTree(elements, appendTo, path) {
+function buildTree(elements, appendTo, path) {
     const div = document.createElement('div');
     div.classList.add('content');
 
@@ -30,7 +30,15 @@ async function buildTree(elements, appendTo, path) {
             i.classList.add('arrow', 'right');
             filePath.prepend(i);
 
-            buildTree(element.dir, fileContent, fullPath);
+            const content = buildTree(element.dir, fileContent, fullPath);
+
+            if (element.metadata !== null) {
+                const span = document.createElement("span");
+                span.innerText = element.metadata.description;
+                span.classList.add("text-muted");
+                span.style.marginLeft = "1em";
+                content.prepend(span);
+            }
         } else {
             // Is file
             // Create link
@@ -63,6 +71,8 @@ async function buildTree(elements, appendTo, path) {
     }
 
     appendTo.append(div);
+
+    return div;
 }
 
 function viewFile(e, filePath) {
