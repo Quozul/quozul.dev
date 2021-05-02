@@ -73,7 +73,7 @@
     Hello<br>
     <b>Bold</b>
     <i style="text-decoration: underline; margin: 1em;">
-        Bye
+        Bye ${variable}
         <u>Underline</u>
     </i><br><!-- Comment -->
     <s>Strike</s>
@@ -258,6 +258,12 @@
             copyCode = code;
 
             code += "\nbuildElement(document.getElementById('res'));";
+
+            const matches = code.match(/\${([^{}]+)}/g) ?? [];
+            for (const match of matches) {
+                const content = match.match(/\${([^{}]+)}/)[1];
+                code = code.replace(match, `{${content}}`);
+            }
 
             eval(code);
         }

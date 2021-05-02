@@ -5,7 +5,7 @@ function buildExperimentList() {
             const parent = document.getElementById("experiments");
 
             experiments.sort((a, b) => {
-                return new Date(a.date) < new Date(b.date);
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
             });
 
             console.log(experiments)
