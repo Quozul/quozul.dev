@@ -4,7 +4,4 @@ echo $2
 
 cd ../$1
 
-pwd
-whoami
-
-git pull origin $2
+git fetch --all ; git reset --hard origin/$2 ; git pull origin $2
