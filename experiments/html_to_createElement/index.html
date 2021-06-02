@@ -4,10 +4,10 @@
 <head>
     <title>Experiments - HTML to createElement</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
-    <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://quozul.dev/public/bootstrap/bootstrap.min.css">
+    <script src="https://quozul.dev/public/bootstrap/bootstrap.bundle.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="image/png" href="/public/assets/icon.png">
+    <link rel="icon" type="image/png" href="https://quozul.dev/public/assets/icon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
@@ -69,9 +69,9 @@
         <div class="col-8 bg-dark p-5">
             <h1>Your HTML code</h1>
             <textarea onchange="convert()" class="form-control" id="html" rows="10" cols="100">
-<span class="hello world">
+<span class="hello ${world}">
     Hello<br>
-    <b>Bold</b>
+    <b data-test="bold">Bold</b>
     <i style="text-decoration: underline; margin: 1em;">
         Bye ${variable}
         <u>Underline</u>
@@ -86,32 +86,53 @@
 </span></textarea>
 
             <div class="d-flex justify-content-between mt-2">
-                <div class="d-flex justify-content-between" style="user-select: none;">
-                    <div class="form-check me-2">
-                        <input class="form-check-input" type="checkbox" value="" id="base36" onchange="convert()">
-                        <label class="form-check-label" for="base36">
+                <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-0" style="user-select: none;">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" value="" id="base36" onchange="convert()" checked>
+                        <label class="form-check-label" for="base36" title="Shorter less readable variable names">
                             Base 36 variable names
                         </label>
                     </div>
 
-                    <div class="form-check me-2">
+                    <div class="form-check col">
                         <input class="form-check-input" type="checkbox" value="" id="setAttribute" onchange="convert()">
-                        <label class="form-check-label" for="setAttribute">
+                        <label class="form-check-label" for="setAttribute" title="Less but longer lines">
                             Use setAttribute for style
                         </label>
                     </div>
 
-                    <div class="form-check me-2">
+                    <div class="form-check col">
                         <input class="form-check-input" type="checkbox" value="" id="innerText" onchange="convert()" checked>
-                        <label class="form-check-label" for="innerText">
+                        <label class="form-check-label" for="innerText" title="Shorter code">
                             Use innerText when possible
                         </label>
                     </div>
 
-                    <div class="form-check">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" value="" id="useQuotes" onchange="convert()" checked>
+                        <label class="form-check-label" for="useQuotes" title="¯\_(ツ)_/¯">
+                            Optimize variable calls
+                        </label>
+                    </div>
+
+                    <div class="form-check col">
                         <input class="form-check-input" type="checkbox" value="" id="fulltrim" onchange="convert()" checked>
-                        <label class="form-check-label" for="fulltrim">
+                        <label class="form-check-label" for="fulltrim" title="Shorter code but can change the render of the elements">
                             Full trim
+                        </label>
+                    </div>
+
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" value="" id="ignoreData" onchange="convert()">
+                        <label class="form-check-label" for="ignoreData" title="Shorter code but can break the elements">
+                            Ignore data attributes
+                        </label>
+                    </div>
+
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" value="" id="comments" onchange="convert()">
+                        <label class="form-check-label" for="comments" title="Add comments to the code">
+                            Comments
                         </label>
                     </div>
                 </div>
@@ -120,7 +141,7 @@
             <div class="d-flex justify-content-between mt-2">
                 <div class="input-group me-2">
                     <span class="input-group-text" id="separatorLabel">Separator</span>
-                    <input type="text" class="form-control" placeholder="Separator" aria-label="Separator" aria-describedby="separatorLabel" value="_" id="separator" onchange="convert()">
+                    <input type="text" class="form-control" placeholder="Variable names separator" aria-label="Separator" aria-describedby="separatorLabel" value="" id="separator" onchange="convert()">
                 </div>
                     
                 <button class="btn btn-primary" onclick="convert();">Convert</button>
@@ -142,138 +163,7 @@
         </div>
     </div>
 
-    <script>
-        let copyCode = '';
-
-        function build(element, parent = "", deep = 0, code = "") {
-            const base36 = document.getElementById('base36').checked;
-            const fulltrim = document.getElementById('fulltrim').checked;
-            const setAttribute = !document.getElementById('setAttribute').checked;
-            const innerText = document.getElementById('innerText').checked;
-            const separator = document.getElementById('separator').value;
-
-            function textNode(parent, varName, node) {
-                let data = node.data.replace(/ +/g, ' ')
-                if (fulltrim) data = data.trim();
-                else data = data.replace(/\n|\r/g, '\\n');
-
-                if (data.length > 0) {
-                    localCode += `const ${varName} = document.createTextNode(\`${data}\`);\n`;
-
-                    if (parent.length > 0)
-                        localCode += `${parent}.append(${varName});\n`;
-                }
-            }
-
-            let localCode = "", i = 0;
-
-            for (const child of element.childNodes) {
-                i += 1;
-
-                const tagName = child.tagName?.toLowerCase();
-
-                let uid;
-
-                if (separator.length === 0 && base36)
-                    uid = (parseInt(parseInt(deep, 36) + i.toString())).toString(36)
-                else
-                    uid = deep.toString() + separator + (base36 ? i.toString(36) : i);
-
-                const varName = `${tagName || child.nodeName.replace("#", "")}_${uid}`;
-
-                if (element.childElementCount > 0)
-                    switch (child.nodeType) {
-                        case 1:
-                            localCode += `const ${varName} = document.createElement(\`${tagName}\`);\n`;
-
-                            for (const attribute of child.attributes)
-                                switch (attribute.name) {
-                                    case "class":
-                                        localCode += `${varName}.classList.add(\`${attribute.value.split(" ").join("\`, \`")}\`);\n`;
-                                        break;
-
-                                    case "name": case "id": case "checked": case "value": case "disabled":
-                                    case "type": case "action": case "method": case "form": case "href":
-                                    case "src": case "target":
-                                        localCode += `${varName}.${attribute.name} = \`${attribute.value}\`;\n`
-                                        break;
-
-                                    case "for":
-                                        localCode += `${varName}.htmlFor = \`${attribute.value}\`;\n`
-                                        break;
-                                    
-                                    case "style":
-                                        if (setAttribute)
-                                            attribute.value.trim().split(';').forEach(s => {
-                                                [name, value] = s.split(':');
-                                                if (name.length > 0 && value.length > 0)
-                                                    localCode += `${varName}.style.${name.trim().replace(/(\-\w)/g, m => m[1].toUpperCase())} = \`${value.trim()}\`;\n`;
-                                            });
-                                        else
-                                            localCode += `${varName}.setAttribute(\`${attribute.name}\`, \`${attribute.value}\`);\n`;
-                                        break;
-
-                                    default:
-                                        localCode += `${varName}.setAttribute(\`${attribute.name}\`, \`${attribute.value}\`);\n`;
-                                        break;
-                                }
-
-                            localCode += build(child, varName, uid.toString(), code);
-
-                            if (parent.length > 0)
-                                localCode += `${parent}.append(${varName});\n`;
-
-                            if (innerText && child.childElementCount === 0 && child.innerText.length > 0)
-                                localCode += `${varName}.innerText = \`${child.innerText}\`;\n`;
-
-                            break;
-                        case 3:
-                            textNode(parent, varName, child);
-                            break;
-                    }
-                else {
-                    if (!innerText || child.parentElement.childElementCount > 0)
-                        textNode(parent, varName, child);
-                }
-            }
-
-            localCode += "\n";
-
-
-            return localCode;
-        }
-
-        function convert() {
-            const html = document.getElementById("html").value;
-            const element = document.createElement("div");
-            element.innerHTML = html;
-
-            document.getElementById('res').innerHTML = "";
-
-            let code = "function buildElement(parent) {\n";
-            code += "  " + build(element, "parent").trim().replace(/\n/g, "\n  ");
-            code += "\n}";
-
-            document.getElementById('code').innerText = code;
-            copyCode = code;
-
-            code += "\nbuildElement(document.getElementById('res'));";
-
-            const matches = code.match(/\${([^{}]+)}/g) ?? [];
-            for (const match of matches) {
-                const content = match.match(/\${([^{}]+)}/)[1];
-                code = code.replace(match, `{${content}}`);
-            }
-
-            eval(code);
-        }
-
-        function copy() {
-            navigator.clipboard.writeText(copyCode);
-        }
-
-        convert();
-    </script>
+    <script src="main.js"></script>
 </main>
 
 <footer class="container">
@@ -281,7 +171,6 @@
         <span class="copyleft"></span> Copyleft - Quozul
     </div>
 </footer>
-<!-- Scripts -->
 </body>
 
 </html>
