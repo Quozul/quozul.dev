@@ -11,9 +11,11 @@ header('Content-Type: application/json; charset=utf-8');
 
 switch ($before) {
     case 'resources' :
+        header("Cache-Control: private, max-age=3600");
         require __DIR__ . '/api/resources.php';
         break;
     case 'experiments' :
+        header("Cache-Control: private, max-age=3600");
         require __DIR__ . '/api/experiments.php';
         break;
     case 'account' :

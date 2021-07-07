@@ -37,4 +37,4 @@ foreach ($experiments as $key => $value) {
         $closest = $value;
 }
 
-header("Location: https://experiments.quozul.dev/experiments/$closest");
+header("Location: /experimentsexperiments/$closest");

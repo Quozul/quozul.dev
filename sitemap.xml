@@ -6,13 +6,13 @@
         <changefreq>monthly</changefreq>
     </url>
     <url>
-        <loc>https://experiments.quozul.dev/</loc>
-        <lastmod>2020-01-31</lastmod>
-        <changefreq>weekly</changefreq>
+        <loc>https://quozul.dev/experiments</loc>
+        <lastmod>2021-07-07</lastmod>
+        <changefreq>monthly</changefreq>
     </url>
     <url>
         <loc>https://status.quozul.dev/</loc>
-        <lastmod>2020-01-31</lastmod>
+        <lastmod>2021-07-07</lastmod>
         <changefreq>daily</changefreq>
     </url>
 </urlset>

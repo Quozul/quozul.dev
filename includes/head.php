@@ -9,7 +9,7 @@
 
     <meta name="description" content="This page contains some random web projects I've made.">
     <meta name="author" content="Quozul">
-    <link rel="canonical" href="https://experiments.quozul.dev/">
+    <link rel="canonical" href="https://quozul.dev/experiments">
 
     <style>
     @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');

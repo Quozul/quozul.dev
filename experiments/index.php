@@ -26,6 +26,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/includes/head.php';
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'; ?>
 </body>
 
-<script src="public/scripts/experiments.js"></script>
+<script src="../public/scripts/experiments.js"></script>
 
 </html>
