@@ -4,18 +4,19 @@
 <head>
     <meta charset="utf-8">
 
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/styles/index/bootstrap.min.css">
+    <!-- Import fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
     <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
 
     <!-- Custom scripts -->
-    <!--<script src="/public/scripts/main.min.js"></script>
-    <script src="/public/scripts/utils.min.js"></script>
-    <script src="/public/scripts/stars.min.js"></script>-->
-    <script src="/public/scripts/index.min.js"></script>
+    <script src="/public/scripts/utils.js"></script>
+    <script src="/public/scripts/main.js"></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/public/styles/stars.min.css">
     <link rel="stylesheet" href="/public/styles/index/main.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,42 +90,13 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100 justify-content-between text-center">
-    <header class="container">
-        <div class="mt-3 rounded shadow-lg p-0 backdrop-blur">
-            <nav class="navbar navbar-expand-lg navbar-dark backdrop-blur rounded shadow-lg">
-                <div class="navbar-collapse collapse w-100 navbarSupportedContent order-1 order-md-0">
-                    <ul class="navbar-nav ms-auto text-center">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/experiments/">Experiments</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mx-auto my-2 order-0 order-md-1 position-relative">
-                    <a class="navbar-brand mx-2" href="/">
-                        <img src="/public/assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
-                        Quozul.dev
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse collapse w-100 navbarSupportedContent order-2 order-md-2">
-                    <ul class="navbar-nav me-auto text-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/resources/">Resources</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </header>
-
     <main class="container">
         <section id="sec1" class="page page-current" name="Home">
             <div class="text-white">
-                <span id="logo">&nbsp;</span>
-                <h1>Quozul</h1>
-                <h2>Powered by the future</h2>
+                <div class="d-inline-flex flex-column align-items-start">
+                    <h2 class="text-start d-inline-block m-0">Web developer</h2>
+                    <h1 class="display m-0">Quozul</h1>
+                </div>
 
                 <div class="scroll-down">
                     <div class="scroll-arrow"></div>
@@ -133,105 +105,112 @@
             </div>
         </section>
 
-        <section id="sec2" class="page page-down" name="Projects">
-            <div>
-                <h1 class="text-white">Projects</h1>
-
-                <h2 class="text-white">Featured</h2>
-                <div class="projects container">
-                    <ul>
-                        <li><a href="https://github.com/Quozul/OnDemandServer" target="_blank" class="button orange" rel="noopener">OnDemandServer</a></li>
-                        <li>Start and stop Minecraft servers on demand.</li>
-                        <li><b>Date:</b> December 20, 2020</li>
-                        <li><b>Language:</b> English</li>
-                        <li><b>Compatibility:</b> BungeeCord plugin</li>
-                        <li><a class="show-link" href="/resources/#Projects/Minecraft/Plugins">Check resources for download</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="https://github.com/Quozul/" target="_blank" class="button white" rel="noopener">GitHub</a></li>
-                        <li>More projects on <a class="show-link" href="https://github.com/Quozul/" target="_blank" rel="noopener">GitHub</a>.</li>
-                        <li>As well as on the <a class="show-link" href="/resources/">resources</a> and <a class="show-link" href="/experiments/">experiments</a> pages.</li>
-                    </ul>
-                </div>
-
-                <h2 class="text-white">All projects</h2>
-                <div class="projects container">
-                    <ul>
-                        <li><a href="https://github.com/Quozul/epic-bot" target="_blank" class="button green" rel="noopener">epic-bot</a></li>
-                        <li>A multi function Discord bot.</li>
-                        <li><b>Date:</b> June 06, 2020</li>
-                        <li><b>Language:</b> French, English</li>
-                        <li><a class="show-link" href="https://discord.com/oauth2/authorize?client_id=660424710021971988&scope=bot&permissions=8" target="_blank" rel="noopener">Invite the bot</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="https://github.com/Quozul/Audio-Visualizer" target="_blank" class="button red" rel="noopener">Audio-Visualizer</a></li>
-                        <li>Audio visualizer in C#.</li>
-                        <li><b>Date:</b> December 6, 2019</li>
-                        <li><b>Language:</b> English</li>
-                        <li><b>Compatibility:</b> Windows</li>
-                        <li><a class="show-link" href="/resources/#Projects/AudioVisualizer">Check resources for download</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="https://github.com/Quozul/Pak" target="_blank" class="button yellow" rel="noopener">Pak</a></li>
-                        <li>Text based game in Java.</li>
-                        <li><b>Date:</b> June 1, 2019</li>
-                        <li><b>Language:</b> English</li>
-                        <li><b>Compatibility:</b> It's Java, everywhere</li>
-                        <li><a class="show-link" href="/resources/#Projects/Pak">Check resources for download</a></li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="https://github.com/Quozul/DHStatsViewer" target="_blank" class="button orange" rel="noopener">DHStatsViewer</a></li>
-                        <li>Discord History Tracker visualizer.</li>
-                        <li><b>Date:</b> Long ago, August 2018</li>
-                        <li><b>Language:</b> English</li>
-                        <li><b>Compatibility:</b> Should work everywhere</li>
-                        <li>
-                            <a class="show-link" href="/resources/#Projects/DHStatsViewer">Check resources for download</a>
-                        </li>
-                    </ul>
-
-                    <ul>
-                        <li><a href="https://github.com/Quozul/Pirikium" target="_blank" class="button purple" rel="noopener">Pirikium</a></li>
-                        <li>Top-down shooter game.</li>
-                        <li><b>Date:</b> July 27, 2018</li>
-                        <li><b>Language:</b> English, French & Polish</li>
-                        <li><b>Compatibility:</b> Should work everywhere</li>
-                        <li>
-                            <a class="show-link" href="https://github.com/Quozul/Pirikium/releases/latest" target="_blank" rel="noopener">GitHub download</a>
-                            •
-                            <a class="show-link" href="/resources/#Projects/Pirikium">Resources</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="sec3" class="page page-down" name="Contact">
-            <div class="container">
-                <h1 class="text-white">Contact</h1>
-
-                <div class="backdrop-blur rounded shadow-lg p-3">
-                    <div class="text-light">
-                        <h2>Other informations :</h2>
-                        <hr>
-                        <p>Contact by mail: <a href="mailto:quozul@outlook.com" class="show-link">quozul@outlook.com</a>.</p>
-                        <p>You can find me on almost all social media under the username <u class="select">Quozul</u>.<br><small>I hope to see you
-                                around ;)</small></p>
+        <section id="sec2" class="page page-down" name="Pirikium">
+            <div class="d-flex justify-content-center">
+                <div class="row g-0 justify-content-center align-items-stretch">
+                    <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
+                        <img src="/public/assets/projects/pirikium.jpg" alt="Pirikium" class="img-fluid">
+                    </div>
+                    <div class="d-none d-md-block border-start"></div>
+                    <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
+                        <h1>Pirikium</h1>
+                        <ul class="list-unstyled">
+                            <li>Top-down shooter game.</li>
+                            <li><b>Date:</b> July 27, 2018</li>
+                            <li><b>Language:</b> English, French & Polish</li>
+                            <li><b>Compatibility:</b> Compiled for Windows & portable</li>
+                            <li>
+                                <a class="show-link" href="https://github.com/Quozul/Pirikium/releases/latest" target="_blank" rel="noopener">GitHub download</a>
+                                •
+                                <a class="show-link" href="/resources/#Projects/Pirikium">Resources</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
-    </main>
 
-    <footer class="container">
-        <div class="mt-3 mb-3 text-center p-3 container shadow-lg rounded backdrop-blur text-white">
-            <span class="copyleft"></span> Copyleft - Quozul
-        </div>
-    </footer>
+        <section id="sec5" class="page page-down" name="DHStatsViewer">
+            <div class="d-flex justify-content-center">
+                <div class="row g-0 justify-content-center align-items-stretch">
+                    <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
+                        <img src="/public/assets/projects/DHStatsViewer.png" alt="DHStatsViewer" class="img-fluid">
+                    </div>
+                    <div class="d-none d-md-block border-start"></div>
+                    <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
+                        <h1>DHStatsViewer</h1>
+                        <ul class="list-unstyled">
+                            <li>Discord History Tracker visualizer.</li>
+                            <li><b>Date:</b> Long ago, August 2018</li>
+                            <li><b>Language:</b> English</li>
+                            <li><b>Compatibility:</b> Compiled for Windows & portable</li>
+                            <li>
+                                <a class="show-link" href="https://github.com/Quozul/DHStatsViewer/releases/latest" target="_blank" rel="noopener">GitHub download</a>
+                                •
+                                <a class="show-link" href="/resources/#Projects/DHStatsViewer">Check resources for download</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec3" class="page page-down" name="OnDemandServer">
+            <div class="d-flex flex-column align-items-center">
+                <div class="row g-0 justify-content-center align-items-stretch">
+                    <div class="p-3 text-end col-6 d-flex flex-column justify-content-start">
+                        <h1 class="text-end">OnDemandServer</h1>
+                        <ul class="list-unstyled">
+                            <li>Start and stop Minecraft servers on demand from the proxy.</li>
+                            <li><b>Date:</b> December 20, 2020</li>
+                            <li><b>Language:</b> English</li>
+                            <li><b>Compatibility:</b> BungeeCord & Waterfall proxies</li>
+                            <li>
+                                <a class="show-link" href="https://github.com/Quozul/OnDemandServer" target="_blank" rel="noopener">GitHub</a>
+                                •
+                                <a class="show-link" href="/resources/#Projects/Minecraft/Plugins">Check resources for download</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="border-start p-3 text-start col-6 d-flex flex-column justify-content-start">
+                        <h1>Other projects</h1>
+                        <ul class="list-unstyled">
+                            <li>More projects on <a class="show-link" href="https://github.com/Quozul/" target="_blank" rel="noopener">GitHub</a>.</li>
+                            <li>As well as on the <a class="show-link" href="/resources/">resources</a> and <a class="show-link" href="/experiments/">experiments</a> pages.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec4" class="page page-down" name="Contact">
+            <div class="container">
+                <h1 class="text-white">Contact</h1>
+
+                <div class="p-3">
+                    <div class="d-flex justify-content-center">
+                        <div class="p-3 d-flex justify-content-center align-items-center">
+                            <img alt="Profile picture" src="/public/assets/icon.png">
+                        </div>
+
+                        <div class="border-start p-3 text-start">
+                            <p>Contact by mail: <a href="mailto:contact@quozul.dev" class="show-link">contact@quozul.dev</a>.</p>
+                            <p>
+                                You can find me on almost all social media under the username <u class="select">Quozul</u>.<br>
+                                <small>I hope to see you around <span class="d-inline-block" style="transform: translate(1em, 0) rotate(90deg);">;-)</span></small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="d-inline">
+                    <div class="mt-3 mb-3 text-center p-3 container text-white">
+                        <span class="copyleft"></span> Copyright — Quozul — All rights reserved.
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </main>
 
     <div class="bubbles"></div>
 </body>
