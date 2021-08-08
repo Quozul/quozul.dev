@@ -1,4 +1,21 @@
-function buildTree(elements, appendTo, path) {
+/**
+ * @typedef FileElement
+ * @property {string} path
+ * @property {string} metadata
+ * @property {?number} size
+ * @property {?number} time
+ * @property {FileElement[]} dir
+ */
+
+/**
+ * @param {FileElement} elements
+ * @param {HTMLElement} appendTo
+ * @param {string} path Base path
+ * @param {string[]} open
+ * @param rootPath
+ * @returns {HTMLDivElement}
+ */
+function buildTree(elements, appendTo, path, open, rootPath = path) {
     const div = document.createElement('div');
     div.classList.add('content');
 
@@ -16,12 +33,19 @@ function buildTree(elements, appendTo, path) {
             fileContent.classList.add('folder');
 
             filePath.addEventListener('click', (e) => {
-                const element = fileContent.querySelector('.content');
-                element.classList.toggle('expand');
+                const elem = fileContent.querySelector('.content');
+                elem.classList.toggle('expand');
 
                 const arrow = fileContent.querySelector('.arrow');
                 arrow.classList.toggle('right');
                 arrow.classList.toggle('down');
+
+                const p = fullPath.replace(rootPath, "");
+                if (elem.classList.contains("expand")) {
+                    window.location.hash = p;
+                } else {
+                    window.location.hash = p.substr(0, p.length - element.path.length);
+                }
                 e.preventDefault();
             });
 
@@ -30,7 +54,13 @@ function buildTree(elements, appendTo, path) {
             i.classList.add('arrow', 'right');
             filePath.prepend(i);
 
-            const content = buildTree(element.dir, fileContent, fullPath);
+            const shouldOpen = open.length > 0 && open[0] === element.path;
+
+            if (shouldOpen) open.shift();
+
+            const content = buildTree(element.dir, fileContent, fullPath, open, rootPath);
+
+            if (shouldOpen) filePath.click();
 
             if (element.metadata !== null) {
                 const span = document.createElement("span");
@@ -75,6 +105,10 @@ function buildTree(elements, appendTo, path) {
     return div;
 }
 
+/**
+ * @param {MouseEvent} e
+ * @param {string} filePath
+ */
 function viewFile(e, filePath) {
     const content = document.getElementById('resource-content');
     const spinner = document.getElementById('spinner');
@@ -98,19 +132,28 @@ function viewFile(e, filePath) {
             spinner.classList.add('d-none');
             spinner.classList.remove('d-flex');
 
-            switch (contentType.split('/')[0]) {
+
+            switch (contentType?.split('/')?.[0]) {
                 case 'image':
                     content.innerHTML = `<img src="${filePath}" class="img-fluid">`;
                     break;
                 case 'text':
-                    res.text().then(txt => {
-                        if (contentType === "text/markdown") {
-                            const converter = new showdown.Converter();
-                            content.innerHTML = converter.makeHtml(txt);
-                        } else {
-                            content.innerHTML = `<pre>${txt}</pre>`;
-                        }
-                    });
+                case 'application':
+                    if (res.headers.get("Content-Length") < 1024) {
+                        res.text().then(txt => {
+                            if (contentType === "text/markdown") {
+                                const converter = new showdown.Converter();
+                                content.innerHTML = converter.makeHtml(txt);
+                            } else {
+                                content.innerHTML = `<pre>${txt}</pre>`;
+                            }
+                        });
+                    } else {
+                        content.innerHTML = "Sorry, this file can't be previewed (too long).";
+                    }
+                    break;
+                default:
+                    content.innerHTML = "Sorry, this file can't be previewed (non-text file).";
                     break;
             }
         })
@@ -122,7 +165,8 @@ function getResources() {
         .then((json) => {
             const tree = document.getElementById('resource-tree');
 
-            buildTree(json[0].dir, tree, '/~erwan');
+            const open = window.location.hash.substr(1).split(/\//g).filter(e => e.length > 0);
+            buildTree(json[0].dir, tree, '/~erwan', open);
         });
 }
 
