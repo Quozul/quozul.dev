@@ -29,7 +29,7 @@ function scroll(dir) {
     // scroll down
     if (dir) {
         const next = cur.nextElementSibling;
-        if (next && !next.classList.contains("page")) return;
+        if (!next || !next.classList.contains("page")) return;
 
         next.classList.add('page-current');
         next.classList.remove('page-down');
@@ -38,7 +38,7 @@ function scroll(dir) {
     } else { // scroll up
         if (cur.firstElementChild.scrollTop !== 0) return;
         const prev = cur.previousElementSibling;
-        if (prev && !prev.classList.contains("page")) return;
+        if (!prev || !prev.classList.contains("page")) return;
 
         prev.classList.add('page-current');
         cur.classList.add('page-down');
