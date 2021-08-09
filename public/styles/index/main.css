@@ -308,9 +308,17 @@ header, footer {
 }
 
 @media (min-width: 576px) {
-    .bubble:hover, .bubble.selected:focus {
+    .bubble {
+        position: relative;
         color: white;
         padding-right: 3em;
+        transition: .2s padding-right, .2s color;
+        cursor: pointer;
+    }
+
+    .bubble:hover, .bubble.selected:focus {
+        color: white;
+        padding-right: 4em;
     }
 }
 
@@ -347,7 +355,13 @@ h1 {
 
 .display {
     font-family: 'Merriweather', serif;
-    letter-spacing: .5em;
-    font-size: 5rem;
+    font-size: 4rem;
     color: #DCB800;
+}
+
+@media (min-width: 576px) {
+    .display {
+        font-size: 5rem;
+        letter-spacing: .5em;
+    }
 }

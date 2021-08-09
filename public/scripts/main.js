@@ -28,9 +28,8 @@ function scroll(dir) {
 
     // scroll down
     if (dir) {
-        if (Math.abs(scroll - cur.firstElementChild.scrollHeight) > 1) return;
         const next = cur.nextElementSibling;
-        if (next === undefined || next.id === '') return;
+        if (next && !next.classList.contains("page")) return;
 
         next.classList.add('page-current');
         next.classList.remove('page-down');
@@ -39,7 +38,7 @@ function scroll(dir) {
     } else { // scroll up
         if (cur.firstElementChild.scrollTop !== 0) return;
         const prev = cur.previousElementSibling;
-        if (prev === undefined || prev.id === '') return;
+        if (prev && !prev.classList.contains("page")) return;
 
         prev.classList.add('page-current');
         cur.classList.add('page-down');
@@ -56,10 +55,11 @@ function scroll(dir) {
     document.getElementsByClassName('bubble')[i]?.classList.add('selected');
 }
 
+let timeout = null;
 document.addEventListener('wheel', function (e) {
     if (e.deltaY === 0) return;
-
-    scroll(e.deltaY > 0);
+    if (timeout) clearTimeout(timeout); // Prevent from scrolling too much
+    timeout = setTimeout(scroll, 50, e.deltaY > 0);
 });
 
 function scrollto(button, id, select) {
@@ -68,7 +68,7 @@ function scrollto(button, id, select) {
 
     const dif = getChildNumber(cur) - getChildNumber(element);
 
-    if (dif === 0) return;
+    if (dif == 0) return;
     else if (dif > 0) {
         cur.classList.add('page-down');
         element.classList.remove('page-up');
