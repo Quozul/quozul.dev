@@ -48,16 +48,20 @@ class PageContainer extends HTMLElement {
             }
         }, {passive: true});
 
-        let startTouchY;
+        let startTouchY, contentScroll = 0;
         this.addEventListener("touchstart", function (ev) {
+            /** @type {PageSection} */
+            const currentlySelected = this.querySelector(":scope > .page-current");
+            contentScroll = currentlySelected.scrollTop;
+
             startTouchY = ev.changedTouches[0].pageY;
         }, {passive: true});
 
-        this.addEventListener("touchmove", function (ev) {
+        /*this.addEventListener("touchmove", function (ev) {
             const curTouchY = ev.changedTouches[0].pageY;
 
             // TODO: Do animation when the section is ready to scroll
-        }, {passive: true});
+        }, {passive: true});*/
 
         this.addEventListener("touchend", function (ev) {
             if (this.transitioning) {
@@ -65,10 +69,13 @@ class PageContainer extends HTMLElement {
                 return;
             }
 
-            const curTouchY = ev.changedTouches[0].pageY;
-
             /** @type {PageSection} */
             const currentlySelected = this.querySelector(":scope > .page-current");
+
+            if (contentScroll !== currentlySelected.scrollTop) return;
+
+            const curTouchY = ev.changedTouches[0].pageY;
+
             let nextSelected;
             if (curTouchY < startTouchY) {
                 // Scroll down
@@ -153,19 +160,8 @@ class PageSection extends HTMLElement {
         this.position = Array.prototype.indexOf.call(this.parent.children, this);
 
         this.transitioning = false;
-        this.addEventListener("transitionstart", ev => {
-            this.parent.transitioning = this.transitioning = true;
-        });
-        this.addEventListener("transitionend", ev => {
-            this.parent.transitioning = this.transitioning = false;
-        });
-
-        this.contentDiv = document.createElement("div");
-        this.contentDiv.innerHTML = this.innerHTML;
-        this.contentDiv.style.width = "100%";
-        this.contentDiv.style.height = "100%";
-        this.innerHTML = "";
-        this.append(this.contentDiv);
+        this.addEventListener("transitionstart", ev => this.parent.transitioning = this.transitioning = true);
+        this.addEventListener("transitionend", ev => this.parent.transitioning = this.transitioning = false);
     }
 
     forceSelect() {
@@ -181,7 +177,7 @@ class PageSection extends HTMLElement {
         if (currentlySelected) {
             // Verify scroll, it is better to be able to see all the content of the page
             const direction = currentlySelected.position > this.position; // True for scroll up, false for scroll down
-            const {offsetHeight, scrollTop, scrollHeight} = currentlySelected.contentDiv;
+            const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
             if (direction && scrollTop !== 0) return;
             if (!direction && offsetHeight + scrollTop !== scrollHeight) return;
 
@@ -234,10 +230,12 @@ function buildMenu() {
     });
 }
 
-window.onload = function (ev) {
+window.addEventListener("load", function (ev) {
     // Load custom elements
     window.customElements.define('page-section', PageSection);
     window.customElements.define('page-container', PageContainer);
 
-    buildMenu();
-}
+    try {
+        buildMenu();
+    } catch (e) {}
+});
