@@ -2,10 +2,15 @@
     user-select: none;
 }
 
+:root {
+    --background-color: #0a0a1a;
+    --gold-color: #DCB800;
+}
+
 body {
     overflow: hidden;
     z-index: 100;
-    background-color: #0a0a1a;
+    background-color: var(--background-color);
 }
 
 .select {
@@ -80,125 +85,6 @@ small {
     font-weight: lighter;
 }
 
-.page {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    z-index: 0;
-    transition: 1s transform, 1s opacity;
-}
-
-.page>div {
-    overflow-y: auto;
-}
-
-.page>div>*:first-child {
-    margin-top: 88px;
-}
-
-.page>div>*:last-child {
-    margin-bottom: 88px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-.page-up {
-    transform: translateY(-100vh) scale(.8);
-    opacity: 0;
-}
-
-.page-down {
-    transform: translateY(100vh) scale(.8);
-    opacity: 0;
-}
-
-.page-current {
-    transform: translateX(0) translateY(0) scale(1);
-    opacity: 1;
-}
-
-/* Projects section */
-
-.projects {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: space-evenly;
-}
-
-.projects ul {
-    background-color: #FDFEFE;
-    border-radius: 4px;
-    font-size: 14px;
-    line-height: 24px;
-    color: black;
-    width: 256px;
-    min-height: 256px;
-    padding: 10px;
-    margin: 20px;
-    box-shadow: 0 5px #D0D3D4;
-    /*transition: 1s;*/
-}
-
-/* buttons */
-
-.button {
-    display: block;
-    margin: 10px;
-    font-size: 24px;
-    padding: 10px;
-    cursor: pointer;
-    box-shadow: inset 0 -1px 0 var(--box-shadow-color);
-    border-radius: 3px 3px 0 0;
-    background-color: var(--background-color);
-    color: black;
-    transition: .3s box-shadow;
-}
-
-.button:hover {
-    border-radius: 3px;
-    box-shadow: inset 0 -64px 0 var(--box-shadow-color);
-}
-
-.green {
-    --background-color: rgba(39, 174, 95, 0.5);
-    --box-shadow-color: #1E8449;
-}
-
-.yellow {
-    --background-color: rgba(212, 172, 13, 0.5);
-    --box-shadow-color: #B7950B;
-}
-
-.red {
-    --background-color: rgba(169, 49, 38, 0.5);
-    --box-shadow-color: #7B241C;
-}
-
-.purple {
-    --background-color: rgba(109, 52, 131, 0.5);
-    --box-shadow-color: #5B2C6F;
-}
-
-.white {
-    --background-color: rgba(238, 238, 238, 0.5);
-    --box-shadow-color: #DDDDDD;
-}
-
-.orange {
-    --background-color: rgba(214, 138, 16, 0.5);
-    --box-shadow-color: #b9770e;
-}
-
 /* Table */
 
 /* Scroll arrow
@@ -239,51 +125,12 @@ small {
     }
 }
 
-/*
-* For weird people blocking scripts
-*     (I'm jocking)
-*/
-
 /* Flex boxes */
 
 .image {
     width: 100%;
     max-width: 400px;
     height: auto;
-}
-
-/* Tooltip https://www.w3schools.com/css/css_tooltip.asp */
-
-/* Utilities */
-
-.backdrop-blur {
-    backdrop-filter: blur(5px);
-    background-color: rgba(51, 51, 68, .5);
-}
-
-/*.backdrop-blur {
-    position: relative;
-    z-index: 100;
-}
-
-.backdrop-blur::before {
-    content: " ";
-    display: block;
-    z-index: -10;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(5px);
-    border-radius: .25rem;
-    background-image: linear-gradient(to top, rgba(17, 17, 34, .5), rgba(34, 34, 51, .5));
-}*/
-
-/* Header footer */
-
-header, footer {
-    z-index: 10;
 }
 
 /* Bubbles */
@@ -351,12 +198,11 @@ header, footer {
 
 h1 {
     font-family: 'Merriweather', serif;
+    color: var(--gold-color);
 }
 
 .display {
-    font-family: 'Merriweather', serif;
     font-size: 4rem;
-    color: #DCB800;
 }
 
 @media (min-width: 576px) {
@@ -364,4 +210,64 @@ h1 {
         font-size: 5rem;
         letter-spacing: .5em;
     }
+}
+
+/* Source: https://codepen.io/ericrasch/pen/Irlpm */
+.line-title {
+    display: table;
+    white-space: nowrap;
+}
+
+.line-title:before, .line-title:after {
+    border-top: 1px solid var(--gold-color);
+    content: '';
+    display: table-cell;
+    position: relative;
+    top: 0.5em;
+    width: 100%;
+}
+
+.line-title-left:after {
+    display: none;
+}
+
+.line-title-right:before {
+    display: none;
+}
+
+.line-title-center:before, .line-title-center:after {
+    width: 45%;
+}
+
+.line-title:before { right: 1.5%; }
+.line-title:after { left: 1.5%; }
+
+/* Project menu */
+
+#subMenu {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow: auto;
+    bottom: 0;
+    background-color: var(--background-color);
+}
+
+#subMenu > div {
+    max-width: 100%;
+    display: flex;
+    padding: 1em;
+}
+
+#subMenu > div > div {
+    padding: .5em;
+    transition: .2s border-bottom-color;
+    border-bottom: solid 1px;
+    border-bottom-color: transparent;
+    cursor: pointer;
+}
+
+#subMenu > div > div:hover, #subMenu > div > div.selected {
+    border-bottom-color: var(--gold-color);
 }

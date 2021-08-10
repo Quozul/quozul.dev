@@ -29,7 +29,6 @@ header, footer {
 }
 
 /* Utility */
-
 .full-size {
     width: 100%;
     height: 100%;
@@ -41,15 +40,7 @@ header, footer {
     align-items: center;
 }
 
-.translate-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 /* Page containers */
-
 page-container {
     display: block;
     position: relative;

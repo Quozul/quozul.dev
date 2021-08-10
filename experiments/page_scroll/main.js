@@ -59,7 +59,6 @@ class PageContainer extends HTMLElement {
 
         /*this.addEventListener("touchmove", function (ev) {
             const curTouchY = ev.changedTouches[0].pageY;
-
             // TODO: Do animation when the section is ready to scroll
         }, {passive: true});*/
 
@@ -80,10 +79,10 @@ class PageContainer extends HTMLElement {
             if (curTouchY < startTouchY) {
                 // Scroll down
                 nextSelected = currentlySelected.nextElementSibling;
-            } else {
+            } else if (curTouchY > startTouchY) {
                 // Scroll up
                 nextSelected = currentlySelected.previousElementSibling;
-            }
+            } // If the touch hasn't moved, do nothing
 
             if (nextSelected) {
                 nextSelected.select();
@@ -126,22 +125,18 @@ class PageContainer extends HTMLElement {
         return Array.prototype.indexOf.call(this.children, selected);
     }
 
+    /**
+     * Returns all the pages of the container
+     * @returns {NodeListOf<PageSection>}
+     */
     getPages() {
         return this.querySelectorAll(":scope > page-section");
     }
 
     /**
-     * Used for a menu
-     * @static
-     * @public
-     * @param {string} pageContainer Id of the page container to update
-     * @param {number} childNumber
+     * Event fired when the container changes page
+     * @type {Event}
      */
-    static scrollToPage(pageContainer, childNumber) {
-        const container = document.querySelector(`page-container#${pageContainer}`);
-        container.select(childNumber);
-    }
-
     static containerSelect = new Event("containerselect");
 }
 
@@ -164,12 +159,18 @@ class PageSection extends HTMLElement {
         this.addEventListener("transitionend", ev => this.parent.transitioning = this.transitioning = false);
     }
 
+    /**
+     * Selects this section
+     */
     forceSelect() {
         this.classList.remove("page-down", "page-up", "page-left", "page-right");
         this.classList.add("page-current");
         this.parent.dispatchEvent(PageContainer.containerSelect);
     }
 
+    /**
+     * Verify if this section can be selected and then select
+     */
     select() {
         /** @type {PageSection} */
         const currentlySelected = this.parent.querySelector(":scope > .page-current");
@@ -191,11 +192,13 @@ class PageSection extends HTMLElement {
         }
 
         this.parent.transitioning = this.transitioning = true;
-
         this.forceSelect();
     }
 }
 
+/**
+ * Build the example's menu
+ */
 function buildMenu() {
     /** @type {HTMLUListElement} */
     const menu = document.getElementById("menu");
