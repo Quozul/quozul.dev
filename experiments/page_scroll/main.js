@@ -6,6 +6,11 @@ class PageContainer extends HTMLElement {
         // Write element functionality in here
         this.style.width = this.getAttribute("width");
         this.style.height = this.getAttribute("height");
+        this.direction = this.getAttribute("direction") === "horizontal";
+
+        // Prevent changing page if element is already transitioning
+        // You should create a menu if you want to switch page more quickly
+        this.transitioning = false;
 
         const selectedSection = window.location.hash.substr(1);
         if (selectedSection) {
@@ -20,13 +25,13 @@ class PageContainer extends HTMLElement {
         }
 
         this.addEventListener("wheel", function (ev) {
-            for (const element of ev.path) {
-                if (element === this) break;
-                if (element instanceof PageContainer) return;
+            if (this.transitioning) {
+                ev.stopPropagation();
+                return;
             }
 
             /** @type {PageSection} */
-            const currentlySelected = this.querySelector(".page-current");
+            const currentlySelected = this.querySelector(":scope > .page-current");
             let nextSelected;
 
             if (ev.deltaY > 0) {
@@ -37,7 +42,10 @@ class PageContainer extends HTMLElement {
                 nextSelected = currentlySelected.previousElementSibling;
             }
 
-            if (nextSelected) nextSelected.select();
+            if (nextSelected) {
+                nextSelected.select();
+                ev.stopPropagation();
+            }
         }, {passive: true});
 
         let startTouchY;
@@ -52,15 +60,15 @@ class PageContainer extends HTMLElement {
         }, {passive: true});
 
         this.addEventListener("touchend", function (ev) {
-            for (const element of ev.path) {
-                if (element === this) break;
-                if (element instanceof PageContainer) return;
+            if (this.transitioning) {
+                ev.stopPropagation();
+                return;
             }
 
             const curTouchY = ev.changedTouches[0].pageY;
 
             /** @type {PageSection} */
-            const currentlySelected = this.querySelector(".page-current");
+            const currentlySelected = this.querySelector(":scope > .page-current");
             let nextSelected;
             if (curTouchY < startTouchY) {
                 // Scroll down
@@ -70,7 +78,10 @@ class PageContainer extends HTMLElement {
                 nextSelected = currentlySelected.previousElementSibling;
             }
 
-            if (nextSelected) nextSelected.select();
+            if (nextSelected) {
+                nextSelected.select();
+                ev.stopPropagation();
+            }
         }, {passive: true});
     }
 
@@ -85,12 +96,12 @@ class PageContainer extends HTMLElement {
 
         for (let i = 0; i < sections.length; i++) {
             const section = sections[i];
-            section.classList.remove("page-up", "page-down", "page-current");
+            section.classList.remove("page-up", "page-down", "page-current", "page-left", "page-right");
 
             if (i < childIndex) {
-                section.classList.add("page-up");
+                section.classList.add(this.direction ? "page-left" : "page-up");
             } else if (i > childIndex) {
-                section.classList.add("page-down");
+                section.classList.add(this.direction ? "page-right" : "page-down");
             } else {
                 section.classList.add("page-current");
             }
@@ -142,32 +153,32 @@ class PageSection extends HTMLElement {
         this.position = Array.prototype.indexOf.call(this.parent.children, this);
 
         this.transitioning = false;
-        this.addEventListener("transitionstart", ev => this.transitioning = true);
-        this.addEventListener("transitionend", ev => this.transitioning = false);
+        this.addEventListener("transitionstart", ev => {
+            this.parent.transitioning = this.transitioning = true;
+        });
+        this.addEventListener("transitionend", ev => {
+            this.parent.transitioning = this.transitioning = false;
+        });
 
         this.contentDiv = document.createElement("div");
         this.contentDiv.innerHTML = this.innerHTML;
+        this.contentDiv.style.width = "100%";
+        this.contentDiv.style.height = "100%";
         this.innerHTML = "";
         this.append(this.contentDiv);
     }
 
     forceSelect() {
-        this.classList.remove("page-down", "page-up");
+        this.classList.remove("page-down", "page-up", "page-left", "page-right");
         this.classList.add("page-current");
         this.parent.dispatchEvent(PageContainer.containerSelect);
     }
 
     select() {
         /** @type {PageSection} */
-        const currentlySelected = this.parent.querySelector(".page-current");
+        const currentlySelected = this.parent.querySelector(":scope > .page-current");
+
         if (currentlySelected) {
-
-            // Prevent changing page if element is already transitioning
-            // You should create a menu to switch page more quickly
-            if (currentlySelected.transitioning) {
-                return;
-            }
-
             // Verify scroll, it is better to be able to see all the content of the page
             const direction = currentlySelected.position > this.position; // True for scroll up, false for scroll down
             const {offsetHeight, scrollTop, scrollHeight} = currentlySelected.contentDiv;
@@ -177,13 +188,13 @@ class PageSection extends HTMLElement {
             // Set proper new position
             currentlySelected.classList.remove("page-current");
             if (direction) {
-                currentlySelected.classList.add("page-down");
+                currentlySelected.classList.add(this.parent.direction ? "page-right" : "page-down");
             } else {
-                currentlySelected.classList.add("page-up");
+                currentlySelected.classList.add(this.parent.direction ? "page-left" : "page-up");
             }
-
-            // TODO: Add left & right positions
         }
+
+        this.parent.transitioning = this.transitioning = true;
 
         this.forceSelect();
     }

@@ -10,6 +10,7 @@ body {
 
 /* Quick menu style */
 ul#menu {
+    padding: 0 1em;
     display: flex;
     flex-direction: row;
     list-style: none;
@@ -25,6 +26,17 @@ ul#menu li.selected {
 
 header, footer {
     z-index: 100;
+}
+
+.full-size {
+    width: 100%;
+    height: 100%;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 /* Page containers */
