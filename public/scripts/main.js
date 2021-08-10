@@ -49,7 +49,7 @@ function scroll(dir) {
     cur.classList.remove('page-current');
 
     document.getElementsByClassName('selected')[0]?.classList.remove('selected');
-    const i = getChildNumber(document.getElementsByClassName('page-current')[0]);
+    const i = getChildNumber(document.querySelector('.page-current'));
     document.getElementsByClassName('menu-entry')[i]?.classList.add('selected');
 
     document.getElementsByClassName('bubble')[i]?.classList.add('selected');
@@ -154,7 +154,7 @@ function handleDates() {
 
 function generateMenu() {
     const bubbles = document.getElementsByClassName('bubbles')[0];
-    const pages = document.getElementsByClassName('page');
+    const pages = document.querySelectorAll('.page');
 
     for (const key in pages) {
         if (pages.hasOwnProperty(key)) {
