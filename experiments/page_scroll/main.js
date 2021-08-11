@@ -1,3 +1,15 @@
+/**
+ * @param {HTMLElement} target
+ * @returns {PageContainer|null} Returns the first parent PageContainer of the given target
+ */
+function getPageContainer(target) {
+    let element = target;
+    do {
+        element = element.parentElement;
+    } while (!(element instanceof PageContainer || element === null));
+    return element;
+}
+
 class PageContainer extends HTMLElement {
     constructor() {
         // Always call super first in constructor
@@ -7,6 +19,8 @@ class PageContainer extends HTMLElement {
         this.style.width = this.getAttribute("width");
         this.style.height = this.getAttribute("height");
         this.direction = this.getAttribute("direction") === "horizontal";
+
+        this.pages = this.querySelectorAll(":scope > page-section");
 
         // Prevent changing page if element is already transitioning
         // You should create a menu if you want to switch page more quickly
@@ -25,7 +39,7 @@ class PageContainer extends HTMLElement {
         }
 
         this.addEventListener("wheel", function (ev) {
-            if (this.transitioning) {
+            if (this.transitioning || ev.deltaY === 0 /* If horizontal scroll, then Y is 0 */) {
                 ev.stopPropagation();
                 return;
             }
@@ -68,12 +82,26 @@ class PageContainer extends HTMLElement {
                 return;
             }
 
+            const containerTarget = getPageContainer(ev.target);
+            const curTouchY = ev.changedTouches[0].pageY;
+
             /** @type {PageSection} */
             const currentlySelected = this.querySelector(":scope > .page-current");
 
-            if (contentScroll !== currentlySelected.scrollTop) return;
+            const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
 
-            const curTouchY = ev.changedTouches[0].pageY;
+            if (containerTarget !== this) {
+                const selected = containerTarget.getSelected();
+                if (selected !== 0 && curTouchY > startTouchY) {
+                    // Can't scroll up
+                    return;
+                } else if (selected !== containerTarget.pages.length - 1 && curTouchY < startTouchY) {
+                    // Can't scroll down
+                    return;
+                }
+            }
+
+            if (contentScroll !== scrollTop) return;
 
             let nextSelected;
             if (curTouchY < startTouchY) {
@@ -98,7 +126,7 @@ class PageContainer extends HTMLElement {
      */
     select(childIndex) {
         /** @type {NodeListOf<PageSection>} */
-        const sections = this.querySelectorAll(":scope > page-section");
+        const sections = this.pages;
 
         for (let i = 0; i < sections.length; i++) {
             const section = sections[i];
@@ -130,7 +158,7 @@ class PageContainer extends HTMLElement {
      * @returns {NodeListOf<PageSection>}
      */
     getPages() {
-        return this.querySelectorAll(":scope > page-section");
+        return this.pages;
     }
 
     /**
@@ -148,7 +176,7 @@ class PageSection extends HTMLElement {
         // Write element functionality in here
         /** @type {PageContainer} */
         this.parent = this.parentElement;
-        if (this.parentElement.tagName === "page-container") {
+        if (!this.parentElement instanceof PageContainer) {
             console.error("PageSection is not in the right container");
         }
 
@@ -176,8 +204,11 @@ class PageSection extends HTMLElement {
         const currentlySelected = this.parent.querySelector(":scope > .page-current");
 
         if (currentlySelected) {
+            if (currentlySelected.position === this.position) return;
+
             // Verify scroll, it is better to be able to see all the content of the page
             const direction = currentlySelected.position > this.position; // True for scroll up, false for scroll down
+
             const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
             if (direction && scrollTop !== 0) return;
             if (!direction && offsetHeight + scrollTop !== scrollHeight) return;

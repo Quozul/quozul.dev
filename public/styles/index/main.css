@@ -239,8 +239,20 @@ h1 {
     width: 45%;
 }
 
-.line-title:before { right: 1.5%; }
-.line-title:after { left: 1.5%; }
+@media (max-width: 768px) {
+    .line-title-left:after, .line-title-right:after, .line-title-center:after {
+        width: 100%;
+        display: table-cell;
+    }
+
+    .line-title-left:before, .line-title-right:before, .line-title-center:before {
+        width: 100%;
+        display: none;
+    }
+}
+
+.line-title:before { right: 0; }
+.line-title:after { left: 0; }
 
 /* Project menu */
 
@@ -262,12 +274,17 @@ h1 {
 
 #subMenu > div > div {
     padding: .5em;
-    transition: .2s border-bottom-color;
-    border-bottom: solid 1px;
-    border-bottom-color: transparent;
+    margin: .25em;
+    transition: .2s box-shadow, .2s color;
+    box-shadow: inset var(--gold-color) 0 0 0;
     cursor: pointer;
 }
 
 #subMenu > div > div:hover, #subMenu > div > div.selected {
-    border-bottom-color: var(--gold-color);
+    box-shadow: inset var(--gold-color) 0 -1px 0;
+}
+
+#subMenu > div > div.selected {
+    color: black;
+    box-shadow: inset var(--gold-color) 0 -40px 0;
 }
