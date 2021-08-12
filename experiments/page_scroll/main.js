@@ -80,25 +80,36 @@ class PageContainer extends HTMLElement {
 
         this.addEventListener("touchmove", function (ev) {
             const containerTarget = getPageContainer(ev.target);
-            if (containerTarget === null) {
+            if (this.transitioning || containerTarget === null) {
                 ev.stopPropagation();
                 return;
             }
 
-            /** @type {PageSection} */
-            const currentlySelected = containerTarget.getSelected();
             const curTouchY = ev.changedTouches[0].pageY;
-            // TODO: Do animation when the section is ready to scroll
+
+            /** @type {PageSection} */
+            let currentlySelected = containerTarget.getSelected();
+
+            const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
+
+            if (contentScroll === scrollTop && curTouchY < startTouchY && currentlySelected.nextElementSibling) {
+                // Scroll down
+                containerTarget.classList.remove("up");
+                containerTarget.classList.add("down");
+            } else if (contentScroll === scrollTop && curTouchY > startTouchY && currentlySelected.previousElementSibling) {
+                // Scroll up
+                containerTarget.classList.remove("down");
+                containerTarget.classList.add("up");
+            } else {
+                containerTarget.classList.remove("down", "up");
+            }
         }, {passive: true});
 
         this.addEventListener("touchend", function (ev) {
-            if (this.transitioning) {
-                ev.stopPropagation();
-                return;
-            }
-
             const containerTarget = getPageContainer(ev.target);
-            if (containerTarget === null) {
+            containerTarget?.classList.remove("down", "up");
+
+            if (this.transitioning || containerTarget === null) {
                 ev.stopPropagation();
                 return;
             }

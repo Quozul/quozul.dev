@@ -47,6 +47,37 @@ page-container {
     overflow: hidden;
 }
 
+page-container:before, page-container:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    height: 0;
+    background-color: white;
+    opacity: 0;
+    transition: .2s opacity, .2s height;
+}
+
+page-container:before {
+    top: 0;
+    border-radius: 0 0 50% 50%;
+}
+
+page-container:after {
+    bottom: 0;
+    border-radius: 50% 50% 0 0;
+}
+
+page-container.up:before {
+    height: 10vh;
+    opacity: .5;
+}
+
+page-container.down:after {
+    height: 10vh;
+    opacity: .5;
+}
+
 page-section {
     display: block;
     position: absolute;
