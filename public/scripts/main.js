@@ -60,6 +60,7 @@ function buildProjectMenu() {
 }
 
 window.addEventListener("load", function () {
+    addPages()
     buildMainMenu();
     buildProjectMenu();
-});
+}, {once: true});

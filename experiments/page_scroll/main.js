@@ -137,7 +137,7 @@ class PageContainer extends HTMLElement {
             } else if (i > childIndex) {
                 section.classList.add(this.direction ? "page-right" : "page-down");
             } else {
-                section.classList.add("page-current");
+                section.forceSelect();
             }
         }
 
@@ -194,6 +194,7 @@ class PageSection extends HTMLElement {
         this.classList.remove("page-down", "page-up", "page-left", "page-right");
         this.classList.add("page-current");
         this.parent.dispatchEvent(PageContainer.containerSelect);
+        this.dispatchEvent(PageSection.pageSelect);
     }
 
     /**
@@ -225,6 +226,12 @@ class PageSection extends HTMLElement {
         this.parent.transitioning = this.transitioning = true;
         this.forceSelect();
     }
+
+    /**
+     * Event fired when the container changes page
+     * @type {Event}
+     */
+    static pageSelect = new Event("pageselect");
 }
 
 /**
@@ -264,12 +271,8 @@ function buildMenu() {
     });
 }
 
-window.addEventListener("load", function (ev) {
+function addPages() {
     // Load custom elements
     window.customElements.define('page-section', PageSection);
     window.customElements.define('page-container', PageContainer);
-
-    try {
-        buildMenu();
-    } catch (e) {}
-});
+}

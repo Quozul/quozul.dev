@@ -225,6 +225,7 @@ h1 {
     position: relative;
     top: 0.5em;
     width: 100%;
+    transition: 2s width;
 }
 
 .line-title-left:after {
@@ -254,6 +255,10 @@ h1 {
 .line-title:before { right: 0; }
 .line-title:after { left: 0; }
 
+.line-title-hidden:before, .line-title-hidden:after {
+    width: 0 !important;
+}
+
 /* Project menu */
 
 #subMenu {
@@ -276,7 +281,7 @@ h1 {
     padding: .5em;
     margin: .25em;
     transition: .2s box-shadow, .2s color;
-    box-shadow: inset var(--gold-color) 0 0 0;
+    box-shadow: inset transparent 0 -1px 0;
     cursor: pointer;
 }
 
