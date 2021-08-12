@@ -56,6 +56,7 @@ page-container:before, page-container:after {
     background-color: white;
     opacity: 0;
     transition: .2s opacity, .2s height;
+    z-index: 1000;
 }
 
 page-container:before {

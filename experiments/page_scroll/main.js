@@ -92,14 +92,37 @@ class PageContainer extends HTMLElement {
 
             const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
 
-            if (contentScroll === scrollTop && curTouchY < startTouchY && currentlySelected.nextElementSibling) {
+            if (containerTarget !== this) {
+                const selected = containerTarget.getSelectedIndex();
+                if (selected === 0 && curTouchY > startTouchY) {
+                    // Can scroll up
+                    currentlySelected = this.getSelected();
+                } else if (selected === containerTarget.pages.length - 1 && curTouchY < startTouchY) {
+                    // Can scroll down
+                    currentlySelected = this.getSelected();
+                }
+            }
+
+            if (
+                contentScroll === scrollTop &&
+                curTouchY < startTouchY &&
+                currentlySelected.nextElementSibling
+            ) {
                 // Scroll down
-                containerTarget.classList.remove("up");
-                containerTarget.classList.add("down");
-            } else if (contentScroll === scrollTop && curTouchY > startTouchY && currentlySelected.previousElementSibling) {
+                if (!containerTarget.classList.contains("down")) {
+                    containerTarget.classList.remove("up");
+                    containerTarget.classList.add("down");
+                }
+            } else if (
+                contentScroll === scrollTop &&
+                curTouchY > startTouchY &&
+                currentlySelected.previousElementSibling
+            ) {
                 // Scroll up
-                containerTarget.classList.remove("down");
-                containerTarget.classList.add("up");
+                if (!containerTarget.classList.contains("up")) {
+                    containerTarget.classList.remove("down");
+                    containerTarget.classList.add("up");
+                }
             } else {
                 containerTarget.classList.remove("down", "up");
             }
