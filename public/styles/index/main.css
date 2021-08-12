@@ -283,6 +283,7 @@ h1 {
     transition: .2s box-shadow, .2s color;
     box-shadow: inset transparent 0 -1px 0;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 #subMenu > div > div:hover, #subMenu > div > div.selected {

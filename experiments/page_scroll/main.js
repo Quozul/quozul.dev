@@ -5,6 +5,7 @@
 function getPageContainer(target) {
     let element = target;
     do {
+        if (element.hasAttribute("data-noscroll")) return null;
         element = element.parentElement;
     } while (!(element instanceof PageContainer || element === null));
     return element;
@@ -64,17 +65,31 @@ class PageContainer extends HTMLElement {
 
         let startTouchY, contentScroll = 0;
         this.addEventListener("touchstart", function (ev) {
+            const containerTarget = getPageContainer(ev.target);
+            if (containerTarget === null) {
+                ev.stopPropagation();
+                return;
+            }
+
             /** @type {PageSection} */
-            const currentlySelected = this.querySelector(":scope > .page-current");
+            const currentlySelected = containerTarget.getSelected();
             contentScroll = currentlySelected.scrollTop;
 
             startTouchY = ev.changedTouches[0].pageY;
         }, {passive: true});
 
-        /*this.addEventListener("touchmove", function (ev) {
+        this.addEventListener("touchmove", function (ev) {
+            const containerTarget = getPageContainer(ev.target);
+            if (containerTarget === null) {
+                ev.stopPropagation();
+                return;
+            }
+
+            /** @type {PageSection} */
+            const currentlySelected = containerTarget.getSelected();
             const curTouchY = ev.changedTouches[0].pageY;
             // TODO: Do animation when the section is ready to scroll
-        }, {passive: true});*/
+        }, {passive: true});
 
         this.addEventListener("touchend", function (ev) {
             if (this.transitioning) {
@@ -83,21 +98,30 @@ class PageContainer extends HTMLElement {
             }
 
             const containerTarget = getPageContainer(ev.target);
+            if (containerTarget === null) {
+                ev.stopPropagation();
+                return;
+            }
+
             const curTouchY = ev.changedTouches[0].pageY;
 
             /** @type {PageSection} */
-            const currentlySelected = this.querySelector(":scope > .page-current");
+            let currentlySelected = containerTarget.getSelected();
 
             const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
 
+            // Prevent scroll if content is not fully scrolled
+            if (curTouchY > startTouchY && scrollTop !== 0) return; // Up
+            if (curTouchY < startTouchY && offsetHeight + scrollTop !== scrollHeight) return; // Down
+
             if (containerTarget !== this) {
-                const selected = containerTarget.getSelected();
-                if (selected !== 0 && curTouchY > startTouchY) {
-                    // Can't scroll up
-                    return;
-                } else if (selected !== containerTarget.pages.length - 1 && curTouchY < startTouchY) {
-                    // Can't scroll down
-                    return;
+                const selected = containerTarget.getSelectedIndex();
+                if (selected === 0 && curTouchY > startTouchY) {
+                    // Can scroll up
+                    currentlySelected = this.getSelected();
+                } else if (selected === containerTarget.pages.length - 1 && curTouchY < startTouchY) {
+                    // Can scroll down
+                    currentlySelected = this.getSelected();
                 }
             }
 
@@ -148,9 +172,16 @@ class PageContainer extends HTMLElement {
      * Returns the index of the selected page
      * @returns {number}
      */
-    getSelected() {
+    getSelectedIndex() {
         const selected = this.querySelector(":scope > .page-current");
         return Array.prototype.indexOf.call(this.children, selected);
+    }
+
+    /**
+     * @returns {PageSection}
+     */
+    getSelected() {
+        return this.querySelector(":scope > .page-current");
     }
 
     /**
@@ -202,23 +233,16 @@ class PageSection extends HTMLElement {
      */
     select() {
         /** @type {PageSection} */
-        const currentlySelected = this.parent.querySelector(":scope > .page-current");
+        const currentlySelected = this.parent.getSelected();
 
         if (currentlySelected) {
             if (currentlySelected.position === this.position) return;
 
-            // Verify scroll, it is better to be able to see all the content of the page
-            const direction = currentlySelected.position > this.position; // True for scroll up, false for scroll down
-
-            const {offsetHeight, scrollTop, scrollHeight} = currentlySelected;
-            if (direction && scrollTop !== 0) return;
-            if (!direction && offsetHeight + scrollTop !== scrollHeight) return;
-
             // Set proper new position
             currentlySelected.classList.remove("page-current");
-            if (direction) {
+            if (currentlySelected.position > this.position) { // Up
                 currentlySelected.classList.add(this.parent.direction ? "page-right" : "page-down");
-            } else {
+            } else { // Down
                 currentlySelected.classList.add(this.parent.direction ? "page-left" : "page-up");
             }
         }
@@ -244,7 +268,7 @@ function buildMenu() {
     const pageContainer = document.getElementById("menuReady");
     const pages = pageContainer.getPages();
 
-    const selected = pageContainer.getSelected();
+    const selected = pageContainer.getSelectedIndex();
 
     for (let i = 0; i < pages.length; i++) {
         /** @type {PageSection} */
@@ -265,7 +289,7 @@ function buildMenu() {
     }
 
     pageContainer.addEventListener("containerselect", function (e) {
-        const i = pageContainer.getSelected();
+        const i = pageContainer.getSelectedIndex();
         menu.querySelector(".selected")?.classList?.remove("selected");
         menu.children.item(i).classList.add("selected");
     });

@@ -4,7 +4,7 @@ function buildMainMenu() {
     /** @type {PageContainer} */
     const pageContainer = document.getElementById("menuReady");
     const pages = pageContainer.getPages();
-    const selected = pageContainer.getSelected();
+    const selected = pageContainer.getSelectedIndex();
 
     for (let i = 0; i < pages.length; i++) {
         /** @type {PageSection} */
@@ -21,7 +21,7 @@ function buildMainMenu() {
     }
 
     pageContainer.addEventListener("containerselect", function (e) {
-        const i = pageContainer.getSelected();
+        const i = pageContainer.getSelectedIndex();
         menu.querySelector(".selected")?.classList?.remove("selected");
         menu.children.item(i).classList.add("selected");
     });
@@ -34,7 +34,7 @@ function buildProjectMenu() {
     /** @type {PageContainer} */
     const pageContainer = document.getElementById("projectsContainer");
     const pages = pageContainer.getPages();
-    const selected = pageContainer.getSelected();
+    const selected = pageContainer.getSelectedIndex();
 
     for (let i = 0; i < pages.length; i++) {
         /** @type {PageSection} */
@@ -51,7 +51,7 @@ function buildProjectMenu() {
     }
 
     pageContainer.addEventListener("containerselect", function (e) {
-        const i = pageContainer.getSelected();
+        const i = pageContainer.getSelectedIndex();
         menu.querySelector(".selected")?.classList?.remove("selected");
         const node = menu.children.item(i);
         node.classList.add("selected");
