@@ -2,9 +2,15 @@
     user-select: none;
 }
 
+:root {
+    --background-color: #0a0a1a;
+    --gold-color: #DCB800;
+}
+
 body {
     overflow: hidden;
     z-index: 100;
+    background-color: var(--background-color);
 }
 
 .select {
@@ -12,14 +18,17 @@ body {
     cursor: pointer;
 }
 
-.wrapper {
-    width: 80%;
-    max-width: 1024px;
-    margin: auto;
-}
-
 ul {
     list-style-type: none;
+    margin-bottom: 0;
+}
+
+ul li {
+    margin-bottom: 1em;
+}
+
+ul li:last-child {
+    margin-bottom: 0;
 }
 
 /* links */
@@ -45,54 +54,12 @@ a.show-link:hover {
     border-bottom: solid 1px #2E86C1;
 }
 
-/* Copyleft */
-
-.copyleft {
-    display: inline-block;
-    transform: rotate(180deg);
-}
-
-.copyleft::after {
-    content: "\00a9";
-}
-
-/* Content */
-
-#logo {
-    display: block;
-    background: url('/public/assets/icon.png');
-    background-size: cover;
-    margin: auto;
-    width: 64px;
-    height: 64px;
-    border-radius: 32px;
-}
-
 h2 {
     font-weight: normal;
 }
 
 small {
     font-weight: lighter;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #499bea 0%, #207ce5 100%);
-}
-
-::-webkit-scrollbar-track {
-    background-color: #333;
-}
-
-.block {
-    background: #222;
-    border-radius: 3px;
-    padding: 10px;
 }
 
 /* Scroll arrow
@@ -133,15 +100,19 @@ small {
     }
 }
 
-.noscript {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+/* Utility */
+.full-size {
+    width: 100%;
+    height: 100%;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Bubbles */
-
 .bubbles {
     display: flex;
     flex-direction: column;
@@ -162,9 +133,17 @@ small {
 }
 
 @media (min-width: 576px) {
-    .bubble:hover, .bubble.selected:focus {
+    .bubble {
+        position: relative;
         color: white;
         padding-right: 3em;
+        transition: .2s padding-right, .2s color;
+        cursor: pointer;
+    }
+
+    .bubble:hover, .bubble.selected:focus {
+        color: white;
+        padding-right: 4em;
     }
 }
 
@@ -193,4 +172,99 @@ small {
         transition: none!important;
         animation: none!important;
     }
+}
+
+h1 {
+    font-family: 'Merriweather', serif;
+    color: var(--gold-color);
+}
+
+.display {
+    font-size: 4rem;
+}
+
+@media (min-width: 576px) {
+    .display {
+        font-size: 5rem;
+        letter-spacing: .5em;
+    }
+}
+
+/* Source: https://codepen.io/ericrasch/pen/Irlpm */
+.line-title {
+    display: table;
+    white-space: nowrap;
+}
+
+.line-title:before, .line-title:after {
+    border-top: 1px solid var(--gold-color);
+    content: '';
+    display: table-cell;
+    position: relative;
+    top: 0.5em;
+    width: 100%;
+    transition: 2s width;
+}
+
+.line-title-left:after {
+    display: none;
+}
+
+.line-title-right:before {
+    display: none;
+}
+
+.line-title-center:before, .line-title-center:after {
+    width: 45%;
+}
+
+@media (max-width: 768px) {
+    .line-title-left:after, .line-title-right:after, .line-title-center:after {
+        width: 100%;
+        display: table-cell;
+    }
+
+    .line-title-left:before, .line-title-right:before, .line-title-center:before {
+        width: 100%;
+        display: none;
+    }
+}
+
+.line-title:before { right: 0; }
+.line-title:after { left: 0; }
+
+/* Project menu */
+
+#subMenu {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow: auto;
+    bottom: 0;
+    background-color: var(--background-color);
+}
+
+#subMenu > div {
+    max-width: 100%;
+    display: flex;
+    padding: 1em;
+}
+
+#subMenu > div > div {
+    padding: .5em;
+    margin: .25em;
+    transition: .2s box-shadow, .2s color;
+    box-shadow: inset transparent 0 -1px 0;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#subMenu > div > div:hover {
+    box-shadow: inset var(--gold-color) 0 -1px 0;
+}
+
+#subMenu > div > div:active, #subMenu > div > div.selected {
+    color: black;
+    box-shadow: inset var(--gold-color) 0 -40px 0;
 }

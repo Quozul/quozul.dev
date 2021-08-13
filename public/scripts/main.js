@@ -1,3 +1,5 @@
+'use strict';
+
 function buildMainMenu() {
     /** @type {HTMLDivElement} */
     const menu = document.querySelector(".bubbles");
@@ -58,6 +60,13 @@ function buildProjectMenu() {
         menu.parentElement.scroll({behavior: "smooth", left: node.getBoundingClientRect().x});
     });
 }
+
+// Prevent right click
+document.addEventListener("contextmenu", function (ev) {
+    if (!(ev.target instanceof HTMLAnchorElement)) {
+        ev.preventDefault();
+    }
+});
 
 window.addEventListener("load", function () {
     addPages()
