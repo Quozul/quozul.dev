@@ -2,32 +2,37 @@
 <html lang="en">
 
 <head>
-    <title>Quozul.dev</title>
     <meta charset="utf-8">
 
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/styles/index/bootstrap.min.css">
-    <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
+    <!-- Import fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
 
     <!-- Custom scripts -->
-    <!--<script src="/public/scripts/main.min.js"></script>
-    <script src="/public/scripts/utils.min.js"></script>
-    <script src="/public/scripts/stars.min.js"></script>-->
-    <script src="/public/scripts/index.min.js"></script>
+    <script src="/experiments/page_scroll/page.js"></script>
+    <script src="/public/scripts/main.js"></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/public/styles/stars.min.css">
-    <link rel="stylesheet" href="/public/styles/index/main.css">
+    <link rel="stylesheet" href="/public/styles/main.min.css">
+    <link rel="stylesheet" href="/experiments/page_scroll/page.min.css">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="image/png" href="/public/assets/icon.png">
-    <meta name="description" content="Hi, I'm a full stack web developper. I'm still at school for now but here's my website. Come check it out!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://quozul.dev/public/assets/icon.png">
+
+    <link rel="canonical" href="https://quozul.dev/">
+
+    <!-- Primary Meta Tags -->
+    <title>Quozul's Website</title>
+    <meta name="description" content="Hi, I'm a full stack web developer. I'm still in high school for now but here's my website. Come check it out!">
 </head>
 
 <body class="d-flex flex-column min-vh-100 justify-content-between">
 <header class="container">
-    <div class="mt-3 rounded shadow-lg p-0 backdrop-blur">
-        <nav class="navbar navbar-expand-lg navbar-dark backdrop-blur rounded shadow-lg">
+    <div class="mt-3 p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="navbar-collapse collapse w-100 navbarSupportedContent order-1 order-md-0">
                 <ul class="navbar-nav ms-auto text-center">
                     <li class="nav-item active">
@@ -56,7 +61,7 @@
 </header>
 
 <main class="container">
-    <section id="sec1" class="page page-current" name="Home">
+    <section class="page page-current">
         <div class="text-white text-center">
             <h1>403</h1>
             <h2 class="mt-0">This is a secret place</h2>
@@ -66,8 +71,8 @@
 </main>
 
 <footer class="container">
-    <div class="mt-3 mb-3 text-center p-3 container shadow-lg rounded backdrop-blur text-white">
-        <span class="copyleft"></span> Copyleft - Quozul
+    <div class="mt-3 mb-3 text-center p-3 container text-white">
+        © Copyright — Quozul — All rights reserved.
     </div>
 </footer>
 
