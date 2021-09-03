@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap');
 
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 a {
     user-select: none;
     cursor: pointer;
@@ -9,9 +14,15 @@ a {
     text-align: left;
 }
 
-.folder > a {
+.folder > .info > a {
     cursor: pointer;
     user-select: none;
+}
+
+.folder .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .folder .content {
@@ -27,7 +38,7 @@ a {
     margin-left: 1em;
 }
 
-.file {
+.file > .info {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

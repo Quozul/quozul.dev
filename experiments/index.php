@@ -3,7 +3,7 @@
 
 <?php
 $page_id = 'home';
-$page_name = 'Experiments - Home';
+$page_name = 'The Secret Laboratory Of Quozul';
 include $_SERVER['DOCUMENT_ROOT'] . '/includes/head.php';
 ?>
 

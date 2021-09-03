@@ -25,8 +25,8 @@ function request(url, query = '') {
     return new Promise(function (resolve, reject) {
         let req = new XMLHttpRequest();
         req.onreadystatechange = function () {
-            if (req.readyState == 4)
-                if (req.status == 200)
+            if (req.readyState === 4)
+                if (req.status === 200)
                     resolve(req);
                 else
                     reject(req);
@@ -36,6 +36,22 @@ function request(url, query = '') {
         req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         req.send(query);
     });
+}
+
+/**
+ * Downloads a blob with a given filename
+ * @param {string} filename
+ * @param {Blob} blob Blob to download as a file
+ */
+function download(filename, blob) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
 }
 
 /**
@@ -52,8 +68,8 @@ function firstToUpper(str) {
  * @returns {string}
  */
 function getReadableFileSizeString(fileSizeInBytes) {
-    var i = -1;
-    var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+    let i = -1;
+    const byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
     do {
         fileSizeInBytes = fileSizeInBytes / 1024;
         i++;

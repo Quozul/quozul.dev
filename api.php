@@ -31,6 +31,9 @@ switch ($before) {
     case 'stats' :
         require __DIR__ . '/api/stats.php';
         break;
+    case 'download' :
+        require __DIR__ . '/api/download.php';
+        break;
     default:
         http_response_code(404);
         break;

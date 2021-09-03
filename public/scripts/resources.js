@@ -23,14 +23,23 @@ function buildTree(elements, appendTo, path, open, rootPath = path) {
         const fullPath = path + (element.path.length > 0 ? '/' + element.path : '');
 
         const fileContent = document.createElement('div');
+        fileContent.setAttribute("data-name", element.path);
+        const fileInfo = document.createElement("div");
+        fileInfo.classList.add("info");
         const filePath = document.createElement('a');
 
-        filePath.innerText = element.path;
-        fileContent.append(filePath);
+        filePath.innerText = `${element.path}`;
+        fileInfo.append(filePath);
+
+        fileContent.append(fileInfo);
 
         if (element.dir !== undefined) {
             // Is directory
             fileContent.classList.add('folder');
+
+            const fileMetadata = document.createElement('span');
+            fileMetadata.innerText = `${getReadableFileSizeString(element.size)} - ${element.dir.length} element(s)`;
+            fileInfo.append(fileMetadata);
 
             filePath.addEventListener('click', (e) => {
                 const elem = fileContent.querySelector('.content');
@@ -54,13 +63,7 @@ function buildTree(elements, appendTo, path, open, rootPath = path) {
             i.classList.add('arrow', 'right');
             filePath.prepend(i);
 
-            const shouldOpen = open.length > 0 && open[0] === element.path;
-
-            if (shouldOpen) open.shift();
-
             const content = buildTree(element.dir, fileContent, fullPath, open, rootPath);
-
-            if (shouldOpen) filePath.click();
 
             if (element.metadata !== null) {
                 const span = document.createElement("span");
@@ -77,10 +80,9 @@ function buildTree(elements, appendTo, path, open, rootPath = path) {
             filePath.target = '_blank';
             filePath.classList.add('show');
 
-            const fileInfo = document.createElement('span');
-            fileInfo.innerText = getReadableFileSizeString(element.size) + ' - ' + new Date(element.time * 1000).toLocaleString();
-
-            fileContent.append(fileInfo);
+            const fileMetadata = document.createElement('span');
+            fileMetadata.innerText = getReadableFileSizeString(element.size) + ' - ' + new Date(element.time * 1000).toLocaleString();
+            fileInfo.append(fileMetadata);
 
             fileContent.classList.add('file');
 
@@ -167,6 +169,12 @@ function getResources() {
 
             const open = window.location.hash.substr(1).split(/\//g).filter(e => e.length > 0);
             buildTree(json[0].dir, tree, '/~erwan', open);
+
+            for (const string of open) {
+                const folder = tree.querySelector(`.content > [data-name="${string}"] a`);
+                console.log(folder);
+                folder.click();
+            }
         });
 }
 

@@ -34,3 +34,8 @@ function buildMenu() {
         menu.children.item(i).classList.add("selected");
     });
 }
+
+window.onload = function() {
+    addPages();
+    buildMenu();
+}
