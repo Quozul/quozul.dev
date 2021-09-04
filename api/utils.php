@@ -40,7 +40,7 @@ function verifyParentFolders(string $path, ?string $id): bool
     $test_path = "";
     foreach ($output[0] as $folder) {
         $test_path .= $folder;
-        $full_path = "/home/erwan/public/" . $test_path;
+        $full_path = getenv("PUBLIC_FOLDER") . $test_path;
 
         if (is_dir($full_path) && file_exists($full_path . "/.metadata.json")) {
             $metadata = json_decode(file_get_contents($full_path . "/.metadata.json"), true);

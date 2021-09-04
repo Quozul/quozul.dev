@@ -69,15 +69,44 @@
 </header>
 
 <main class="container h-100">
+    <div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disclaimerModalLabel">About this page</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-start">
+                    <h6 class="fw-bold">Resources available</h6>
+                    <p>
+                        The files made publicly available on this page comes with no warranty.
+                        Some files are hidden because they are private.
+                        You may use these files for your own personal use.
+                    </p>
+
+                    <h6 class="fw-bold">Resources used</h6>
+                    <p>
+                        File icons from <a href="https://github.com/PKief/vscode-material-icon-theme" class="show-link">vscode-material-icon-theme</a>.
+                    </p>
+
+                    <h6 class="fw-bold">Login with Discord</h6>
+                    <p>
+                        While I use Discord as a mean to restrict access to some files and folders, I do not store any personal information from you.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <file-browser></file-browser>
 </main>
 
 <footer class="container">
     <div class="mb-3 text-center p-3 container shadow-lg rounded text-white">
-        <div>
-            File icons from <a href="https://github.com/PKief/vscode-material-icon-theme" class="show-link">vscode-material-icon-theme</a>
-        </div>
-        © Copyright — Quozul — All rights reserved.
+        © Copyright — Quozul — All rights reserved. <a class="show-link" data-bs-toggle="modal" data-bs-target="#disclaimerModal">About this page</a>.
     </div>
 </footer>
 </body>

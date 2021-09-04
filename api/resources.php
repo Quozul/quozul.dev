@@ -60,7 +60,7 @@ $real_path = preg_replace($re, "/", $path);
 if (PHP_OS === "WINNT")
     $dir = $_SERVER['DOCUMENT_ROOT'];
 else
-    $dir = "/home/erwan/public/" . $real_path;
+    $dir = getenv("PUBLIC_FOLDER") . $real_path;
 
 // Get user's JWT
 require_once __DIR__ . "/utils.php";

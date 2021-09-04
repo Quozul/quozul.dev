@@ -7,7 +7,7 @@ $re = "/(^|[\/\\\])(\.\.[\/\\\])+/";
 $path = preg_replace($re, "/", $path);
 
 // the file you want to send
-$real_path = "/home/erwan/public/" . $path;
+$real_path = getenv("PUBLIC_FOLDER") . $path;
 
 if (!file_exists($real_path)) {
     http_response_code(404);

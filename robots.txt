@@ -1,6 +1,6 @@
 User-agent: *
 Disallow: /experiments/
-Disallow: /~erwan/
+Disallow: /resources/
 Disallow: /includes/
 Disallow: /pages/
 Disallow: /api/

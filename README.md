@@ -1,2 +1,2 @@
-# quozul.dev
-Quozul's website made with Express and Node.JS, using ejs to render pages.
+# Quozul.dev
+Quozul's website made with in pure PHP and JavaScript.
