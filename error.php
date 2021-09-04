@@ -25,8 +25,9 @@
     <link rel="canonical" href="https://quozul.dev/">
 
     <!-- Primary Meta Tags -->
-    <title>Quozul's Website</title>
+    <title>Woops</title>
     <meta name="description" content="Hi, I'm a full stack web developer. I'm still in high school for now but here's my website. Come check it out!">
+    <meta name="robots" content="noindex, nofollow">
 </head>
 
 <body class="d-flex flex-column min-vh-100 justify-content-between">
@@ -36,7 +37,7 @@
             <div class="navbar-collapse collapse w-100 navbarSupportedContent order-1 order-md-0">
                 <ul class="navbar-nav ms-auto text-center">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/experiments/">Experiments</a>
+                        <a class="nav-link" href="/experiments">Experiments</a>
                     </li>
                 </ul>
             </div>
@@ -52,7 +53,7 @@
             <div class="navbar-collapse collapse w-100 navbarSupportedContent order-2 order-md-2">
                 <ul class="navbar-nav me-auto text-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="/resources/">Resources</a>
+                        <a class="nav-link" href="/resources">Resources</a>
                     </li>
                 </ul>
             </div>
@@ -63,8 +64,21 @@
 <main class="container">
     <section class="page page-current">
         <div class="text-white text-center">
-            <h1>404</h1>
-            <h2 class="mt-0">You seem to have lost yourself</h2>
+            <?php
+            $code = $_GET["code"];
+            $msg = "Woops";
+            if (500 <= $code && $code < 600) {
+                $msg = "Act as if you had saw nothing";
+            } else if ($code == 404) {
+                $msg = "You seem to have lost yourself";
+            } else if ($code == 403) {
+                $msg = "This is a secret place";
+            } else if ($code == 401) {
+                $msg = "You do not belong here";
+            }
+            ?>
+            <h1><?php echo $code ?></h1>
+            <h2 class="mt-0"><?php echo $msg ?></h2>
             <a class="show-link" href="/">Go back to home page</a>
         </div>
     </section>
