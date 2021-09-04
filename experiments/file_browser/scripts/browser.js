@@ -244,13 +244,11 @@ const fileBrowser = {
         }
 
         async openPath() {
-            let request;
-            if (this.auth) {
-                const headers = new Headers({"Authorization": this.auth});
-                request = await fetch(`/api/resources/?path=${this.path.join("/")}`, {headers: headers});
-            } else {
-                request = await fetch(`/api/resources/?path=${this.path.join("/")}`);
-            }
+            let request, headers = {};
+            let url = "/api/resources/";
+            if (this.path.length > 0) url += `?path=${this.path.join("/")}`;
+            if (this.auth) headers["Authorization"] = this.auth;
+            request = await fetch(url, {headers: headers});
 
             this.browser.innerHTML = "";
             this.preview.innerHTML = "";
@@ -298,6 +296,7 @@ const fileBrowser = {
 
                 img.src = `/public/assets/icons/${file.content ? "folder" : icons[0]?.name}.svg`;
                 img.classList.add('icon');
+                img.alt = `${icons[0]?.name} icon`;
 
                 element.prepend(img);
                 element.setAttribute("data-name", file.name);
