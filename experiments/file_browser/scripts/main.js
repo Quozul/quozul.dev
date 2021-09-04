@@ -4,6 +4,6 @@ window.addEventListener("load", async function () {
      * @type {fileBrowser.FileBrowser}
      */
     const browser = document.querySelector("file-browser");
-    const files = await (await fetch("/api/resources")).json();
-    browser.setFiles(files[0].dir);
+    browser.setCallbackUrl("/api/resources");
+    browser.setPath();
 });

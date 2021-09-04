@@ -1,9 +1,10 @@
-function loggedIn() {
+function loggedIn(discord) {
     const loginButton = document.getElementById("loginButton");
-    const discord = JSON.parse(window.localStorage.getItem("discord"));
+    if (!discord) discord = JSON.parse(window.localStorage.getItem("discord"));
 
     loginButton.innerText = "Logged in as " + discord.username;
     loginButton.href = "";
+    loginButton.title = "Log out";
 
     if (discord.avatar) {
         const avatarUrl = `https://cdn.discordapp.com/avatars/${discord.id}/${discord.avatar}.webp?size=64`
@@ -14,6 +15,11 @@ function loggedIn() {
         img.setAttribute("style", "height: 2em;width: 2em;border-radius: 50%;");
         loginButton.prepend(img);
     }
+
+    loginButton.addEventListener("click", () => {
+        window.localStorage.removeItem("discord");
+        loginButton.innerHTML = 'Login with Discord <img src="/public/assets/Discord-Logo-White.svg" class="ms-1" alt="Discord logo" style="height: 1em">'
+    }, {passive: true, once: true});
 }
 
 function removeCodeFromUrl() {
@@ -75,8 +81,8 @@ window.addEventListener("load", async function () {
             })
             .then(json => {
                 window.localStorage.setItem("discord", JSON.stringify(json));
-                browser.setAuthorization("Bearer " + JSON.parse(discord).token);
-                loggedIn();
+                browser.setAuthorization("Bearer " + json.token);
+                loggedIn(json);
                 browser.setPath();
             })
             .catch(res => {
