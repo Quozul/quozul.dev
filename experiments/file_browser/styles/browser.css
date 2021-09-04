@@ -11,6 +11,36 @@ file-browser {
     overflow: hidden;
 }
 
+/* CONTEXT MENU */
+
+file-browser ul.context-menu {
+    position: absolute;
+    width: 128px;
+    height: auto;
+    z-index: 200;
+    transition: transform .1s;
+    transform: scale(0);
+    transform-origin: top left;
+    background-color: var(--folder-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 0;
+}
+
+file-browser ul.context-menu.visible {
+    transform: scale(1);
+}
+
+file-browser ul.context-menu > li {
+    cursor: pointer;
+    padding: 1em;
+}
+
+file-browser ul.context-menu > li:hover {
+
+}
+
 /* BROWSER */
 file-browser .browser {
     position: absolute;

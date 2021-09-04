@@ -33,14 +33,14 @@ $public_name = basename($path);
 
 // get the file's mime type to send the correct content type header
 $finfo = finfo_open(FILEINFO_MIME_TYPE);
-$mime_type = finfo_file($finfo, $path);
+$mime_type = finfo_file($finfo, $real_path);
 
 // send the headers
 header("Content-Disposition: attachment; filename=$public_name;");
 header("Content-Type: $mime_type");
-header("Content-Length: " . filesize($path));
+header("Content-Length: " . filesize($real_path));
 
 // stream the file
-$fp = fopen($path, 'rb');
+$fp = fopen($real_path, 'rb');
 fpassthru($fp);
 exit;

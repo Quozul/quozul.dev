@@ -66,6 +66,16 @@ else
 require_once __DIR__ . "/utils.php";
 $id = getUserId();
 
+if (!file_exists($dir)) {
+    http_response_code(404);
+    exit();
+}
+
+if (!is_dir($dir)) {
+    http_response_code(400);
+    exit();
+}
+
 if (!verifyParentFolders($path, $id)) {
     http_response_code(401);
     exit();

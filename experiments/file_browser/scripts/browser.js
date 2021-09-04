@@ -37,18 +37,29 @@ const fileBrowser = {
 
             // Write element functionality in here
             this.files = [];
-            this.path = atob(window.location.hash.substring(1)).split(/\//g).filter(v => v.length > 0);
+            this.path = unescape(atob(window.location.hash.substring(1))).split(/\//g).filter(v => v.length > 0);
 
             this.append(this.preview = document.createElement("div"));
             this.append(this.pathElement = document.createElement("div"));
             this.append(this.browser = document.createElement("div"));
             this.append(this.search = document.createElement("input"));
             this.append(this.downloadCenter = document.createElement("div"));
+            this.append(this.contextMenu = document.createElement("ul"));
             this.browser.classList.add("browser");
             this.pathElement.classList.add("path");
             this.preview.classList.add("preview");
             this.search.classList.add("search");
             this.downloadCenter.classList.add("download-center");
+            this.contextMenu.classList.add("context-menu");
+
+            this.getSize();
+            document.addEventListener("resize", () => this.getSize(), {passive: true});
+
+            // Context menu loose focus
+            document.addEventListener("click", ev => {
+                if (ev.target === this.contextMenu || this.contextMenu.contains(ev.target)) return false;
+                this.contextMenu.classList.remove("visible");
+            }, {passive: true});
 
             this.searchIndex = 0;
 
@@ -61,13 +72,13 @@ const fileBrowser = {
                 } else if (!ev.ctrlKey && ev.key.length === 1) {
                     this.search.focus();
                 }
-            });
+            }, {passive: true});
 
-            this.search.addEventListener("focusin", ev => {
+            this.search.addEventListener("focusin", () => {
                 this.search.classList.add("visible");
             }, {passive: true});
 
-            this.search.addEventListener("focusout", ev => {
+            this.search.addEventListener("focusout", () => {
                 if (this.search.value.length === 0) this.search.classList.remove("visible");
             }, {passive: true});
 
@@ -108,13 +119,19 @@ const fileBrowser = {
                         }
                     }
                 }
-            });
+            }, {passive: true});
 
-            window.addEventListener("popstate", ev => {
-                this.path = atob(window.location.hash.substring(1)).split(/\//g).filter(v => v.length > 0);
+            window.addEventListener("popstate", () => {
+                this.path = unescape(atob(window.location.hash.substring(1))).split(/\//g).filter(v => v.length > 0);
                 const elements = Array.from(this.browser.children);
                 fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
-            });
+            }, {passive: true});
+        }
+
+        getSize() {
+            const boundingRect = this.getBoundingClientRect();
+            this.x = boundingRect.x;
+            this.y = boundingRect.y;
         }
 
         setPath() {
@@ -126,7 +143,7 @@ const fileBrowser = {
             // First element
             const span = document.createElement("span");
             span.innerText = "root" /* Default folder name */;
-            span.addEventListener("click", ev => {
+            span.addEventListener("click", () => {
                 this.path = [];
                 this.changeDirectory();
             }, {passive: true});
@@ -138,7 +155,7 @@ const fileBrowser = {
 
                 const span = document.createElement("span");
                 span.innerText = string;
-                span.addEventListener("click", ev => {
+                span.addEventListener("click", () => {
                     // Close directory
                     this.path = this.path.slice(0, i + 1);
                     this.changeDirectory();
@@ -152,7 +169,7 @@ const fileBrowser = {
             fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
 
             const url = new URL(window.location);
-            url.hash = btoa(this.path.join("/"));
+            url.hash = btoa(escape(this.path.join("/")));
             window.history.pushState({}, document.title, url.toString());
         }
 
@@ -235,16 +252,28 @@ const fileBrowser = {
                 request = await fetch(`/api/resources/?path=${this.path.join("/")}`);
             }
 
-            if (request.status !== 200) {
-                this.browser.innerHTML = "";
-                this.browser.innerText = "You are now allowed to see this folder.";
-                return;
+            this.browser.innerHTML = "";
+            this.preview.innerHTML = "";
+
+            switch (request.status) {
+                case 400: {
+                    this.browser.innerText = "The provided path is not valid.";
+                    this.downloadFile(this.path.pop());
+                    this.setPath();
+                    return;
+                }
+                case 401: {
+                    this.browser.innerText = "You are now allowed to see this folder.";
+                    return;
+                }
+                case 404: {
+                    this.browser.innerText = "This path does not exists.";
+                    return;
+                }
             }
 
             const files = (await request.json()).content;
             let size = 0;
-
-            this.browser.innerHTML = "";
 
             for (const file of files) {
                 size += file.size;
@@ -273,10 +302,35 @@ const fileBrowser = {
                 element.prepend(img);
                 element.setAttribute("data-name", file.name);
 
+                // Right click on element
+                element.addEventListener("contextmenu", ev => {
+                    ev.preventDefault();
+
+                    this.contextMenu.style.left = ev.x - this.x + "px";
+                    this.contextMenu.style.top = ev.y - this.y + "px";
+
+                    this.contextMenu.innerHTML = "";
+
+                    const copyLi = document.createElement("li");
+                    copyLi.innerText = "Copy link";
+                    this.contextMenu.append(copyLi);
+
+                    copyLi.addEventListener("click", () => {
+                        console.log(escape([...this.path, file.name].join("/")));
+                        const url = "https://quozul.dev/resources/#" + btoa(escape([...this.path, file.name].join("/")));
+                        console.log(url);
+                        navigator.clipboard.writeText(url)
+                        this.contextMenu.classList.remove("visible");
+                    }, {passive: true, once: true});
+
+                    this.contextMenu.classList.add("visible");
+                });
+
                 if (file.content) {
                     statElement.innerText += ` - ${file.content.length} elements`;
                 }
 
+                // Click on element
                 element.addEventListener("click", ev => {
                     if (!element.classList.contains("open")) {
                         ev.preventDefault();
