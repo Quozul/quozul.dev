@@ -1,9 +1,90 @@
+function loggedIn() {
+    const loginButton = document.getElementById("loginButton");
+    const discord = JSON.parse(window.localStorage.getItem("discord"));
+
+    loginButton.innerText = "Logged in as " + discord.username;
+    loginButton.href = "";
+
+    if (discord.avatar) {
+        const avatarUrl = `https://cdn.discordapp.com/avatars/${discord.id}/${discord.avatar}.webp?size=64`
+        const img = document.createElement("img");
+        img.src = avatarUrl;
+        img.alt = `${discord.username}'s avatar`;
+        img.classList.add("me-1");
+        img.setAttribute("style", "height: 2em;width: 2em;border-radius: 50%;");
+        loginButton.prepend(img);
+    }
+}
+
+function removeCodeFromUrl() {
+    const url = new URL(window.location);
+    url.searchParams.delete("code");
+    window.history.pushState({}, document.title, url.toString());
+}
+
 window.addEventListener("load", async function () {
+    const discord = JSON.parse(window.localStorage.getItem("discord"));
+
+    // Initialize browser
     fileBrowser.init();
-    /**
-     * @type {fileBrowser.FileBrowser}
-     */
+    /** @type {fileBrowser.FileBrowser} */
     const browser = document.querySelector("file-browser");
-    const files = await (await fetch("/api/resources")).json();
-    browser.setFiles(files[0].dir);
+    browser.setCallbackUrl("/api/resources");
+
+    if (discord) {
+        if (discord.expiry * 1000 < Date.now()) {
+            console.warn("Token has expired");
+        } else {
+            loggedIn();
+            removeCodeFromUrl();
+
+            browser.setAuthorization("Bearer " + discord.token);
+            browser.setPath();
+            return;
+        }
+    }
+
+    browser.setPath();
+
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (code !== null) {
+        const loginButton = document.getElementById("loginButton");
+
+        // Disable login button
+        loginButton.classList.add("disable");
+
+        // Add spinner
+        const spinner = document.createElement("div");
+        spinner.classList.add("spinner-border", "me-1");
+        spinner.setAttribute("style", "height: 1em;width: 1em;");
+        spinner.setAttribute("role", "status");
+
+        const span_c = document.createElement("span");
+        span_c.classList.add("visually-hidden");
+        span_c.innerText = "Loading...";
+        spinner.append(span_c);
+
+        loginButton.prepend(spinner);
+
+        // Login user and get a JWT
+        fetch("/api/login", {method: "POST", body: code})
+            .then(res => {
+                console.log(res.status);
+                if (200 > res.status || res.status >= 300) throw res;
+                return res.json();
+            })
+            .then(json => {
+                window.localStorage.setItem("discord", JSON.stringify(json));
+                browser.setAuthorization("Bearer " + JSON.parse(discord).token);
+                loggedIn();
+                browser.setPath();
+            })
+            .catch(res => {
+                console.log("error", res.status);
+            })
+            .finally(res => {
+                spinner.remove();
+                removeCodeFromUrl();
+            });
+    }
 });

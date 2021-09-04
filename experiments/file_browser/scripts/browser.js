@@ -17,13 +17,13 @@ const fileBrowser = {
         if (path.length === 0) return entries;
 
         for (const entry of entries) {
-            const name = entry.path;
+            const name = entry.name;
 
             if (name === path[0]) {
                 if (path.length === 1) {
-                    return entry.dir;
+                    return entry.content;
                 } else {
-                    return this.findHandler(entry.dir, path.slice(1));
+                    return this.findHandler(entry.content, path.slice(1));
                 }
             }
         }
@@ -37,7 +37,7 @@ const fileBrowser = {
 
             // Write element functionality in here
             this.files = [];
-            this.path = [];
+            this.path = atob(window.location.hash.substring(1)).split(/\//g).filter(v => v.length > 0);
 
             this.append(this.preview = document.createElement("div"));
             this.append(this.pathElement = document.createElement("div"));
@@ -49,8 +49,6 @@ const fileBrowser = {
             this.preview.classList.add("preview");
             this.search.classList.add("search");
             this.downloadCenter.classList.add("download-center");
-
-            this.setPath();
 
             this.searchIndex = 0;
 
@@ -111,6 +109,12 @@ const fileBrowser = {
                     }
                 }
             });
+
+            window.addEventListener("popstate", ev => {
+                this.path = atob(window.location.hash.substring(1)).split(/\//g).filter(v => v.length > 0);
+                const elements = Array.from(this.browser.children);
+                fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
+            });
         }
 
         setPath() {
@@ -146,11 +150,18 @@ const fileBrowser = {
         changeDirectory() {
             const elements = Array.from(this.browser.children);
             fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
+
+            const url = new URL(window.location);
+            url.hash = btoa(this.path.join("/"));
+            window.history.pushState({}, document.title, url.toString());
         }
 
-        setFiles(files) {
-            this.files = files;
-            this.openPath();
+        setAuthorization(token) {
+            this.auth = token;
+        }
+
+        setCallbackUrl(url) {
+            this.callbackUrl = url;
         }
 
         async downloadFile(filename) {
@@ -166,7 +177,12 @@ const fileBrowser = {
             downloadInfo.classList.add("info")
             downloadElement.append(downloadInfo);
 
-            const response = await fetch("/api/download", {method: "POST", body: this.path.join("/") + "/" + filename});
+            const headers = new Headers({"Authorization": this.auth});
+            const response = await fetch("/api/download", {
+                method: "POST",
+                headers: headers,
+                body: this.path.join("/") + "/" + filename,
+            });
 
             downloadElement.classList.add("downloading");
             downloadInfo.innerText = `Downloading ${filename}\nPlease hang up...`;
@@ -210,8 +226,22 @@ const fileBrowser = {
             }, 1000);
         }
 
-        openPath() {
-            const files = fileBrowser.findHandler(this.files, this.path);
+        async openPath() {
+            let request;
+            if (this.auth) {
+                const headers = new Headers({"Authorization": this.auth});
+                request = await fetch(`/api/resources/?path=${this.path.join("/")}`, {headers: headers});
+            } else {
+                request = await fetch(`/api/resources/?path=${this.path.join("/")}`);
+            }
+
+            if (request.status !== 200) {
+                this.browser.innerHTML = "";
+                this.browser.innerText = "You are now allowed to see this folder.";
+                return;
+            }
+
+            const files = (await request.json()).content;
             let size = 0;
 
             this.browser.innerHTML = "";
@@ -220,11 +250,11 @@ const fileBrowser = {
                 size += file.size;
 
                 const element = document.createElement("div");
-                element.classList.add(file.dir ? "folder" : "file");
+                element.classList.add(file.content ? "folder" : "file");
 
                 const nameElement = document.createElement("span");
                 nameElement.classList.add("name");
-                nameElement.innerText = file.path;
+                nameElement.innerText = file.name;
                 element.append(nameElement);
 
                 const statElement = document.createElement("span");
@@ -232,19 +262,19 @@ const fileBrowser = {
                 statElement.innerText = getReadableFileSizeString(file.size);
                 element.append(statElement);
 
-                const fileExt = file.path.split('.').slice(-1).pop();
+                const fileExt = file.name.split('.').slice(-1).pop();
                 const img = document.createElement('img');
 
                 const icons = getFileIcon(fileExt);
 
-                img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
+                img.src = `/public/assets/icons/${file.content ? "folder" : icons[0]?.name}.svg`;
                 img.classList.add('icon');
 
                 element.prepend(img);
-                element.setAttribute("data-name", file.path);
+                element.setAttribute("data-name", file.name);
 
-                if (file.dir) {
-                    statElement.innerText += ` - ${file.dir.length} elements`;
+                if (file.content) {
+                    statElement.innerText += ` - ${file.content.length} elements`;
                 }
 
                 element.addEventListener("click", ev => {
@@ -254,13 +284,13 @@ const fileBrowser = {
                         return;
                     }
 
-                    if (file.dir) {
+                    if (file.content) {
                         // Open directory
-                        this.path.push(file.path);
+                        this.path.push(file.name);
                         this.changeDirectory("open");
                     } else {
                         // View or download file
-                        this.downloadFile(file.path);
+                        this.downloadFile(file.name);
                     }
                 }, {passive: true});
                 this.browser.append(element);

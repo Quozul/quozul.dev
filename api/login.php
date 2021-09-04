@@ -7,7 +7,11 @@ if (empty($code)) {
     exit;
 }
 
-function request($url, $headers = [], $post = null) {
+/**
+ * @throws Exception
+ */
+function request($url, $headers = [], $post = null): string
+{
     $ch = curl_init($url);
 
     curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
@@ -31,9 +35,16 @@ function request($url, $headers = [], $post = null) {
 
     curl_close($ch);
 
+    if (300 <= $http_code) {
+        throw new Exception($body);
+    }
+
     return $body;
 }
 
+/**
+ * @throws Exception
+ */
 function token($code) {
     $url = "https://discord.com/api/oauth2/token";
 
@@ -42,7 +53,7 @@ function token($code) {
         "client_secret" => getenv("CLIENT_SECRET"),
         "code" => $code,
         "grant_type" => "authorization_code",
-        "redirect_uri" => "https://quozul.dev/login",
+        "redirect_uri" => "https://quozul.dev/resources",
     ]);
 
     $body = request($url, ["Content-type: application/x-www-form-urlencoded"], $data);
@@ -50,6 +61,9 @@ function token($code) {
     return json_decode($body, true);
 }
 
+/**
+ * @throws Exception
+ */
 function info($access_token) {
     $url = "https://discord.com/api/users/@me";
 
@@ -60,6 +74,27 @@ function info($access_token) {
 
 header("Content-Type: application/json");
 
-$tok = token($code);
-$access_token = $tok["access_token"];
-echo json_encode(array_merge($tok, info($access_token)));
+try {
+    $discord_token = token($code);
+} catch (Exception $e) {
+    exit();
+}
+
+$access_token = $discord_token["access_token"];
+try {
+    $discord_info = info($access_token);
+} catch (Exception $e) {
+    exit();
+}
+
+require_once __DIR__ . "/class/Token.php";
+$expiry = time() + $discord_token["expires_in"];
+$jwt = new Token();
+$jwt->create(
+    ["alg" => "HS256", "typ" => "JWT"],
+    ["username" => $discord_info["username"], "id" => $discord_info["id"], "expiry" => $expiry]
+);
+
+$discord_info["token"] = $jwt->get();
+$discord_info["expiry"] = $expiry;
+echo json_encode($discord_info);

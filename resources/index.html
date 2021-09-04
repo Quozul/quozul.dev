@@ -14,6 +14,7 @@
     <script src="/public/scripts/fileIcons.js"></script>
     <script src="/public/scripts/resources.js"></script>
     <script src="/experiments/file_browser/scripts/browser.js"></script>
+    <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
 
     <!-- Custom styles -->
     <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
@@ -51,9 +52,15 @@
                 </button>
             </div>
             <div class="navbar-collapse collapse w-100 navbarSupportedContent order-2 order-md-2">
-                <ul class="navbar-nav me-auto text-center">
-                    <li class="nav-item">
+                <ul class="navbar-nav w-100 text-center justify-content-between align-items-center">
+                    <li class="nav-item m-0">
                         <a class="nav-link" href="/resources">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="loginButton" href="https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=https%3A%2F%2Fquozul.dev%2Fresources&response_type=code&scope=identify">
+                            Login with Discord
+                            <img src="/public/assets/Discord-Logo-White.svg" class="ms-1" alt="Discord logo" style="height: 1em">
+                        </a>
                     </li>
                 </ul>
             </div>

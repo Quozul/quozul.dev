@@ -1,1 +1,0 @@
-{"translations":[{"detected_source_language":"EN","text":"Nous ne sommes pas. Je n'aime pas."}]}
