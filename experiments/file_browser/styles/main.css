@@ -1,6 +1,5 @@
 :root {
     --folder-color: #151536;
-    --file-color: #151536;
     --background-color: #0a0a1a;
     --gold-color: #DCB800;
 }
@@ -9,10 +8,16 @@ body {
     font-family: 'Quicksand', sans-serif;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     margin: 0;
     box-sizing: border-box;
     min-height: 100vh;
     background-color: #0a0a1a;
     color: white;
+}
+
+main {
+    width: 80vw;
+    height: 80vh;
 }

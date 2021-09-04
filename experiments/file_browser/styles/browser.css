@@ -3,17 +3,24 @@
 }
 
 file-browser {
-    height: 100%;
+    position: relative;
+    display: block;
     user-select: none;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 /* BROWSER */
 file-browser .browser {
-    padding: 3em 0;
-    position: relative;
+    position: absolute;
+    top: 3.5em;
+    left: 0;
+    bottom: 3.5em;
     display: flex;
     flex-wrap: wrap;
-    height: 100%;
+    width: 100%;
+    overflow: auto;
 }
 
 file-browser .browser > div {
@@ -68,12 +75,8 @@ file-browser .browser > div.open:after {
     box-shadow: inset var(--background-color) 0 0 0;
 }
 
-file-browser .browser > div.folder {
+file-browser .browser > div.folder, file-browser .browser > div.file {
     background-color: var(--folder-color);
-}
-
-file-browser .browser > div.file {
-    background-color: var(--file-color);
 }
 
 /* PATH */
@@ -102,7 +105,7 @@ file-browser .preview {
 }
 
 file-browser .path, file-browser .preview {
-    position: fixed;
+    position: absolute;
     width: 100%;
     z-index: 100;
     background-color: var(--folder-color);
@@ -111,7 +114,7 @@ file-browser .path, file-browser .preview {
 /* SEARCH */
 
 file-browser .search {
-    position: fixed;
+    position: absolute;
     z-index: 100;
     background-color: var(--folder-color);
     top: 0;
@@ -120,12 +123,18 @@ file-browser .search {
     color: white;
     padding: 1em;
     font-size: 1em;
+    transform: translateY(-100%);
+    transition: transform .2s;
+}
+
+file-browser .search.visible {
+    transform: translateY(3.5em);
 }
 
 /* DOWNLOAD */
 
 file-browser .download-center {
-    position: fixed;
+    position: absolute;
     bottom: 4em;
     left: 50%;
     display: flex;

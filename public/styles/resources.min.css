@@ -1,0 +1,1 @@
+:root{--folder-color:#151536;--background-color:#0a0a1a;--gold-color:#DCB800}file-browser .browser{justify-content:space-evenly}file-browser .browser>div{border-radius:.25rem}file-browser .path,file-browser .preview{background-color:var(--background-color)}

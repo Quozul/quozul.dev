@@ -60,10 +60,18 @@ const fileBrowser = {
                     ev.preventDefault();
 
                     this.search.select();
-                } else if (!ev.ctrlKey) {
+                } else if (!ev.ctrlKey && ev.key.length === 1) {
                     this.search.focus();
                 }
             });
+
+            this.search.addEventListener("focusin", ev => {
+                this.search.classList.add("visible");
+            }, {passive: true});
+
+            this.search.addEventListener("focusout", ev => {
+                if (this.search.value.length === 0) this.search.classList.remove("visible");
+            }, {passive: true});
 
             this.search.addEventListener("keyup", ev => {
                 const elements = Array.from(this.browser.children);

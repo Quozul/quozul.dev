@@ -1,99 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap');
-
-* {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+:root {
+    --folder-color: #151536;
+    --background-color: #0a0a1a;
+    --gold-color: #DCB800;
 }
 
-a {
-    user-select: none;
-    cursor: pointer;
+file-browser .browser {
+    justify-content: space-evenly;
 }
 
-.folder {
-    text-align: left;
+file-browser .browser > div {
+    border-radius: .25rem;
 }
 
-.folder > .info > a {
-    cursor: pointer;
-    user-select: none;
-}
-
-.folder .info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.folder .content {
-    height: 0;
-    overflow-y: hidden;
-}
-
-.content.expand {
-    height: auto;
-}
-
-.file, .folder {
-    margin-left: 1em;
-}
-
-.file > .info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.icon {
-    margin-right: .5em;
-    height: 1em;
-}
-
-/* File info */
-
-.file > span {
-    display: none;
-}
-
-@media (min-width: 576px) {
-    .file > span {
-        display: block;
-    }
-}
-
-/* Arrows */
-.arrow {
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-    margin-right: 1em;
-    transition: .2s transform;
-}
-
-.right {
-    transform: rotate(-45deg);
-}
-
-.left {
-    transform: rotate(135deg);
-}
-
-.up {
-    transform: rotate(-135deg);
-}
-
-.down {
-    transform: rotate(45deg);
-}
-
-/* Copyleft */
-
-.copyleft {
-    display: inline-block;
-    transform: rotate(180deg);
-}
-
-.copyleft::after {
-    content: "\00a9";
+file-browser .path, file-browser .preview {
+    background-color: var(--background-color);
 }
