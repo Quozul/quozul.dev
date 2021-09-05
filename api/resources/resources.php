@@ -7,10 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
 // ID of authorized Discord users
 define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
 
-function recursiveDirScan(string $directory, ?string $id): array
+//ini_set("display_errors", 1);
+
+function recursiveDirScan(string $directory, ?string $view_mode, ?string $user_id): array
 {
     $files = [];
-
     $dirContent = scandir($directory);
 
     foreach ($dirContent as $file) {
@@ -25,12 +26,12 @@ function recursiveDirScan(string $directory, ?string $id): array
 
                 if (
                     isset($metadata["restricted"]) && $metadata["restricted"] && // If folder is restricted in access
-                    (is_null($id) || array_search($id, AUTHORIZED_IDS)) // If user is allowed to view this folder
+                    (is_null($user_id) || array_search($user_id, AUTHORIZED_IDS)) // If user is allowed to view this folder
                 ) continue;
             }
 
             $size = 0;
-            $content = recursiveDirScan($path, $id);
+            $content = recursiveDirScan($path, $view_mode, $user_id);
             foreach ($content as $c) $size += $c["size"];
 
             $data = [
@@ -42,8 +43,22 @@ function recursiveDirScan(string $directory, ?string $id): array
 
             if (!empty($metadata)) $data["metadata"] = $metadata;
 
-            array_unshift($files, $data);
+            // Get episodes in seasons
+            if ($view_mode === "library") {
+                $seasons = [];
+                foreach ($content as $season) {
+                    if (isset($season["dir"])) $seasons[] = $season["elements"];
+                }
+
+                $data["seasons"] = $seasons;
+            }
+
+            if (file_exists($path . "/.thumbnail.jpg") || file_exists($path . "/.thumbnail.png")) $data["has_thumbnail"] = true;
+
+            array_push($files, $data);
         } else if ($file !== '.metadata.json') {
+            if ($view_mode === "library" && preg_split("/\\//", mime_content_type($path))[0] !== "video") continue;
+
             $size = filesize($path);
             $time = filemtime($path);
 
@@ -58,16 +73,12 @@ function recursiveDirScan(string $directory, ?string $id): array
     return $files;
 }
 
-header("Content-Type: application/json");
+header('Content-Type: application/json; charset=utf-8');
 
 $path = $_GET["path"] ?? "/";
 $re = "/(^|[\/\\\])(\.\.[\/\\\])+/";
 $real_path = preg_replace($re, "/", $path);
-
-if (PHP_OS === "WINNT")
-    $dir = $_SERVER['DOCUMENT_ROOT'];
-else
-    $dir = getenv("PUBLIC_FOLDER") . $real_path;
+$dir = getenv("PUBLIC_FOLDER") . $real_path;
 
 // Get user's JWT
 require_once __DIR__ . "/../utils.php";
@@ -88,18 +99,21 @@ if (!verifyParentFolders($path, $id)) {
     exit();
 }
 
-$files = recursiveDirScan($dir, $id);
-
-$data = [
-    "path" => $real_path,
-    "content" => $files,
-];
+$metadata = null;
+$view_mode = "default";
+$data = [ "path" => $real_path ];
 
 if (file_exists($dir . '/.metadata.json')) {
     $metadata = json_decode(file_get_contents($dir . '/.metadata.json'), true);
+
     if (!empty($metadata)) {
         $data["metadata"] = $metadata;
+        $view_mode = $metadata["view_mode"];
     }
 }
+
+$files = recursiveDirScan($dir, $view_mode, $id);
+
+$data["content"] = $files;
 
 echo json_encode($data);

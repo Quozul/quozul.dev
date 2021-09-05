@@ -97,4 +97,6 @@ $jwt->create(
 
 $discord_info["token"] = $jwt->get();
 $discord_info["expiry"] = $expiry;
+
+header('Content-Type: application/json; charset=utf-8');
 echo json_encode($discord_info);

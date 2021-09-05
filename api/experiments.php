@@ -11,4 +11,5 @@ foreach (array_diff(scandir($path), array('..', '.')) as $key => $value) {
     $experiments[] = $experiment;
 }
 
+header('Content-Type: application/json; charset=utf-8');
 echo json_encode($experiments);

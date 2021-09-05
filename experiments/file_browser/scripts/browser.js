@@ -1,3 +1,21 @@
+/**
+ * @typedef ResourceMetadata
+ * @property {?string} description Resource's description
+ * @property {?boolean} restricted Is the resource's access restricted
+ * @property {?string} view_mode The mode to view the resource's content
+ */
+/**
+ * @typedef ResourceList
+ * @property {string} name Resource's name
+ * @property {number} size Resource's size in bytes
+ * @property {?boolean} dir This resource is a directory
+ * @property {?number} elements Directory's amount of elements
+ * @property {?ResourceList} content Directory's content
+ * @property {?ResourceMetadata} metadata Directory's metadata
+ * @property {?boolean} has_thumbnail Does the directory has a thumbnail
+ * @property {?number[]} seasons Amount of episodes in each seasons
+ */
+
 const fileBrowser = {
     TRANSITION_DURATION: 200,
     toggleAnimation: function (elements, classToToggle, delay = 1000, end = null, finalDelay = null) {
@@ -19,8 +37,7 @@ const fileBrowser = {
             super();
 
             // Write element functionality in here
-            this.files = [];
-            this.path = unescape(atob(window.location.hash.substring(1))).split(/\//g).filter(v => v.length > 0);
+            this.path = this.decodePath();
 
             this.append(this.preview = document.createElement("div"));
             this.append(this.pathElement = document.createElement("div"));
@@ -105,7 +122,7 @@ const fileBrowser = {
             }, {passive: true});
 
             window.addEventListener("popstate", () => {
-                this.path = unescape(atob(window.location.hash.substring(1))).split(/\//g).filter(v => v.length > 0);
+                this.decodePath();
                 const elements = Array.from(this.browser.children);
                 fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
             }, {passive: true});
@@ -152,7 +169,7 @@ const fileBrowser = {
             fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
 
             const url = new URL(window.location);
-            url.hash = btoa(escape(this.path.join("/")));
+            url.hash = this.encodePath();
             window.history.pushState({}, document.title, url.toString());
 
             this.browser.scroll({top: 0, behavior: "smooth"});
@@ -164,6 +181,14 @@ const fileBrowser = {
 
         setCallbackUrl(url) {
             this.callbackUrl = url;
+        }
+
+        encodePath(path = this.path) {
+            return btoa(encodeURIComponent(path.join("/")));
+        }
+
+        decodePath(hash = window.location.hash.substring(1)) {
+            return this.path = decodeURIComponent(atob(hash)).split(/\//g).filter(v => v.length > 0);
         }
 
         async downloadFile(filename) {
@@ -230,6 +255,7 @@ const fileBrowser = {
         }
 
         async openPath() {
+            // Get file and folder list
             let request, headers = {};
             let url = "/api/resources/";
             if (this.path.length > 0) url += `?path=${this.path.join("/")}`;
@@ -256,9 +282,13 @@ const fileBrowser = {
                 }
             }
 
+            /** @type {ResourceList} */
             const files = (await request.json());
             let size = 0;
 
+            this.browser.setAttribute("data-view-mode", files?.metadata?.view_mode ?? "default");
+
+            // Build file and folder list
             for (const file of files.content) {
                 size += file.size;
 
@@ -272,7 +302,6 @@ const fileBrowser = {
 
                 const statElement = document.createElement("span");
                 statElement.classList.add("stat");
-                statElement.innerText = getReadableFileSizeString(file.size);
                 element.append(statElement);
 
                 const fileExt = file.name.split('.').slice(-1).pop();
@@ -280,7 +309,13 @@ const fileBrowser = {
 
                 const icons = getFileIcon(fileExt);
 
-                img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
+                if (files?.metadata?.view_mode && file.has_thumbnail) {
+                    img.src = `/api/thumbnail/${this.encodePath([...this.path, file.name])}`;
+                } else {
+                    img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
+                }
+
+                img.loading = "lazy";
                 img.classList.add('icon');
                 img.alt = `${icons[0]?.name} icon`;
 
@@ -301,7 +336,6 @@ const fileBrowser = {
                     this.contextMenu.append(copyLi);
 
                     copyLi.addEventListener("click", () => {
-                        console.log(escape([...this.path, file.name].join("/")));
                         const url = "https://quozul.dev/resources/#" + btoa(escape([...this.path, file.name].join("/")));
                         console.log(url);
                         navigator.clipboard.writeText(url)
@@ -311,10 +345,14 @@ const fileBrowser = {
                     this.contextMenu.classList.add("visible");
                 });
 
-                if (file.dir) {
-                    statElement.innerText += ` - ${file.elements} elements`;
+                if (files?.metadata?.view_mode === "library") {
+                    let episodes = 0;
+                    for (const season of file.seasons) episodes += season;
+                    statElement.innerText = `${file.seasons.length} season(s) - ${episodes} episode(s)`;
+                } else if (file.dir) {
+                    statElement.innerText = `${getReadableFileSizeString(file.size)} - ${file.elements} element(s)`;
                 } else {
-                    statElement.innerText += ` - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
+                    statElement.innerText = `${getReadableFileSizeString(file.size)} - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
                 }
 
                 // Click on element
