@@ -2,8 +2,6 @@
 // ID of authorized Discord users
 define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
 
-ini_set("display_errors", 1);
-
 function recursiveDirScan(string $directory, ?string $id): array
 {
     $files = [];
@@ -11,7 +9,7 @@ function recursiveDirScan(string $directory, ?string $id): array
     $dirContent = scandir($directory);
 
     foreach ($dirContent as $file) {
-        if (substr($file, 0, 1) === '.') continue;
+        if (substr($file, 0, 1) === ".") continue;
 
         $path = $directory . '/' . $file;
 
@@ -26,16 +24,20 @@ function recursiveDirScan(string $directory, ?string $id): array
                 ) continue;
             }
 
-            $content = recursiveDirScan($path, $id);
             $size = 0;
+            $content = recursiveDirScan($path, $id);
             foreach ($content as $c) $size += $c["size"];
 
-            array_unshift($files, [
+            $data = [
                 "name" => $file,
-                "content" => $content,
-                "metadata" => $metadata,
+                "dir" => true,
+                "elements" => count($content),
                 "size" => $size,
-            ]);
+            ];
+
+            if (!empty($metadata)) $data["metadata"] = $metadata;
+
+            array_unshift($files, $data);
         } else if ($file !== '.metadata.json') {
             $size = filesize($path);
             $time = filemtime($path);
@@ -83,7 +85,16 @@ if (!verifyParentFolders($path, $id)) {
 
 $files = recursiveDirScan($dir, $id);
 
-echo json_encode([
+$data = [
     "path" => $real_path,
     "content" => $files,
-]);
+];
+
+if (file_exists($dir . '/.metadata.json')) {
+    $metadata = json_decode(file_get_contents($dir . '/.metadata.json'), true);
+    if (!empty($metadata)) {
+        $data["metadata"] = $metadata;
+    }
+}
+
+echo json_encode($data);

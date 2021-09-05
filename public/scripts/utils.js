@@ -38,3 +38,27 @@ function getReadableFileSizeString(fileSizeInBytes) {
 
     return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
 }
+
+/**
+ * Format a date to given format
+ * @param {string} format
+ * @returns
+ */
+Date.prototype.format = function (format) {
+    const associations = {
+        "%yyyy": "getFullYear",
+        "%dd": "getDate",
+        "%hh": "getHours",
+        "%mmmm": "getMilliseconds",
+        "%mm": "getMinutes",
+        "%MM": "getMonth",
+        "%ss": "getSeconds"
+    }
+
+    for (const match of format.match(/(?<!%)%(?!%)(\w*)/g)) {
+        let value = this[associations[match]]?.call(this);
+        format = format.replace(match, (match === "%MM" ? ++value : value)?.toString().padStart(match.length - 1, '0') ?? match);
+    }
+
+    return format;
+}

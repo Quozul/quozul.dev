@@ -13,23 +13,6 @@ const fileBrowser = {
             this.toggleAnimation(elements, classToToggle, delay, end, finalDelay)
         }, delay);
     },
-    findHandler: function (entries, path = []) {
-        if (path.length === 0) return entries;
-
-        for (const entry of entries) {
-            const name = entry.name;
-
-            if (name === path[0]) {
-                if (path.length === 1) {
-                    return entry.content;
-                } else {
-                    return this.findHandler(entry.content, path.slice(1));
-                }
-            }
-        }
-
-        return null;
-    },
     FileBrowser: class extends HTMLElement {
         constructor() {
             // Always call super first in constructor
@@ -72,7 +55,7 @@ const fileBrowser = {
                 } else if (!ev.ctrlKey && ev.key.length === 1) {
                     this.search.focus();
                 }
-            }, {passive: true});
+            });
 
             this.search.addEventListener("focusin", () => {
                 this.search.classList.add("visible");
@@ -171,6 +154,8 @@ const fileBrowser = {
             const url = new URL(window.location);
             url.hash = btoa(escape(this.path.join("/")));
             window.history.pushState({}, document.title, url.toString());
+
+            this.browser.scroll({top: 0, behavior: "smooth"});
         }
 
         setAuthorization(token) {
@@ -219,7 +204,7 @@ const fileBrowser = {
                 chunks.push(value);
                 receivedLength += value.length;
 
-                downloadProgress.style.width = `${receivedLength / contentLength * 100}%`;
+                downloadProgress.style.width = `${Math.min(1, receivedLength / contentLength) * 100}%`;
             }
 
             // Step 4: concatenate chunks into single Uint8Array
@@ -270,14 +255,14 @@ const fileBrowser = {
                 }
             }
 
-            const files = (await request.json()).content;
+            const files = (await request.json());
             let size = 0;
 
-            for (const file of files) {
+            for (const file of files.content) {
                 size += file.size;
 
                 const element = document.createElement("div");
-                element.classList.add(file.content ? "folder" : "file");
+                element.classList.add(file.dir ? "folder" : "file");
 
                 const nameElement = document.createElement("span");
                 nameElement.classList.add("name");
@@ -294,7 +279,7 @@ const fileBrowser = {
 
                 const icons = getFileIcon(fileExt);
 
-                img.src = `/public/assets/icons/${file.content ? "folder" : icons[0]?.name}.svg`;
+                img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
                 img.classList.add('icon');
                 img.alt = `${icons[0]?.name} icon`;
 
@@ -325,8 +310,10 @@ const fileBrowser = {
                     this.contextMenu.classList.add("visible");
                 });
 
-                if (file.content) {
-                    statElement.innerText += ` - ${file.content.length} elements`;
+                if (file.dir) {
+                    statElement.innerText += ` - ${file.elements} elements`;
+                } else {
+                    statElement.innerText += ` - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
                 }
 
                 // Click on element
@@ -337,7 +324,7 @@ const fileBrowser = {
                         return;
                     }
 
-                    if (file.content) {
+                    if (file.dir) {
                         // Open directory
                         this.path.push(file.name);
                         this.changeDirectory("open");
@@ -352,7 +339,10 @@ const fileBrowser = {
             const elements = Array.from(this.browser.children);
             fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length);
 
-            this.preview.innerText = `${files.length} elements - ${getReadableFileSizeString(size)} total size`
+            this.preview.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
+            if (files?.metadata?.description) {
+                this.preview.innerText += ` | ${files.metadata.description}`;
+            }
         }
     },
     init: function () {

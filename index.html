@@ -94,7 +94,7 @@
         <page-container id="menuReady" width="100vw" height="100vh" direction="vertical">
             <page-section data-name="Home">
                 <div class="full-size flex-center">
-                    <div style="max-height: 100%;">
+                    <div class="mh-100">
                         <div class="d-inline-flex flex-column align-items-start m-0">
                             <h2 class="text-start d-inline-block m-0">Web developer</h2>
                             <h1 class="display m-0 line-title line-title-center">Quozul</h1>
@@ -109,10 +109,10 @@
             </page-section>
 
             <page-section data-name="Projects" class="page-down">
-                <page-container id="projectsContainer" width="100%" height="calc(100% - 73px)" style="z-index: 20;" direction="horizontal">
+                <page-container id="projectsContainer" width="100%" height="calc(100% - 73px)" class="z-20" direction="horizontal">
                     <page-section data-name="Minecraft plugins">
                         <div class="full-size flex-center">
-                            <div style="max-height: 100%;">
+                            <div class="mh-100">
                                 <div class="row g-0 justify-content-center align-items-stretch">
                                     <div class="p-3 text-center text-md-end col-12 col-md-6 d-flex flex-column justify-content-start">
                                         <h1 class="text-md-end line-title line-title-left">OnDemandServer</h1>
@@ -224,7 +224,7 @@
 
                     <page-section data-name="Text based games">
                         <div class="full-size flex-center">
-                            <div style="max-height: 100%;">
+                            <div class="mh-100">
                                 <div class="row g-0 justify-content-center align-items-stretch">
                                     <div class="p-3 text-center text-md-end col-12 col-md-6 d-flex flex-column justify-content-start">
                                         <h1 class="text-md-end line-title line-title-left">Pak</h1>
@@ -265,7 +265,7 @@
 
             <page-section data-name="About" class="page-down">
                 <div class="full-size flex-center">
-                    <div style="max-height: 100%;">
+                    <div class="mh-100">
                         <div class="row g-0">
                             <div class="col-12 col-md-6 text-md-end p-3">
                                 <h1 class="line-title line-title-left pe-md-5">About</h1>
@@ -278,9 +278,7 @@
                                 </p>
                             </div>
                             <div class="col-12 col-md-6 p-3">
-                                <img loading="lazy" src="/public/assets/icon.png" alt="Logo" class="d-none d-md-block"
-                                     width="64" height="64"
-                                     style="position: absolute; margin-left: -48px; margin-top: -16px;">
+                                <img loading="lazy" src="/public/assets/icon.png" alt="Logo" class="d-none d-md-block logo" width="64" height="64">
 
                                 <h1 class="line-title line-title-right ps-md-5">Contact</h1>
                                 <p>
@@ -289,7 +287,7 @@
                                 </p>
                                 <p>
                                     You can find me on almost all social media under the username <u class="select">Quozul</u>.<br>
-                                    <small>I hope to see you around <span class="d-inline-block" style="transform: translate(1em, 0) rotate(90deg);">;-)</span></small>
+                                    <small>I hope to see you around <span class="d-inline-block emoji">;-)</span></small>
                                 </p>
                             </div>
                         </div>

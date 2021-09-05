@@ -16,17 +16,19 @@ function getUserId(): ?string
     $id = null;
     $headers = getallheaders();
 
-    if (isset($headers["authorization"])) {
-        $authorization = $headers["authorization"];
+    if (isset($headers["Authorization"])) {
+        $authorization = $headers["Authorization"];
 
         $output = [];
-        $result = preg_match("/Bearer\s((.*)\.(.*)\.(.*))/", $authorization, $output);
+        preg_match("/Bearer\s((.*)\.(.*)\.(.*))/", $authorization, $output);
 
         // Get user's token
         $jwt = new Token();
         $jwt->import($output[1]);
 
-        if (!$jwt->validate()) return null; // Token is not valid
+        if (!$jwt->validate()) {
+            return null; // Token is not valid
+        }
 
         $id = $jwt->getPayload()["id"];
     }
