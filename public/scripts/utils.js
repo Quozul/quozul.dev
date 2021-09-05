@@ -62,3 +62,39 @@ Date.prototype.format = function (format) {
 
     return format;
 }
+
+/**
+ * Toggle class with a delay
+ * TODO: Optimize this function
+ * @param {Element[]} elements
+ * @param {string} classToToggle
+ * @param {number} delay Delay between class adding
+ * @param {?number} end End callback
+ * @param {?number} finalDelay Final delay, usually the transition's delay if any
+ */
+function toggleAnimation(elements, classToToggle, delay = 1000, end = null, finalDelay = null) {
+    if (elements.length === 0) {
+        if (end) {
+            setTimeout(() => end(), finalDelay ?? delay);
+        }
+        return;
+    }
+    const element = elements.shift();
+    setTimeout(() => {
+        element.classList.toggle(classToToggle);
+        this.toggleAnimation(elements, classToToggle, delay, end, finalDelay)
+    }, delay);
+}
+
+function createSpinner() {
+    const spinner = document.createElement("span");
+    spinner.classList.add("spinner-border", "me-1");
+    spinner.setAttribute("role", "status");
+
+    const span = document.createElement("span");
+    span.classList.add("visually-hidden");
+    span.innerText = "Loading...";
+    spinner.append(span);
+
+    return spinner;
+}

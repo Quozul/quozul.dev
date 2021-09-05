@@ -16,375 +16,374 @@
  * @property {?number[]} seasons Amount of episodes in each seasons
  */
 
-const fileBrowser = {
-    TRANSITION_DURATION: 200,
-    toggleAnimation: function (elements, classToToggle, delay = 1000, end = null, finalDelay = null) {
-        if (elements.length === 0) {
-            if (end) {
-                setTimeout(() => end(), finalDelay ?? delay);
-            }
+function buildFileBrowserElement(file, browser, view_mode = "default") {
+    const element = document.createElement("div");
+    element.classList.add(file.dir ? "folder" : "file");
+
+    const nameElement = document.createElement("span");
+    nameElement.classList.add("name");
+    nameElement.innerText = file.name;
+    element.append(nameElement);
+
+    const statElement = document.createElement("span");
+    statElement.classList.add("stat");
+    element.append(statElement);
+
+    const fileExt = file.name.split('.').slice(-1).pop();
+    const img = document.createElement('img');
+
+    const icons = getFileIcon(fileExt);
+
+    if (view_mode && file.has_thumbnail) {
+        img.src = `/api/thumbnail/${browser.encodePath([...browser.path, file.name])}`;
+    } else {
+        img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
+    }
+
+    img.loading = "lazy";
+    img.classList.add('icon');
+    img.alt = `${icons[0]?.name} icon`;
+
+    element.prepend(img);
+    element.setAttribute("data-name", file.name);
+
+    // Right click on element
+    element.addEventListener("contextmenu", ev => {
+        ev.preventDefault();
+
+        browser.contextMenu.style.left = ev.x - browser.x + "px";
+        browser.contextMenu.style.top = ev.y - browser.y + "px";
+
+        browser.contextMenu.innerHTML = "";
+
+        const copyLi = document.createElement("li");
+        copyLi.innerText = "Copy link";
+        browser.contextMenu.append(copyLi);
+
+        copyLi.addEventListener("click", () => {
+            const url = "https://quozul.dev/resources/#" + btoa(escape([...browser.path, file.name].join("/")));
+            console.log(url);
+            navigator.clipboard.writeText(url)
+            browser.contextMenu.classList.remove("visible");
+        }, {passive: true, once: true});
+
+        browser.contextMenu.classList.add("visible");
+    });
+
+    if (view_mode === "library") {
+        let episodes = 0;
+        for (const season of file.seasons) episodes += season;
+        statElement.innerText = `${file.seasons.length} season(s) - ${episodes} episode(s)`;
+    } else if (file.dir) {
+        statElement.innerText = `${getReadableFileSizeString(file.size)} - ${file.elements} element(s)`;
+    } else {
+        statElement.innerText = `${getReadableFileSizeString(file.size)} - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
+    }
+
+    // Click on element
+    element.addEventListener("click", ev => {
+        if (!element.classList.contains("open")) {
+            ev.preventDefault();
+            ev.stopPropagation();
             return;
         }
-        const element = elements.shift();
-        setTimeout(() => {
-            element.classList.toggle(classToToggle);
-            this.toggleAnimation(elements, classToToggle, delay, end, finalDelay)
-        }, delay);
-    },
-    FileBrowser: class extends HTMLElement {
-        constructor() {
-            // Always call super first in constructor
-            super();
 
-            // Write element functionality in here
-            this.path = this.decodePath();
+        if (file.dir) {
+            // Open directory
+            browser.path.push(file.name);
+            browser.changeDirectory("open");
+        } else {
+            // View or download file
+            browser.downloadFile(file.name);
+        }
+    }, {passive: true});
 
-            this.append(this.preview = document.createElement("div"));
-            this.append(this.pathElement = document.createElement("div"));
-            this.append(this.browser = document.createElement("div"));
-            this.append(this.search = document.createElement("input"));
-            this.append(this.downloadCenter = document.createElement("div"));
-            this.append(this.contextMenu = document.createElement("ul"));
-            this.browser.classList.add("browser");
-            this.pathElement.classList.add("path");
-            this.preview.classList.add("preview");
-            this.search.classList.add("search");
-            this.downloadCenter.classList.add("download-center");
-            this.contextMenu.classList.add("context-menu");
+    return element;
+}
 
-            this.getSize();
-            document.addEventListener("resize", () => this.getSize(), {passive: true});
+class FileBrowser extends HTMLElement {
+    static TRANSITION_DURATION = 200;
 
-            // Context menu loose focus
-            document.addEventListener("click", ev => {
-                if (ev.target === this.contextMenu || this.contextMenu.contains(ev.target)) return false;
-                this.contextMenu.classList.remove("visible");
-            }, {passive: true});
+    constructor() {
+        // Always call super first in constructor
+        super();
 
-            this.searchIndex = 0;
+        // Write element functionality in here
+        this.path = this.decodePath();
 
-            // Prevent CTRL+F & select custom input
-            window.addEventListener("keydown", ev => {
-                if (ev.keyCode === 114 || (ev.ctrlKey && ev.keyCode === 70)) {
-                    ev.preventDefault();
+        this.append(this.preview = document.createElement("div"));
+        this.append(this.pathElement = document.createElement("div"));
+        this.append(this.browser = document.createElement("div"));
+        this.append(this.search = document.createElement("input"));
+        this.append(this.downloadCenter = document.createElement("div"));
+        this.append(this.contextMenu = document.createElement("ul"));
+        this.browser.classList.add("browser");
+        this.pathElement.classList.add("path");
+        this.preview.classList.add("preview");
+        this.search.classList.add("search");
+        this.downloadCenter.classList.add("download-center");
+        this.contextMenu.classList.add("context-menu");
 
-                    this.search.select();
-                } else if (!ev.ctrlKey && ev.key.length === 1) {
-                    this.search.focus();
-                }
-            });
+        this.getSize();
+        document.addEventListener("resize", () => this.getSize(), {passive: true});
 
-            this.search.addEventListener("focusin", () => {
-                this.search.classList.add("visible");
-            }, {passive: true});
+        // Context menu loose focus
+        document.addEventListener("click", ev => {
+            if (ev.target === this.contextMenu || this.contextMenu.contains(ev.target)) return false;
+            this.contextMenu.classList.remove("visible");
+        }, {passive: true});
 
-            this.search.addEventListener("focusout", () => {
-                if (this.search.value.length === 0) this.search.classList.remove("visible");
-            }, {passive: true});
+        this.searchIndex = 0;
 
-            this.search.addEventListener("keyup", ev => {
-                const elements = Array.from(this.browser.children);
-                const search = this.search.value;
+        // Prevent CTRL+F & select custom input
+        window.addEventListener("keydown", ev => {
+            if (ev.keyCode === 114 || (ev.ctrlKey && ev.keyCode === 70)) {
+                ev.preventDefault();
 
-                if (ev.key === "Enter") {
-                    let found = false;
+                this.search.select();
+            } else if (!ev.ctrlKey && ev.key.length === 1) {
+                this.search.focus();
+            }
+        });
 
-                    for (let i = this.searchIndex; i < elements.length; i++) {
-                        const element = elements[i];
-                        const name = element.getAttribute("data-name");
+        this.search.addEventListener("focusin", () => {
+            this.search.classList.add("visible");
+        }, {passive: true});
 
-                        if (name.toLowerCase().includes(search)) {
-                            this.searchIndex = i + 1;
-                            found = true;
-                            element.scrollIntoView({behavior: "smooth"});
-                            break;
-                        }
-                    }
+        this.search.addEventListener("focusout", () => {
+            if (this.search.value.length === 0) this.search.classList.remove("visible");
+        }, {passive: true});
 
-                    if (!found) {
-                        this.searchIndex = 0;
-                    }
-                } else {
-                    for (const element of elements) {
-                        const name = element.getAttribute("data-name");
-                        const nameElement = element.querySelector(".name");
+        this.search.addEventListener("keyup", ev => {
+            const elements = Array.from(this.browser.children);
+            const search = this.search.value;
 
-                        if (name.toLowerCase().includes(search)) {
-                            const re = new RegExp(`(.*)(${search})(.*)`, "i")
-                            const match = re.exec(name);
+            if (ev.key === "Enter") {
+                let found = false;
 
-                            nameElement.innerHTML = `${match[1]}<span>${match[2]}</span>${match[3]}`;
-                        } else {
-                            nameElement.innerHTML = name;
-                        }
+                for (let i = this.searchIndex; i < elements.length; i++) {
+                    const element = elements[i];
+                    const name = element.getAttribute("data-name");
+
+                    if (name.toLowerCase().includes(search)) {
+                        this.searchIndex = i + 1;
+                        found = true;
+                        element.scrollIntoView({behavior: "smooth"});
+                        break;
                     }
                 }
-            }, {passive: true});
 
-            window.addEventListener("popstate", () => {
-                this.decodePath();
-                const elements = Array.from(this.browser.children);
-                fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
-            }, {passive: true});
-        }
+                if (!found) {
+                    this.searchIndex = 0;
+                }
+            } else {
+                for (const element of elements) {
+                    const name = element.getAttribute("data-name");
+                    const nameElement = element.querySelector(".name");
 
-        getSize() {
-            const boundingRect = this.getBoundingClientRect();
-            this.x = boundingRect.x;
-            this.y = boundingRect.y;
-        }
+                    if (name.toLowerCase().includes(search)) {
+                        const re = new RegExp(`(.*)(${search})(.*)`, "i")
+                        const match = re.exec(name);
 
-        setPath() {
-            this.openPath();
+                        nameElement.innerHTML = `${match[1]}<span>${match[2]}</span>${match[3]}`;
+                    } else {
+                        nameElement.innerHTML = name;
+                    }
+                }
+            }
+        }, {passive: true});
 
-            // Build path element
-            this.pathElement.innerHTML = "";
+        window.addEventListener("popstate", () => {
+            this.decodePath();
+            const elements = Array.from(this.browser.children);
+            toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
+        }, {passive: true});
+    }
 
-            // First element
+    getSize() {
+        const boundingRect = this.getBoundingClientRect();
+        this.x = boundingRect.x;
+        this.y = boundingRect.y;
+    }
+
+    setPath() {
+        this.openPath();
+
+        // Build path element
+        this.pathElement.innerHTML = "";
+
+        // First element
+        const span = document.createElement("span");
+        span.innerText = "root" /* Default folder name */;
+        span.addEventListener("click", () => {
+            this.path = [];
+            this.changeDirectory();
+        }, {passive: true});
+        this.pathElement.append(span);
+
+        // Rest of the folders
+        for (let i = 0; i < this.path.length; i++) {
+            const string = this.path[i];
+
             const span = document.createElement("span");
-            span.innerText = "root" /* Default folder name */;
+            span.innerText = string;
             span.addEventListener("click", () => {
-                this.path = [];
+                // Close directory
+                this.path = this.path.slice(0, i + 1);
                 this.changeDirectory();
             }, {passive: true});
             this.pathElement.append(span);
+        }
+    }
 
-            // Rest of the folders
-            for (let i = 0; i < this.path.length; i++) {
-                const string = this.path[i];
+    changeDirectory() {
+        const elements = Array.from(this.browser.children);
+        toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), FileBrowser.TRANSITION_DURATION);
 
-                const span = document.createElement("span");
-                span.innerText = string;
-                span.addEventListener("click", () => {
-                    // Close directory
-                    this.path = this.path.slice(0, i + 1);
-                    this.changeDirectory();
-                }, {passive: true});
-                this.pathElement.append(span);
-            }
+        const url = new URL(window.location);
+        url.hash = this.encodePath();
+        window.history.pushState({}, document.title, url.toString());
+
+        this.browser.scroll({top: 0, behavior: "smooth"});
+    }
+
+    setAuthorization(token) {
+        this.auth = token;
+    }
+
+    setCallbackUrl(url) {
+        this.callbackUrl = url;
+    }
+
+    encodePath(path = this.path) {
+        return btoa(encodeURIComponent(path.join("/")));
+    }
+
+    decodePath(hash = window.location.hash.substring(1)) {
+        return this.path = decodeURIComponent(atob(hash)).split(/\//g).filter(v => v.length > 0);
+    }
+
+    async downloadFile(filename) {
+        const downloadElement = document.createElement("div");
+        downloadElement.classList.add("download");
+        this.downloadCenter.append(downloadElement);
+
+        const downloadProgress = document.createElement("div");
+        downloadProgress.classList.add("progress");
+        downloadElement.append(downloadProgress);
+
+        const downloadInfo = document.createElement("div");
+        downloadInfo.classList.add("info")
+        downloadElement.append(downloadInfo);
+
+        let headers = {};
+        if (this.auth) headers["Authorization"] = this.auth;
+        const response = await fetch("/api/download", {
+            method: "POST",
+            headers: headers,
+            body: this.path.join("/") + "/" + filename,
+        });
+
+        downloadElement.classList.add("downloading");
+        downloadInfo.innerText = `Downloading ${filename}\nPlease hang up...`;
+
+        const reader = response.body.getReader();
+
+        // Step 2: get total length
+        const contentLength = response.headers.get('Content-Length');
+
+        // Step 3: read the data
+        let receivedLength = 0; // received that many bytes at the moment
+        let chunks = []; // array of received binary chunks (comprises the body)
+        let entry;
+        while (!(entry = await reader.read()).done) {
+            const {value} = entry;
+
+            chunks.push(value);
+            receivedLength += value.length;
+
+            downloadProgress.style.width = `${Math.min(1, receivedLength / contentLength) * 100}%`;
         }
 
-        changeDirectory() {
-            const elements = Array.from(this.browser.children);
-            fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
-
-            const url = new URL(window.location);
-            url.hash = this.encodePath();
-            window.history.pushState({}, document.title, url.toString());
-
-            this.browser.scroll({top: 0, behavior: "smooth"});
+        // Step 4: concatenate chunks into single Uint8Array
+        let chunksAll = new Uint8Array(receivedLength); // (4.1)
+        let position = 0;
+        for (let chunk of chunks) {
+            chunksAll.set(chunk, position); // (4.2)
+            position += chunk.length;
         }
 
-        setAuthorization(token) {
-            this.auth = token;
-        }
+        // We're done!
+        download(filename, new Blob([chunksAll]));
 
-        setCallbackUrl(url) {
-            this.callbackUrl = url;
-        }
-
-        encodePath(path = this.path) {
-            return btoa(encodeURIComponent(path.join("/")));
-        }
-
-        decodePath(hash = window.location.hash.substring(1)) {
-            return this.path = decodeURIComponent(atob(hash)).split(/\//g).filter(v => v.length > 0);
-        }
-
-        async downloadFile(filename) {
-            const downloadElement = document.createElement("div");
-            downloadElement.classList.add("download");
-            this.downloadCenter.append(downloadElement);
-
-            const downloadProgress = document.createElement("div");
-            downloadProgress.classList.add("progress");
-            downloadElement.append(downloadProgress);
-
-            const downloadInfo = document.createElement("div");
-            downloadInfo.classList.add("info")
-            downloadElement.append(downloadInfo);
-
-            let headers = {};
-            if (this.auth) headers["Authorization"] = this.auth;
-            const response = await fetch("/api/download", {
-                method: "POST",
-                headers: headers,
-                body: this.path.join("/") + "/" + filename,
-            });
-
-            downloadElement.classList.add("downloading");
-            downloadInfo.innerText = `Downloading ${filename}\nPlease hang up...`;
-
-            const reader = response.body.getReader();
-
-            // Step 2: get total length
-            const contentLength = response.headers.get('Content-Length');
-
-            // Step 3: read the data
-            let receivedLength = 0; // received that many bytes at the moment
-            let chunks = []; // array of received binary chunks (comprises the body)
-            let entry;
-            while (!(entry = await reader.read()).done) {
-                const {value} = entry;
-
-                chunks.push(value);
-                receivedLength += value.length;
-
-                downloadProgress.style.width = `${Math.min(1, receivedLength / contentLength) * 100}%`;
-            }
-
-            // Step 4: concatenate chunks into single Uint8Array
-            let chunksAll = new Uint8Array(receivedLength); // (4.1)
-            let position = 0;
-            for (let chunk of chunks) {
-                chunksAll.set(chunk, position); // (4.2)
-                position += chunk.length;
-            }
-
-            // We're done!
-            download(filename, new Blob([chunksAll]));
+        setTimeout(() => {
+            downloadProgress.style.width = `0`;
+            downloadElement.classList.remove("downloading");
 
             setTimeout(() => {
-                downloadProgress.style.width = `0`;
-                downloadElement.classList.remove("downloading");
+                downloadElement.remove();
+            }, 200);
+        }, 1000);
+    }
 
-                setTimeout(() => {
-                    downloadElement.remove();
-                }, 200);
-            }, 1000);
-        }
+    async openPath() {
+        // Get file and folder list
+        let request, headers = {};
+        let url = "/api/resources/";
+        if (this.path.length > 0) url += `?path=${this.path.join("/")}`;
+        if (this.auth) headers["Authorization"] = this.auth;
 
-        async openPath() {
-            // Get file and folder list
-            let request, headers = {};
-            let url = "/api/resources/";
-            if (this.path.length > 0) url += `?path=${this.path.join("/")}`;
-            if (this.auth) headers["Authorization"] = this.auth;
-            request = await fetch(url, {headers: headers});
+        this.browser.innerHTML = "";
+        // Loading spinner
+        const spinner = createSpinner();
+        this.browser.append(spinner);
 
-            this.browser.innerHTML = "";
-            this.preview.innerHTML = "";
+        request = await fetch(url, {headers: headers});
 
-            switch (request.status) {
-                case 400: {
-                    this.browser.innerText = "The provided path is not valid.";
-                    this.downloadFile(this.path.pop());
-                    this.setPath();
-                    return;
-                }
-                case 401: {
-                    this.browser.innerText = "You are now allowed to see this folder.";
-                    return;
-                }
-                case 404: {
-                    this.browser.innerText = "This path does not exists.";
-                    return;
-                }
+        spinner.remove();
+        this.preview.innerHTML = "";
+
+        switch (request.status) {
+            case 400: {
+                this.browser.innerText = "The provided path is not valid.";
+                this.downloadFile(this.path.pop());
+                this.setPath();
+                return;
             }
-
-            /** @type {ResourceList} */
-            const files = (await request.json());
-            let size = 0;
-
-            this.browser.setAttribute("data-view-mode", files?.metadata?.view_mode ?? "default");
-
-            // Build file and folder list
-            for (const file of files.content) {
-                size += file.size;
-
-                const element = document.createElement("div");
-                element.classList.add(file.dir ? "folder" : "file");
-
-                const nameElement = document.createElement("span");
-                nameElement.classList.add("name");
-                nameElement.innerText = file.name;
-                element.append(nameElement);
-
-                const statElement = document.createElement("span");
-                statElement.classList.add("stat");
-                element.append(statElement);
-
-                const fileExt = file.name.split('.').slice(-1).pop();
-                const img = document.createElement('img');
-
-                const icons = getFileIcon(fileExt);
-
-                if (files?.metadata?.view_mode && file.has_thumbnail) {
-                    img.src = `/api/thumbnail/${this.encodePath([...this.path, file.name])}`;
-                } else {
-                    img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
-                }
-
-                img.loading = "lazy";
-                img.classList.add('icon');
-                img.alt = `${icons[0]?.name} icon`;
-
-                element.prepend(img);
-                element.setAttribute("data-name", file.name);
-
-                // Right click on element
-                element.addEventListener("contextmenu", ev => {
-                    ev.preventDefault();
-
-                    this.contextMenu.style.left = ev.x - this.x + "px";
-                    this.contextMenu.style.top = ev.y - this.y + "px";
-
-                    this.contextMenu.innerHTML = "";
-
-                    const copyLi = document.createElement("li");
-                    copyLi.innerText = "Copy link";
-                    this.contextMenu.append(copyLi);
-
-                    copyLi.addEventListener("click", () => {
-                        const url = "https://quozul.dev/resources/#" + btoa(escape([...this.path, file.name].join("/")));
-                        console.log(url);
-                        navigator.clipboard.writeText(url)
-                        this.contextMenu.classList.remove("visible");
-                    }, {passive: true, once: true});
-
-                    this.contextMenu.classList.add("visible");
-                });
-
-                if (files?.metadata?.view_mode === "library") {
-                    let episodes = 0;
-                    for (const season of file.seasons) episodes += season;
-                    statElement.innerText = `${file.seasons.length} season(s) - ${episodes} episode(s)`;
-                } else if (file.dir) {
-                    statElement.innerText = `${getReadableFileSizeString(file.size)} - ${file.elements} element(s)`;
-                } else {
-                    statElement.innerText = `${getReadableFileSizeString(file.size)} - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
-                }
-
-                // Click on element
-                element.addEventListener("click", ev => {
-                    if (!element.classList.contains("open")) {
-                        ev.preventDefault();
-                        ev.stopPropagation();
-                        return;
-                    }
-
-                    if (file.dir) {
-                        // Open directory
-                        this.path.push(file.name);
-                        this.changeDirectory("open");
-                    } else {
-                        // View or download file
-                        this.downloadFile(file.name);
-                    }
-                }, {passive: true});
-                this.browser.append(element);
+            case 401: {
+                this.browser.innerText = "You are now allowed to see this folder.";
+                return;
             }
-
-            const elements = Array.from(this.browser.children);
-            fileBrowser.toggleAnimation(elements, "open", fileBrowser.TRANSITION_DURATION / elements.length);
-
-            this.preview.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
-            if (files?.metadata?.description) {
-                this.preview.innerText += ` | ${files.metadata.description}`;
+            case 404: {
+                this.browser.innerText = "This path does not exists.";
+                return;
             }
         }
-    },
-    init: function () {
-        window.customElements.define('file-browser', this.FileBrowser);
-    },
+
+        /** @type {ResourceList} */
+        const files = (await request.json());
+        let size = 0;
+
+        this.browser.setAttribute("data-view-mode", files?.metadata?.view_mode ?? "default");
+
+        // Build file and folder list
+        for (const file of files.content) {
+            size += file.size;
+
+            const element = buildFileBrowserElement(file, this, files?.metadata?.view_mode);
+            this.browser.append(element);
+        }
+
+        const elements = Array.from(this.browser.children);
+        toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length);
+
+        this.preview.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
+        if (files?.metadata?.description) {
+            this.preview.innerText += ` | ${files.metadata.description}`;
+        }
+    }
+}
+
+function initFileBrowser () {
+    window.customElements.define('file-browser', FileBrowser);
 }

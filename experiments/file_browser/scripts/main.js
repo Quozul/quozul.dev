@@ -1,7 +1,7 @@
 window.addEventListener("load", async function () {
-    fileBrowser.init();
+    initFileBrowser();
     /**
-     * @type {fileBrowser.FileBrowser}
+     * @type {FileBrowser}
      */
     const browser = document.querySelector("file-browser");
     browser.setCallbackUrl("/api/resources");

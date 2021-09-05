@@ -31,8 +31,8 @@ window.addEventListener("load", async function () {
     const discord = JSON.parse(window.localStorage.getItem("discord"));
 
     // Initialize browser
-    fileBrowser.init();
-    /** @type {fileBrowser.FileBrowser} */
+    initFileBrowser();
+    /** @type {FileBrowser} */
     const browser = document.querySelector("file-browser");
     browser.setCallbackUrl("/api/resources");
 
@@ -59,16 +59,8 @@ window.addEventListener("load", async function () {
         loginButton.classList.add("disable");
 
         // Add spinner
-        const spinner = document.createElement("div");
-        spinner.classList.add("spinner-border", "me-1");
-        spinner.setAttribute("style", "height: 1em;width: 1em;");
-        spinner.setAttribute("role", "status");
-
-        const span_c = document.createElement("span");
-        span_c.classList.add("visually-hidden");
-        span_c.innerText = "Loading...";
-        spinner.append(span_c);
-
+        const spinner = createSpinner();
+        spinner.classList.add("spinner-border-sm", "h-1", "w-1");
         loginButton.prepend(spinner);
 
         // Login user and get a JWT
