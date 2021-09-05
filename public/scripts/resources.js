@@ -15,6 +15,7 @@ window.addEventListener("load", async function () {
     }, {passive: true});
 
     document.addEventListener("loggedout", () => {
+        browser.setAuthorization(null);
         browser.setPath();
     }, {passive: true});
 

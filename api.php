@@ -15,22 +15,23 @@ foreach ($env as $item) {
 }
 
 switch ($before) {
-    case 'resources' :
-        header("Cache-Control: private, max-age=3600");
+    case 'resources':
+        header("Cache-Control: no-cache, max-age=0, stale-while-revalidate=300");
         require __DIR__ . '/api/resources/resources.php';
         break;
-    case 'experiments' :
+    case 'experiments':
         header("Cache-Control: private, max-age=3600");
         require __DIR__ . '/api/experiments.php';
         break;
-    case 'download' :
-        header("Cache-Control: private, max-age=3600");
+    case 'download':
+        header("Cache-Control: no-cache, max-age=0, stale-while-revalidate=300");
         require __DIR__ . '/api/resources/download.php';
         break;
-    case 'login' :
+    case 'login':
         require __DIR__ . '/api/login.php';
         break;
-    case 'thumbnail' :
+    case 'thumbnail':
+        header("Cache-Control: private, max-age=3600");
         require __DIR__ . '/api/resources/thumbnail.php';
         break;
     default:

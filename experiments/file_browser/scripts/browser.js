@@ -221,7 +221,7 @@ class FileBrowser extends HTMLElement {
         window.addEventListener("popstate", () => {
             this.decodePath();
             const elements = Array.from(this.browser.children);
-            toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), fileBrowser.TRANSITION_DURATION);
+            toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length, () => this.setPath(), FileBrowser.TRANSITION_DURATION);
         }, {passive: true});
     }
 

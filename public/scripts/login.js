@@ -21,7 +21,7 @@ function loggedIn(discord) {
     if (!discord) discord = JSON.parse(window.localStorage.getItem("discord"));
 
     loginButton.innerText = "Logged in as " + discord.username;
-    loginButton.href = "";
+    loginButton.removeAttribute("href");
     loginButton.classList.add("logged-in");
 
     if (discord.avatar) {
@@ -50,8 +50,10 @@ window.addEventListener("load", () => {
     const loginButton = document.getElementById("loginButton");
     document.querySelector("#logoutButton").addEventListener("click", () => {
         window.localStorage.removeItem("discord");
-        loginButton.innerHTML = 'Login with Discord <img src="/public/assets/Discord-Logo-White.svg" class="ms-1 h-1" alt="Discord logo">'
+        loginButton.innerHTML = '<img src="/public/assets/Discord-Logo-White.svg" class="me-1 h-1" alt="Discord logo"> Login with Discord'
+        loginButton.href = `https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname)}&response_type=code&scope=identify`;
         loginButton.classList.remove("logged-in");
+        document.dispatchEvent(loggedout);
     }, {passive: true});
 
     if (discord) {
@@ -81,7 +83,10 @@ window.addEventListener("load", () => {
         loginButton.prepend(spinner);
 
         // Login user and get a JWT
-        fetch("/api/login", {method: "POST", body: JSON.stringify({code: code, redirectUri: window.location.origin})})
+        fetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify({code: code, redirectUri: window.location.origin + window.location.pathname})
+        })
             .then(res => {
                 if (200 > res.status || res.status >= 300) throw res;
                 return res.json();

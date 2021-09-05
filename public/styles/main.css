@@ -275,6 +275,10 @@ h1 {
     height: 1em;
 }
 
+.h-2{
+    height: 2em;
+}
+
 .w-1 {
     width: 1em;
 }
@@ -308,15 +312,17 @@ h1 {
 }
 
 #loginButton.logged-in, #loginButton.logged-in + #logoutButton {
-    transition: transform .5s;
+    transition: transform .2s, opacity .2s;
     width: 100%;
     height: 100%;
     transform-origin: top;
     transform: rotateX(0);
+    opacity: 1;
 }
 
 .login-button:hover #loginButton.logged-in {
     transform: rotateX(90deg);
+    opacity: 0;
 }
 
 #loginButton + #logoutButton {
@@ -332,6 +338,7 @@ h1 {
     justify-content: center;
     align-content: center;
     transform: translate(-50%, -50%) rotateX(-90deg);
+    opacity: 0;
 }
 
 #loginButton.logged-in + #logoutButton {
@@ -340,6 +347,7 @@ h1 {
 
 .login-button:hover #loginButton.logged-in + #logoutButton {
     transform: translate(-50%, -50%) rotateX(0);
+    opacity: 1;
 }
 
 .avatar {
