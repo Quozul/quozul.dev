@@ -1,10 +1,15 @@
 <?php
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405);
+    exit();
+}
+
 define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
 
 $path = file_get_contents("php://input");
 // Ensure there is no "../" in the file path
 $re = "/(^|[\/\\\])(\.\.[\/\\\])+/";
-$path = preg_replace($re, "/", $path);
+$real_path = preg_replace($re, "/", $path);
 
 // the file you want to send
 $real_path = getenv("PUBLIC_FOLDER") . $path;
@@ -19,7 +24,7 @@ if (is_dir($real_path)) {
     exit;
 }
 
-require_once __DIR__ . "/utils.php";
+require_once __DIR__ . "/../utils.php";
 $id = getUserId();
 
 // Verify user is authorized to download file

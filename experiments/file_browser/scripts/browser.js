@@ -179,7 +179,8 @@ const fileBrowser = {
             downloadInfo.classList.add("info")
             downloadElement.append(downloadInfo);
 
-            const headers = new Headers({"Authorization": this.auth});
+            let headers = {};
+            if (this.auth) headers["Authorization"] = this.auth;
             const response = await fetch("/api/download", {
                 method: "POST",
                 headers: headers,

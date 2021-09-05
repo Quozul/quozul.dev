@@ -19,7 +19,7 @@ foreach ($env as $item) {
 switch ($before) {
     case 'resources' :
         header("Cache-Control: private, max-age=3600");
-        require __DIR__ . '/api/resources.php';
+        require __DIR__ . '/api/resources/resources.php';
         break;
     case 'experiments' :
         header("Cache-Control: private, max-age=3600");
@@ -36,7 +36,10 @@ switch ($before) {
         require __DIR__ . '/api/stats.php';
         break;
     case 'download' :
-        require __DIR__ . '/api/download.php';
+        require __DIR__ . '/api/resources/download.php';
+        break;
+    case 'thumbnail' :
+        require __DIR__ . '/api/resources/thumbnail.php';
         break;
     case 'login' :
         require __DIR__ . '/api/login.php';

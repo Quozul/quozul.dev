@@ -24,3 +24,9 @@ file-browser .browser > div {
 file-browser .path, file-browser .preview {
     background-color: var(--background-color);
 }
+
+.avatar {
+    height: 2em;
+    width: 2em;
+    border-radius: 50%;
+}

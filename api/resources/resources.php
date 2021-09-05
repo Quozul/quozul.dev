@@ -1,4 +1,9 @@
 <?php
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+    http_response_code(405);
+    exit();
+}
+
 // ID of authorized Discord users
 define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
 
@@ -65,7 +70,7 @@ else
     $dir = getenv("PUBLIC_FOLDER") . $real_path;
 
 // Get user's JWT
-require_once __DIR__ . "/utils.php";
+require_once __DIR__ . "/../utils.php";
 $id = getUserId();
 
 if (!file_exists($dir)) {

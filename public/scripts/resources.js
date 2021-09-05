@@ -11,14 +11,13 @@ function loggedIn(discord) {
         const img = document.createElement("img");
         img.src = avatarUrl;
         img.alt = `${discord.username}'s avatar`;
-        img.classList.add("me-1");
-        img.setAttribute("style", "height: 2em;width: 2em;border-radius: 50%;");
+        img.classList.add("me-1", "avatar");
         loginButton.prepend(img);
     }
 
     loginButton.addEventListener("click", () => {
         window.localStorage.removeItem("discord");
-        loginButton.innerHTML = 'Login with Discord <img src="/public/assets/Discord-Logo-White.svg" class="ms-1" alt="Discord logo" style="height: 1em">'
+        loginButton.innerHTML = 'Login with Discord <img src="/public/assets/Discord-Logo-White.svg" class="ms-1 h-1" alt="Discord logo">'
     }, {passive: true, once: true});
 }
 
