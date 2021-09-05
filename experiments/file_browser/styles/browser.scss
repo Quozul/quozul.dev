@@ -263,13 +263,13 @@ file-browser {
         flex-direction: column;
         width: auto;
         transform: translateX(-50%) translateY(0);
+        z-index: 300;
 
         .download {
             padding: 1em;
             transition: transform .2s;
             border-radius: .25em;
             border: solid #ccc 1px;
-            z-index: 200;
             background-color: var(--background-color);
             margin: .5em 0;
             transform: translateY(calc(100% + 4em));
