@@ -16,93 +16,99 @@
  * @property {?number[]} seasons Amount of episodes in each seasons
  */
 
-function buildFileBrowserElement(file, browser, view_mode = "default") {
-    const element = document.createElement("div");
-    element.classList.add(file.dir ? "folder" : "file");
-
-    const nameElement = document.createElement("span");
-    nameElement.classList.add("name");
-    nameElement.innerText = file.name;
-    element.append(nameElement);
-
-    const statElement = document.createElement("span");
-    statElement.classList.add("stat");
-    element.append(statElement);
-
-    const fileExt = file.name.split('.').slice(-1).pop();
-    const img = document.createElement('img');
-
-    const icons = getFileIcon(fileExt);
-
-    if (view_mode && file.has_thumbnail) {
-        img.src = `/api/thumbnail/${browser.encodePath([...browser.path, file.name])}`;
-    } else {
-        img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
-    }
-
-    img.loading = "lazy";
-    img.classList.add('icon');
-    img.alt = `${icons[0]?.name} icon`;
-
-    element.prepend(img);
-    element.setAttribute("data-name", file.name);
-
-    // Right click on element
-    element.addEventListener("contextmenu", ev => {
-        ev.preventDefault();
-
-        browser.contextMenu.style.left = ev.x - browser.x + "px";
-        browser.contextMenu.style.top = ev.y - browser.y + "px";
-
-        browser.contextMenu.innerHTML = "";
-
-        const copyLi = document.createElement("li");
-        copyLi.innerText = "Copy link";
-        browser.contextMenu.append(copyLi);
-
-        copyLi.addEventListener("click", () => {
-            const url = "https://quozul.dev/resources/#" + btoa(escape([...browser.path, file.name].join("/")));
-            console.log(url);
-            navigator.clipboard.writeText(url)
-            browser.contextMenu.classList.remove("visible");
-        }, {passive: true, once: true});
-
-        browser.contextMenu.classList.add("visible");
-    });
-
-    if (view_mode === "library") {
-        let episodes = 0;
-        for (const season of file.seasons) episodes += season;
-        statElement.innerText = `${file.seasons.length} season(s) - ${episodes} episode(s)`;
-    } else if (file.dir) {
-        statElement.innerText = `${getReadableFileSizeString(file.size)} - ${file.elements} element(s)`;
-    } else {
-        statElement.innerText = `${getReadableFileSizeString(file.size)} - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
-    }
-
-    // Click on element
-    element.addEventListener("click", ev => {
-        if (!element.classList.contains("open")) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            return;
-        }
-
-        if (file.dir) {
-            // Open directory
-            browser.path.push(file.name);
-            browser.changeDirectory("open");
-        } else {
-            // View or download file
-            browser.downloadFile(file.name);
-        }
-    }, {passive: true});
-
-    return element;
-}
-
 class FileBrowser extends HTMLElement {
     static TRANSITION_DURATION = 200;
+
+    static createElement(tagName, ...c) {
+        const element = document.createElement(tagName);
+        element.classList.add(...c);
+        return element;
+    }
+
+    static buildFileBrowserElement(file, browser, view_mode = "default") {
+        const element = document.createElement("div");
+        element.classList.add(file.dir ? "folder" : "file");
+
+        const nameElement = document.createElement("span");
+        nameElement.classList.add("name");
+        nameElement.innerText = file.name;
+        element.append(nameElement);
+
+        const statElement = document.createElement("span");
+        statElement.classList.add("stat");
+        element.append(statElement);
+
+        const fileExt = file.name.split('.').slice(-1).pop();
+        const img = document.createElement('img');
+
+        const icons = getFileIcon(fileExt);
+
+        if (view_mode && file.has_thumbnail) {
+            img.src = `/api/thumbnail/${browser.encodePath([...browser.path, file.name])}`;
+        } else {
+            img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
+        }
+
+        img.loading = "lazy";
+        img.classList.add('icon');
+        img.alt = `${icons[0]?.name} icon`;
+
+        element.prepend(img);
+        element.setAttribute("data-name", file.name);
+
+        // Right click on element
+        element.addEventListener("contextmenu", ev => {
+            ev.preventDefault();
+
+            browser.contextMenu.style.left = ev.x - browser.x + "px";
+            browser.contextMenu.style.top = ev.y - browser.y + "px";
+
+            browser.contextMenu.innerHTML = "";
+
+            const copyLi = document.createElement("li");
+            copyLi.innerText = "Copy link";
+            browser.contextMenu.append(copyLi);
+
+            copyLi.addEventListener("click", () => {
+                const url = "https://quozul.dev/resources/#" + btoa(escape([...browser.path, file.name].join("/")));
+                console.log(url);
+                navigator.clipboard.writeText(url)
+                browser.contextMenu.classList.remove("visible");
+            }, {passive: true, once: true});
+
+            browser.contextMenu.classList.add("visible");
+        });
+
+        if (view_mode === "library") {
+            let episodes = 0;
+            for (const season of file.seasons) episodes += season;
+            statElement.innerText = `${file.seasons.length} season(s) - ${episodes} episode(s)`;
+        } else if (file.dir) {
+            statElement.innerText = `${getReadableFileSizeString(file.size)} - ${file.elements} element(s)`;
+        } else {
+            statElement.innerText = `${getReadableFileSizeString(file.size)} - ${new Date(file.time * 1000).format("%yyyy-%MM-%dd %hh:%mm")}`;
+        }
+
+        // Click on element
+        element.addEventListener("click", ev => {
+            if (!element.classList.contains("open")) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                return;
+            }
+
+            if (file.dir) {
+                // Open directory
+                browser.path.push(file.name);
+                browser.changeDirectory("open");
+            } else {
+                // View or download file
+                browser.downloadFile(file.name);
+            }
+        }, {passive: true});
+
+        return element;
+    }
 
     constructor() {
         // Always call super first in constructor
@@ -111,18 +117,22 @@ class FileBrowser extends HTMLElement {
         // Write element functionality in here
         this.path = this.decodePath();
 
-        this.append(this.preview = document.createElement("div"));
-        this.append(this.pathElement = document.createElement("div"));
-        this.append(this.browser = document.createElement("div"));
-        this.append(this.search = document.createElement("input"));
-        this.append(this.downloadCenter = document.createElement("div"));
-        this.append(this.contextMenu = document.createElement("ul"));
-        this.browser.classList.add("browser");
-        this.pathElement.classList.add("path");
-        this.preview.classList.add("preview");
-        this.search.classList.add("search");
-        this.downloadCenter.classList.add("download-center");
-        this.contextMenu.classList.add("context-menu");
+        // Build browser elements
+        this.append(this.stat = FileBrowser.createElement("div", "stat"));
+        this.append(this.pathElement = FileBrowser.createElement("div", "path"));
+        this.append(this.browser = FileBrowser.createElement("div", "browser"));
+        this.append(this.search = FileBrowser.createElement("input", "search"));
+        this.append(this.downloadCenter = FileBrowser.createElement("div", "download-center"));
+        this.append(this.contextMenu = FileBrowser.createElement("ul", "context-menu"));
+
+        // Build preview div
+        this.append(this.preview = FileBrowser.createElement("div", "preview"));
+        const close = FileBrowser.createElement("div", "close");
+        close.addEventListener("click", () => {
+            this.preview.classList.remove("show");
+        }, {passive: true});
+        this.preview.append(close); // Cross
+        this.preview.append(this.previewContent = FileBrowser.createElement("div", "content")); // Content
 
         this.getSize();
         document.addEventListener("resize", () => this.getSize(), {passive: true});
@@ -291,6 +301,7 @@ class FileBrowser extends HTMLElement {
 
         // Step 2: get total length
         const contentLength = response.headers.get('Content-Length');
+        const contentType = response.headers.get('Content-Type');
 
         // Step 3: read the data
         let receivedLength = 0; // received that many bytes at the moment
@@ -309,12 +320,40 @@ class FileBrowser extends HTMLElement {
         let chunksAll = new Uint8Array(receivedLength); // (4.1)
         let position = 0;
         for (let chunk of chunks) {
-            chunksAll.set(chunk, position); // (4.2)
+            chunksAll.set(chunk, position);
             position += chunk.length;
         }
+        const blob = new Blob([chunksAll], {type: contentType});
 
-        // We're done!
-        download(filename, new Blob([chunksAll]));
+        const type = contentType.split("/")[0];
+        switch (type) {
+            case "image": {
+                // If file is an image, then preview it
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(blob);
+                img.alt = filename;
+
+                this.previewContent.innerHTML = "";
+                this.preview.classList.add("show");
+
+                this.previewContent.append(img);
+                break;
+            }
+            case "text": {
+                const pre = document.createElement("pre");
+                pre.innerText = new TextDecoder().decode(chunksAll);
+
+                this.previewContent.innerHTML = "";
+                this.preview.classList.add("show");
+
+                this.previewContent.append(pre);
+                break;
+            }
+            default: {
+                // Otherwise, download it
+                download(filename, blob);
+            }
+        }
 
         setTimeout(() => {
             downloadProgress.style.width = `0`;
@@ -341,7 +380,7 @@ class FileBrowser extends HTMLElement {
         request = await fetch(url, {headers: headers});
 
         spinner.remove();
-        this.preview.innerHTML = "";
+        this.stat.innerHTML = "";
 
         switch (request.status) {
             case 400: {
@@ -370,16 +409,16 @@ class FileBrowser extends HTMLElement {
         for (const file of files.content) {
             size += file.size;
 
-            const element = buildFileBrowserElement(file, this, files?.metadata?.view_mode);
+            const element = FileBrowser.buildFileBrowserElement(file, this, files?.metadata?.view_mode);
             this.browser.append(element);
         }
 
         const elements = Array.from(this.browser.children);
         toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length);
 
-        this.preview.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
+        this.stat.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
         if (files?.metadata?.description) {
-            this.preview.innerText += ` | ${files.metadata.description}`;
+            this.stat.innerText += ` | ${files.metadata.description}`;
         }
     }
 }

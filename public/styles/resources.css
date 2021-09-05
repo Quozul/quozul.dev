@@ -21,7 +21,7 @@ file-browser .browser[data-view-mode="default"] > div {
     border-radius: .25rem;
 }
 
-file-browser .path, file-browser .preview {
+file-browser > .path, file-browser > .stat {
     background-color: var(--background-color);
 }
 
