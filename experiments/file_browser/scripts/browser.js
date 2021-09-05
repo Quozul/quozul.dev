@@ -130,6 +130,7 @@ class FileBrowser extends HTMLElement {
 
         // Write element functionality in here
         this.path = this.decodePath();
+        this.updating = false;
 
         // Build browser elements
         this.append(this.stat = FileBrowser.createElement("div", "stat"));
@@ -389,6 +390,9 @@ class FileBrowser extends HTMLElement {
     }
 
     async openPath() {
+        if (this.updating) return;
+        this.updating = true;
+
         // Get file and folder list
         let request, headers = {};
         let url = "/api/resources/";
@@ -443,6 +447,8 @@ class FileBrowser extends HTMLElement {
         if (files?.metadata?.description) {
             this.stat.innerText += ` | ${files.metadata.description}`;
         }
+
+        this.updating = false;
     }
 }
 

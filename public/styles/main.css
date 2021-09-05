@@ -296,3 +296,54 @@ h1 {
 .emoji {
     transform: translate(1em, 0) rotate(90deg);
 }
+
+/* Login button */
+
+.login-button {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#loginButton.logged-in, #loginButton.logged-in + #logoutButton {
+    transition: transform .5s;
+    width: 100%;
+    height: 100%;
+    transform-origin: top;
+    transform: rotateX(0);
+}
+
+.login-button:hover #loginButton.logged-in {
+    transform: rotateX(90deg);
+}
+
+#loginButton + #logoutButton {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+#loginButton.logged-in + #logoutButton {
+    transform-origin: bottom;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    transform: translate(-50%, -50%) rotateX(-90deg);
+}
+
+#loginButton.logged-in + #logoutButton {
+    height: auto;
+}
+
+.login-button:hover #loginButton.logged-in + #logoutButton {
+    transform: translate(-50%, -50%) rotateX(0);
+}
+
+.avatar {
+    height: 2em;
+    width: 2em;
+    border-radius: 50%;
+}

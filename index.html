@@ -13,7 +13,9 @@
 
     <!-- Custom scripts -->
     <script src="/experiments/page_scroll/page.js"></script>
+    <script src="/public/scripts/utils.js"></script>
     <script src="/public/scripts/main.js"></script>
+    <script src="/public/scripts/login.js"></script>
 
     <!-- Custom styles -->
     <link rel="stylesheet" href="/public/styles/main.min.css">
@@ -89,230 +91,275 @@
     </script>
 </head>
 
-<body>
-    <main class="flex-center">
-        <page-container id="menuReady" width="100vw" height="100vh" direction="vertical">
-            <page-section data-name="Home">
-                <div class="full-size flex-center">
-                    <div class="mh-100">
-                        <div class="d-inline-flex flex-column align-items-start m-0">
-                            <h2 class="text-start d-inline-block m-0">Web developer</h2>
-                            <h1 class="display m-0 line-title line-title-center">Quozul</h1>
+<body class="d-flex flex-column vh-100 justify-content-between">
+<header class="container">
+    <div class="mt-3 p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="navbar-collapse collapse w-100 navbarSupportedContent order-1 order-md-0">
+                <ul class="navbar-nav ms-auto text-center">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/experiments">Experiments</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="navbar-brand mx-2" href="/">
+                    <img src="/public/assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                    Quozul.dev
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 navbarSupportedContent order-2 order-md-2">
+                <ul class="navbar-nav w-100 text-center justify-content-between align-items-center">
+                    <li class="nav-item m-0">
+                        <a class="nav-link" href="/resources">Resources</a>
+                    </li>
+                    <li class="nav-item login-button">
+                        <a class="nav-link d-flex align-items-center" id="loginButton" href="https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=https%3A%2F%2Fquozul.dev&response_type=code&scope=identify">
+                            Login with Discord
+                            <img src="/public/assets/Discord-Logo-White.svg" class="ms-1 h-1" alt="Discord logo">
+                        </a>
+                        <div id="logoutButton">
+                            <span>Logout</span>
                         </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
 
-                        <div class="scroll-down">
-                            <div class="scroll-arrow"></div>
-                            Discover my projects
-                        </div>
+<main class="flex-center h-100">
+    <page-container id="menuReady" width="100vw" height="100%" direction="vertical">
+        <page-section data-name="Home">
+            <div class="full-size flex-center">
+                <div class="mh-100">
+                    <div class="d-inline-flex flex-column align-items-start m-0">
+                        <h2 class="text-start d-inline-block m-0">Web developer</h2>
+                        <h1 class="display m-0 line-title line-title-center">Quozul</h1>
+                    </div>
+
+                    <div class="scroll-down">
+                        <div class="scroll-arrow"></div>
+                        Discover my projects
                     </div>
                 </div>
-            </page-section>
+            </div>
+        </page-section>
 
-            <page-section data-name="Projects" class="page-down">
-                <page-container id="projectsContainer" width="100%" height="calc(100% - 73px)" class="z-20" direction="horizontal">
-                    <page-section data-name="Minecraft plugins">
-                        <div class="full-size flex-center">
-                            <div class="mh-100">
-                                <div class="row g-0 justify-content-center align-items-stretch">
-                                    <div class="p-3 text-center text-md-end col-12 col-md-6 d-flex flex-column justify-content-start">
-                                        <h1 class="text-md-end line-title line-title-left">OnDemandServer</h1>
-                                        <ul class="list-unstyled">
-                                            <li>Start and stop Minecraft servers on demand from the proxy.</li>
-                                            <li><b>Date:</b> December 20, 2020</li>
-                                            <li><b>Language:</b> English, customizable</li>
-                                            <li><b>Compatibility:</b> BungeeCord & Waterfall proxies</li>
-                                            <li>
-                                                <a class="show-link" href="https://github.com/Quozul/OnDemandServer" target="_blank" rel="noopener">GitHub</a>
-                                                •
-                                                <a class="show-link" href="/resources/#Projects/Minecraft/Plugins">Check resources for download</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="p-3 text-center text-md-start col-12 col-md-6 d-flex flex-column justify-content-start">
-                                        <h1 class="line-title line-title-right">Survival-Games</h1>
-                                        <ul class="list-unstyled">
-                                            <li>Not exactly a survival games plugin for Minecraft.</li>
-                                            <li><b>Date:</b> September 9, 2020</li>
-                                            <li><b>Language:</b> French</li>
-                                            <li><b>Compatibility:</b> Spigot and derivatives</li>
-                                            <li>
-                                                <a class="show-link" href="https://github.com/Quozul/Survival-Games" target="_blank" rel="noopener">GitHub</a>
-                                                •
-                                                <a class="show-link" href="/resources/#Projects/Minecraft/Plugins">Check resources for download</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </page-section>
-
-                    <page-section data-name="DHStatsViewer" class="page-right">
-                        <div class="full-size flex-center">
+        <page-section data-name="Projects" class="page-down">
+            <page-container id="projectsContainer" width="100%" height="calc(100% - 73px)" class="z-20" direction="horizontal">
+                <page-section data-name="Minecraft plugins">
+                    <div class="full-size flex-center">
+                        <div class="mh-100">
                             <div class="row g-0 justify-content-center align-items-stretch">
-                                <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
-                                    <img loading="lazy" src="/public/assets/projects/DHStatsViewer.png" alt="DHStatsViewer" class="img-fluid">
-                                </div>
-                                <div class="d-none d-md-block border-start"></div>
-                                <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
-                                    <h1 class="line-title line-title-center">DHStatsViewer</h1>
+                                <div class="p-3 text-center text-md-end col-12 col-md-6 d-flex flex-column justify-content-start">
+                                    <h1 class="text-md-end line-title line-title-left">OnDemandServer</h1>
                                     <ul class="list-unstyled">
-                                        <li><a class="show-link" href="https://dht.chylex.com/" target="_blank" rel="noopener">Discord History Tracker</a> visualizer.</li>
-                                        <li><b>Date:</b> Some times in August 2018</li>
-                                        <li><b>Language:</b> English</li>
-                                        <li><b>Compatibility:</b> Compiled for Windows & portable</li>
+                                        <li>Start and stop Minecraft servers on demand from the proxy.</li>
+                                        <li><b>Date:</b> December 20, 2020</li>
+                                        <li><b>Language:</b> English, customizable</li>
+                                        <li><b>Compatibility:</b> BungeeCord & Waterfall proxies</li>
                                         <li>
-                                            <a class="show-link" href="https://github.com/Quozul/DHStatsViewer/releases/latest" target="_blank" rel="noopener">GitHub download</a>
+                                            <a class="show-link" href="https://github.com/Quozul/OnDemandServer" target="_blank" rel="noopener">GitHub</a>
                                             •
-                                            <a class="show-link" href="/resources/#Projects/DHStatsViewer">Check resources for download</a>
+                                            <a class="show-link" href="/resources/#Projects/Minecraft/Plugins">Check resources for download</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="p-3 text-center text-md-start col-12 col-md-6 d-flex flex-column justify-content-start">
+                                    <h1 class="line-title line-title-right">Survival-Games</h1>
+                                    <ul class="list-unstyled">
+                                        <li>Not exactly a survival games plugin for Minecraft.</li>
+                                        <li><b>Date:</b> September 9, 2020</li>
+                                        <li><b>Language:</b> French</li>
+                                        <li><b>Compatibility:</b> Spigot and derivatives</li>
+                                        <li>
+                                            <a class="show-link" href="https://github.com/Quozul/Survival-Games" target="_blank" rel="noopener">GitHub</a>
+                                            •
+                                            <a class="show-link" href="/resources/#Projects/Minecraft/Plugins">Check resources for download</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                    </page-section>
-
-                    <page-section data-name="Lovcon" class="page-right">
-                        <div class="full-size flex-center">
-                            <div class="row g-0 justify-content-center align-items-stretch">
-                                <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
-                                    <img loading="lazy" src="/public/assets/projects/lovcon.png" alt="Lovcon" class="img-fluid">
-                                </div>
-                                <div class="d-none d-md-block border-start"></div>
-                                <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
-                                    <h1 class="line-title line-title-center">Lovcon</h1>
-                                    <ul class="list-unstyled">
-                                        <li>Fully-featured in-game console which you can use and edit it as your desires.</li>
-                                        <li><b>Date:</b> September 15, 2018</li>
-                                        <li><b>Language:</b> English</li>
-                                        <li><b>Compatibility:</b> Library for <a class="show-link" href="https://love2d.org/" target="_blank" rel="noopener">Löve2D</a></li>
-                                        <li>
-                                            <a class="show-link" href="https://github.com/Quozul/lovcon/releases/latest" target="_blank" rel="noopener">GitHub download</a>
-                                            •
-                                            <a class="show-link" href="/resources/#Projects/Lovcon">Resources</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </page-section>
-
-                    <page-section data-name="Pirikium" class="page-right">
-                        <div class="full-size flex-center">
-                            <div class="row g-0 justify-content-center align-items-stretch">
-                                <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
-                                    <img loading="lazy" src="/public/assets/projects/pirikium.jpg" alt="Pirikium" class="img-fluid">
-                                </div>
-                                <div class="d-none d-md-block border-start"></div>
-                                <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
-                                    <h1 class="line-title line-title-center">Pirikium</h1>
-                                    <ul class="list-unstyled">
-                                        <li>Top-down shooter game.</li>
-                                        <li><b>Date:</b> July 27, 2018</li>
-                                        <li><b>Language:</b> English, French & Polish</li>
-                                        <li><b>Compatibility:</b> Compiled for Windows & portable</li>
-                                        <li>
-                                            <a class="show-link" href="https://github.com/Quozul/Pirikium/releases/latest" target="_blank" rel="noopener">GitHub download</a>
-                                            •
-                                            <a class="show-link" href="/resources/#Projects/Pirikium">Resources</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </page-section>
-
-                    <page-section data-name="Text based games">
-                        <div class="full-size flex-center">
-                            <div class="mh-100">
-                                <div class="row g-0 justify-content-center align-items-stretch">
-                                    <div class="p-3 text-center text-md-end col-12 col-md-6 d-flex flex-column justify-content-start">
-                                        <h1 class="text-md-end line-title line-title-left">Pak</h1>
-                                        <ul class="list-unstyled">
-                                            <li>Text based game in Java.</li>
-                                            <li><b>Date:</b> June 1, 2019</li>
-                                            <li><b>Language:</b> English</li>
-                                            <li><b>Compatibility:</b> It's Java, everywhere</li>
-                                            <li>
-                                                <a class="show-link" href="https://github.com/Quozul/Pak" target="_blank" rel="noopener">GitHub</a>
-                                                •
-                                                <a class="show-link" href="/resources/#Projects/Pak">Check resources for download</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="p-3 text-center text-md-start col-12 col-md-6 d-flex flex-column justify-content-start">
-                                        <h1 class="line-title line-title-right">Fuald</h1>
-                                        <ul class="list-unstyled">
-                                            <li>Text-based RPG game in shell script.</li>
-                                            <li><b>Date:</b> April 16, 2018</li>
-                                            <li><b>Language:</b> English & French</li>
-                                            <li><b>Compatibility:</b> Linux based systems</li>
-                                            <li>
-                                                <a class="show-link" href="https://github.com/Quozul/Fuald" target="_blank" rel="noopener">GitHub</a>
-                                                •
-                                                <a class="show-link" href="/resources/#Projects/Fuald">Check resources for download</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </page-section>
-                </page-container>
-
-                <div id="subMenu" data-noscroll><div></div></div>
-            </page-section>
-
-            <page-section data-name="About" class="page-down">
-                <div class="full-size flex-center">
-                    <div class="mh-100">
-                        <div class="row g-0">
-                            <div class="col-12 col-md-6 text-md-end p-3">
-                                <h1 class="line-title line-title-left pe-md-5">About</h1>
-                                <p>
-                                    Living in Paris, France, I'm currently a student in IT and I'm working as a web developer.
-                                </p>
-                                <p>
-                                    I mostly like to make random ideas that got through my mind.<br>
-                                    Most of them are not available on my website though.
-                                </p>
-                            </div>
-                            <div class="col-12 col-md-6 p-3">
-                                <img loading="lazy" src="/public/assets/icon.png" alt="Logo" class="d-none d-md-block logo" width="64" height="64">
-
-                                <h1 class="line-title line-title-right ps-md-5">Contact</h1>
-                                <p>
-                                    Contact by mail: <a href="mailto:contact@quozul.dev" class="show-link">contact@quozul.dev</a>.<br>
-                                    I may be able to help you develop a website or an app... 🤔
-                                </p>
-                                <p>
-                                    You can find me on almost all social media under the username <u class="select">Quozul</u>.<br>
-                                    <small>I hope to see you around <span class="d-inline-block emoji">;-)</span></small>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row g-0">
-                            <div class="col-12 text-md-center p-3">
-                                <h1 class="line-title line-title-center">Resources</h1>
-                                <p>
-                                    More projects on <a class="show-link" href="https://github.com/Quozul/" target="_blank" rel="noopener">GitHub</a>.<br>
-                                    As well as on the <a class="show-link" href="/resources/">resources</a> and <a class="show-link" href="/experiments/">experiments</a> pages.
-                                </p>
-                            </div>
-                        </div>
-
-                        <footer class="d-inline">
-                            <div class="mt-3 mb-3 text-center p-3 container text-white">
-                                © Copyright — Quozul — All rights reserved.
-                            </div>
-                        </footer>
                     </div>
-                </div>
-            </page-section>
-        </page-container>
-    </main>
+                </page-section>
 
-    <div class="bubbles"></div>
+                <page-section data-name="DHStatsViewer" class="page-right">
+                    <div class="full-size flex-center">
+                        <div class="row g-0 justify-content-center align-items-stretch">
+                            <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
+                                <img loading="lazy" src="/public/assets/projects/DHStatsViewer.png" alt="DHStatsViewer" class="img-fluid">
+                            </div>
+                            <div class="d-none d-md-block border-start"></div>
+                            <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
+                                <h1 class="line-title line-title-center">DHStatsViewer</h1>
+                                <ul class="list-unstyled">
+                                    <li><a class="show-link" href="https://dht.chylex.com/" target="_blank" rel="noopener">Discord History Tracker</a> visualizer.</li>
+                                    <li><b>Date:</b> Some times in August 2018</li>
+                                    <li><b>Language:</b> English</li>
+                                    <li><b>Compatibility:</b> Compiled for Windows & portable</li>
+                                    <li>
+                                        <a class="show-link" href="https://github.com/Quozul/DHStatsViewer/releases/latest" target="_blank" rel="noopener">GitHub download</a>
+                                        •
+                                        <a class="show-link" href="/resources/#Projects/DHStatsViewer">Check resources for download</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </page-section>
+
+                <page-section data-name="Lovcon" class="page-right">
+                    <div class="full-size flex-center">
+                        <div class="row g-0 justify-content-center align-items-stretch">
+                            <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
+                                <img loading="lazy" src="/public/assets/projects/lovcon.png" alt="Lovcon" class="img-fluid">
+                            </div>
+                            <div class="d-none d-md-block border-start"></div>
+                            <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
+                                <h1 class="line-title line-title-center">Lovcon</h1>
+                                <ul class="list-unstyled">
+                                    <li>Fully-featured in-game console which you can use and edit it as your desires.</li>
+                                    <li><b>Date:</b> September 15, 2018</li>
+                                    <li><b>Language:</b> English</li>
+                                    <li><b>Compatibility:</b> Library for <a class="show-link" href="https://love2d.org/" target="_blank" rel="noopener">Löve2D</a></li>
+                                    <li>
+                                        <a class="show-link" href="https://github.com/Quozul/lovcon/releases/latest" target="_blank" rel="noopener">GitHub download</a>
+                                        •
+                                        <a class="show-link" href="/resources/#Projects/Lovcon">Resources</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </page-section>
+
+                <page-section data-name="Pirikium" class="page-right">
+                    <div class="full-size flex-center">
+                        <div class="row g-0 justify-content-center align-items-stretch">
+                            <div class="p-3 justify-content-center col-md-6 col-12 d-flex flex-column justify-content-center">
+                                <img loading="lazy" src="/public/assets/projects/pirikium.jpg" alt="Pirikium" class="img-fluid">
+                            </div>
+                            <div class="d-none d-md-block border-start"></div>
+                            <div class="p-3 text-start col-md-6 col-12 d-flex flex-column justify-content-center">
+                                <h1 class="line-title line-title-center">Pirikium</h1>
+                                <ul class="list-unstyled">
+                                    <li>Top-down shooter game.</li>
+                                    <li><b>Date:</b> July 27, 2018</li>
+                                    <li><b>Language:</b> English, French & Polish</li>
+                                    <li><b>Compatibility:</b> Compiled for Windows & portable</li>
+                                    <li>
+                                        <a class="show-link" href="https://github.com/Quozul/Pirikium/releases/latest" target="_blank" rel="noopener">GitHub download</a>
+                                        •
+                                        <a class="show-link" href="/resources/#Projects/Pirikium">Resources</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </page-section>
+
+                <page-section data-name="Text based games">
+                    <div class="full-size flex-center">
+                        <div class="mh-100">
+                            <div class="row g-0 justify-content-center align-items-stretch">
+                                <div class="p-3 text-center text-md-end col-12 col-md-6 d-flex flex-column justify-content-start">
+                                    <h1 class="text-md-end line-title line-title-left">Pak</h1>
+                                    <ul class="list-unstyled">
+                                        <li>Text based game in Java.</li>
+                                        <li><b>Date:</b> June 1, 2019</li>
+                                        <li><b>Language:</b> English</li>
+                                        <li><b>Compatibility:</b> It's Java, everywhere</li>
+                                        <li>
+                                            <a class="show-link" href="https://github.com/Quozul/Pak" target="_blank" rel="noopener">GitHub</a>
+                                            •
+                                            <a class="show-link" href="/resources/#Projects/Pak">Check resources for download</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="p-3 text-center text-md-start col-12 col-md-6 d-flex flex-column justify-content-start">
+                                    <h1 class="line-title line-title-right">Fuald</h1>
+                                    <ul class="list-unstyled">
+                                        <li>Text-based RPG game in shell script.</li>
+                                        <li><b>Date:</b> April 16, 2018</li>
+                                        <li><b>Language:</b> English & French</li>
+                                        <li><b>Compatibility:</b> Linux based systems</li>
+                                        <li>
+                                            <a class="show-link" href="https://github.com/Quozul/Fuald" target="_blank" rel="noopener">GitHub</a>
+                                            •
+                                            <a class="show-link" href="/resources/#Projects/Fuald">Check resources for download</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </page-section>
+            </page-container>
+
+            <div id="subMenu" data-noscroll><div></div></div>
+        </page-section>
+
+        <page-section data-name="About" class="page-down">
+            <div class="full-size flex-center">
+                <div class="mh-100">
+                    <div class="row g-0">
+                        <div class="col-12 col-md-6 text-md-end p-3">
+                            <h1 class="line-title line-title-left pe-md-5">About</h1>
+                            <p>
+                                Living in Paris, France, I'm currently a student in IT and I'm working as a web developer.
+                            </p>
+                            <p>
+                                I mostly like to make random ideas that got through my mind.<br>
+                                Most of them are not available on my website though.
+                            </p>
+                        </div>
+                        <div class="col-12 col-md-6 p-3">
+                            <img loading="lazy" src="/public/assets/icon.png" alt="Logo" class="d-none d-md-block logo" width="64" height="64">
+
+                            <h1 class="line-title line-title-right ps-md-5">Contact</h1>
+                            <p>
+                                Contact by mail: <a href="mailto:contact@quozul.dev" class="show-link">contact@quozul.dev</a>.<br>
+                                I may be able to help you develop a website or an app... 🤔
+                            </p>
+                            <p>
+                                You can find me on almost all social media under the username <u class="select">Quozul</u>.<br>
+                                <small>I hope to see you around <span class="d-inline-block emoji">;-)</span></small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col-12 text-md-center p-3">
+                            <h1 class="line-title line-title-center">Resources</h1>
+                            <p>
+                                More projects on <a class="show-link" href="https://github.com/Quozul/" target="_blank" rel="noopener">GitHub</a>.<br>
+                                As well as on the <a class="show-link" href="/resources/">resources</a> and <a class="show-link" href="/experiments/">experiments</a> pages.
+                            </p>
+                        </div>
+                    </div>
+
+                    <footer class="d-inline">
+                        <div class="mt-3 mb-3 text-center p-3 container text-white">
+                            © Copyright — Quozul — All rights reserved.
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </page-section>
+    </page-container>
+</main>
+
+<div class="bubbles"></div>
+
+<footer class="container">
+    <div class="mb-3 text-center p-3 container shadow-lg rounded text-white">
+        © Copyright — Quozul — All rights reserved.
+    </div>
+</footer>
 </body>
 
 </html>

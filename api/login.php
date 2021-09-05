@@ -1,8 +1,8 @@
 <?php
 // The goal of this file is to verify that the user is logged in using Discord
-$code = file_get_contents("php://input");
+$code = json_decode(file_get_contents("php://input"), true);
 
-if (empty($code)) {
+if (empty($code) || !isset($code["code"]) || !isset($code["redirectUri"])) {
     http_response_code(400);
     exit;
 }
@@ -51,9 +51,9 @@ function token($code) {
     $data = http_build_query([
         "client_id" => getenv("CLIENT_ID"),
         "client_secret" => getenv("CLIENT_SECRET"),
-        "code" => $code,
+        "code" => $code["code"],
         "grant_type" => "authorization_code",
-        "redirect_uri" => "https://quozul.dev/resources",
+        "redirect_uri" => $code["redirectUri"],
     ]);
 
     $body = request($url, ["Content-type: application/x-www-form-urlencoded"], $data);
@@ -77,6 +77,7 @@ header("Content-Type: application/json");
 try {
     $discord_token = token($code);
 } catch (Exception $e) {
+    var_dump($e);
     exit();
 }
 
@@ -84,6 +85,7 @@ $access_token = $discord_token["access_token"];
 try {
     $discord_info = info($access_token);
 } catch (Exception $e) {
+    var_dump($e);
     exit();
 }
 

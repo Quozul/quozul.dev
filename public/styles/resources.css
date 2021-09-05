@@ -26,9 +26,3 @@ file-browser .browser[data-view-mode="default"] > div {
 file-browser > .path, file-browser > .stat {
     background-color: var(--background-color);
 }
-
-.avatar {
-    height: 2em;
-    width: 2em;
-    border-radius: 50%;
-}
