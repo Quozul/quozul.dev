@@ -25,6 +25,12 @@ class FileBrowser extends HTMLElement {
         return element;
     }
 
+    /**
+     * @param {ResourceList} file
+     * @param {FileBrowser} browser
+     * @param {string} view_mode
+     * @returns {HTMLDivElement}
+     */
     static buildFileBrowserElement(file, browser, view_mode = "default") {
         const element = document.createElement("div");
         element.classList.add(file.dir ? "folder" : "file");
@@ -71,8 +77,16 @@ class FileBrowser extends HTMLElement {
 
             copyLi.addEventListener("click", () => {
                 const url = "https://quozul.dev/resources/#" + btoa(escape([...browser.path, file.name].join("/")));
-                console.log(url);
                 navigator.clipboard.writeText(url)
+                browser.contextMenu.classList.remove("visible");
+            }, {passive: true, once: true});
+
+            const downLi = document.createElement("li");
+            downLi.innerText = "Download";
+            browser.contextMenu.append(downLi);
+
+            downLi.addEventListener("click", () => {
+                browser.downloadFile(file.name, true);
                 browser.contextMenu.classList.remove("visible");
             }, {passive: true, once: true});
 
@@ -273,7 +287,12 @@ class FileBrowser extends HTMLElement {
         return this.path = decodeURIComponent(atob(hash)).split(/\//g).filter(v => v.length > 0);
     }
 
-    async downloadFile(filename) {
+    /**
+     * @param {string} filename
+     * @param {boolean} force_download
+     * @returns {Promise<void>}
+     */
+    async downloadFile(filename, force_download = false) {
         const downloadElement = document.createElement("div");
         downloadElement.classList.add("download");
         this.downloadCenter.append(downloadElement);
@@ -325,34 +344,38 @@ class FileBrowser extends HTMLElement {
         }
         const blob = new Blob([chunksAll], {type: contentType});
 
-        const type = contentType.split("/")[0];
-        switch (type) {
-            case "image": {
-                // If file is an image, then preview it
-                const img = document.createElement("img");
-                img.src = URL.createObjectURL(blob);
-                img.alt = filename;
+        if (!force_download) {
+            const type = contentType.split("/")[0];
+            switch (type) {
+                case "image": {
+                    // If file is an image, then preview it
+                    const img = document.createElement("img");
+                    img.src = URL.createObjectURL(blob);
+                    img.alt = filename;
 
-                this.previewContent.innerHTML = "";
-                this.preview.classList.add("show");
+                    this.previewContent.innerHTML = "";
+                    this.preview.classList.add("show");
 
-                this.previewContent.append(img);
-                break;
+                    this.previewContent.append(img);
+                    break;
+                }
+                case "text": {
+                    const pre = document.createElement("pre");
+                    pre.innerText = new TextDecoder().decode(chunksAll);
+
+                    this.previewContent.innerHTML = "";
+                    this.preview.classList.add("show");
+
+                    this.previewContent.append(pre);
+                    break;
+                }
+                default: {
+                    // Otherwise, download it
+                    download(filename, blob);
+                }
             }
-            case "text": {
-                const pre = document.createElement("pre");
-                pre.innerText = new TextDecoder().decode(chunksAll);
-
-                this.previewContent.innerHTML = "";
-                this.preview.classList.add("show");
-
-                this.previewContent.append(pre);
-                break;
-            }
-            default: {
-                // Otherwise, download it
-                download(filename, blob);
-            }
+        } else {
+            download(filename, blob);
         }
 
         setTimeout(() => {

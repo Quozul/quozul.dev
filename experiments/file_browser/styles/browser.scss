@@ -11,14 +11,15 @@ file-browser {
         width: 128px;
         height: auto;
         z-index: 200;
-        transition: transform .1s;
+        //transition: transform .1s;
         transform: scale(0);
         transform-origin: top left;
-        background-color: var(--folder-color);
+        background-color: var(--context-menu);
         box-shadow: 0 0 10px rgba(0, 0, 0, .5);
         border-radius: 5px;
         list-style-type: none;
         padding: 0;
+        overflow: hidden;
 
         &.visible {
             transform: scale(1);
@@ -27,6 +28,15 @@ file-browser {
         > li {
             cursor: pointer;
             padding: 1em;
+            margin: 0;
+
+            & + li {
+                border-top: solid 1px #ccc;
+            }
+
+            &:hover {
+                background-color: var(--context-menu-hover);
+            }
         }
     }
 
