@@ -308,10 +308,9 @@ class FileBrowser extends HTMLElement {
 
         let headers = {};
         if (this.auth) headers["Authorization"] = this.auth;
-        const response = await fetch("/api/download", {
-            method: "POST",
+        const response = await fetch(`/api/download/?path=${this.path.join("/") + "/" + filename}`, {
+            method: "GET",
             headers: headers,
-            body: this.path.join("/") + "/" + filename,
         });
 
         downloadElement.classList.add("downloading");
