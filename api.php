@@ -34,6 +34,9 @@ switch ($before) {
         header("Cache-Control: private, max-age=3600");
         require __DIR__ . '/api/resources/thumbnail.php';
         break;
+    case 'stream':
+        require __DIR__ . '/api/resources/stream.php';
+        break;
     default:
         http_response_code(404);
         break;

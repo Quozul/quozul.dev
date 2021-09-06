@@ -124,6 +124,31 @@ class FileBrowser extends HTMLElement {
         return element;
     }
 
+    /**
+     * @param {HTMLVideoElement} video
+     * @returns {Promise<MediaSource>}
+     */
+    static initMediaStream(video) {
+        return new Promise(resolve => {
+            const mediaSource = new MediaSource();
+
+            mediaSource.onsourceopen = function () {
+                console.log("Media source opened");
+                resolve(mediaSource);
+            }
+
+            mediaSource.onsourceclose = function () {
+                console.log("Media source closed");
+            }
+
+            mediaSource.onsourceended = function () {
+                console.log("Media source ended");
+            }
+
+            video.src = URL.createObjectURL(mediaSource);
+        });
+    }
+
     constructor() {
         // Always call super first in constructor
         super();
@@ -288,6 +313,24 @@ class FileBrowser extends HTMLElement {
         return this.path = decodeURIComponent(atob(hash)).split(/\//g).filter(v => v.length > 0);
     }
 
+    async stream(response) {
+
+        const reader = response.body.getReader();
+
+        // If file is a video, then play it
+        const video = document.createElement("video");
+        video.controls = true;
+        video.src = "https://quozul.dev/api/stream/?path=test/out.mp4";
+
+        // Play the video when the first few frames are loaded
+        video.oncanplay = video.play
+
+        this.previewContent.innerHTML = "";
+        this.preview.classList.add("show");
+
+        this.previewContent.append(video);
+    }
+
     /**
      * @param {string} filename
      * @param {boolean} force_download
@@ -313,10 +356,15 @@ class FileBrowser extends HTMLElement {
             headers: headers,
         });
 
-        downloadElement.classList.add("downloading");
-        downloadInfo.innerText = `Downloading ${filename}\nPlease hang up...`;
+        if (response.status === 303) {
+            this.stream(response);
+            return;
+        }
 
         const reader = response.body.getReader();
+
+        downloadElement.classList.add("downloading");
+        downloadInfo.innerText = `Downloading ${filename}\nPlease hang up...`;
 
         // Step 2: get total length
         const contentLength = response.headers.get('Content-Length');

@@ -15,7 +15,7 @@ function recursiveDirScan(string $directory, ?string $view_mode, ?string $user_i
     $dirContent = scandir($directory);
 
     foreach ($dirContent as $file) {
-        if (substr($file, 0, 1) === ".") continue;
+        if (str_starts_with($file, ".")) continue;
 
         $path = $directory . '/' . $file;
 

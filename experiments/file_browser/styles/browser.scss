@@ -203,6 +203,11 @@ file-browser {
                 text-align: left;
                 user-select: text;
             }
+
+            video {
+                width: 100%;
+                height: 100%;
+            }
         }
 
         &.show {
@@ -273,7 +278,7 @@ file-browser {
             border: solid #ccc 1px;
             background-color: var(--background-color);
             margin: .5em 0;
-            transform: translateY(calc(100% + 4em));
+            transform: translateY(calc(100% + 5em));
 
             &.downloading {
                 transform: translateY(0);

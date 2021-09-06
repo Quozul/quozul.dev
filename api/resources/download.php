@@ -21,6 +21,11 @@ if (is_dir($real_path)) {
     exit;
 }
 
+if (preg_split("/\\//", mime_content_type($real_path))[0] === "video") {
+    http_response_code(303);
+    exit;
+}
+
 require_once __DIR__ . "/../utils.php";
 $id = getUserId();
 
