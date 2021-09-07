@@ -10,9 +10,7 @@ $_SESSION['action'] = $after;
 // Load .env
 $env_file = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.env");
 $env = preg_split("/[\n\r]+/", $env_file);
-foreach ($env as $item) {
-    putenv($item);
-}
+foreach ($env as $item) putenv($item);
 
 switch ($before) {
     case 'resources':
