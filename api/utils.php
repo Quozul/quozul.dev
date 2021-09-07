@@ -11,6 +11,8 @@ function base64url_decode($data): string
     return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
 }
 
+// ID of authorized Discord users
+define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
 function getUserId(): ?string
 {
     $id = null;

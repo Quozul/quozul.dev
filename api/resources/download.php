@@ -4,8 +4,6 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit();
 }
 
-define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
-
 $path = $_GET["path"] ?? "/";
 $re = "/(^|[\/\\\])(\.\.[\/\\\])+/";
 $real_path = preg_replace($re, "/", $path);
@@ -21,7 +19,10 @@ if (is_dir($real_path)) {
     exit;
 }
 
-if (preg_split("/\\//", mime_content_type($real_path))[0] === "video") {
+$mime_type = mime_content_type($real_path);
+header("Content-Type: $mime_type");
+
+if (preg_split("/\\//", $mime_type)[0] === "video") {
     http_response_code(303);
     exit;
 }
@@ -38,13 +39,8 @@ if (!verifyParentFolders($path, $id)) {
 // the file name of the download, change this if needed
 $public_name = basename($path);
 
-// get the file's mime type to send the correct content type header
-$finfo = finfo_open(FILEINFO_MIME_TYPE);
-$mime_type = finfo_file($finfo, $real_path);
-
 // send the headers
 header("Content-Disposition: attachment; filename=$public_name;");
-header("Content-Type: $mime_type");
 header("Content-Length: " . filesize($real_path));
 
 // stream the file

@@ -313,14 +313,51 @@ class FileBrowser extends HTMLElement {
         return this.path = decodeURIComponent(atob(hash)).split(/\//g).filter(v => v.length > 0);
     }
 
-    async stream(response) {
-
-        const reader = response.body.getReader();
+    async stream(path, mime) {
 
         // If file is a video, then play it
+        const url = `https://quozul.dev/api/stream/?path=${path}`;
+
         const video = document.createElement("video");
+
+        const mediaSource = await FileBrowser.initMediaStream(video);
+
+        const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028,mp4a.40.2"; profiles="isom,iso6,iso2,avc1,mp41"');
+
+        sourceBuffer.onupdateend = function () {}
+
+        let headers = {};
+        if (this.auth) headers["Authorization"] = this.auth;
+
         video.controls = true;
-        video.src = "https://quozul.dev/api/stream/?path=test/out.mp4";
+        video.onwaiting = async ev => {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: headers,
+            });
+
+            const reader = response.body.getReader();
+
+            let receivedLength = 0; // received that many bytes at the moment
+            let chunks = []; // array of received binary chunks (comprises the body)
+            let entry;
+            while (!(entry = await reader.read()).done) {
+                const {value} = entry;
+
+                chunks.push(value);
+                receivedLength += value.length;
+            }
+
+            // Step 4: concatenate chunks into single Uint8Array
+            let chunksAll = new Uint8Array(receivedLength); // (4.1)
+            let position = 0;
+            for (let chunk of chunks) {
+                chunksAll.set(chunk, position);
+                position += chunk.length;
+            }
+
+            sourceBuffer.appendBuffer(chunksAll.buffer);
+        };
 
         // Play the video when the first few frames are loaded
         video.oncanplay = video.play
@@ -350,14 +387,15 @@ class FileBrowser extends HTMLElement {
         downloadElement.append(downloadInfo);
 
         let headers = {};
+        const path = this.path.join("/") + "/" + filename;
         if (this.auth) headers["Authorization"] = this.auth;
-        const response = await fetch(`/api/download/?path=${this.path.join("/") + "/" + filename}`, {
+        const response = await fetch(`/api/download/?path=${path}`, {
             method: "GET",
             headers: headers,
         });
 
         if (response.status === 303) {
-            this.stream(response);
+            this.stream(path, response.headers.get("Content-Type"));
             return;
         }
 

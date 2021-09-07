@@ -14,6 +14,15 @@ if (is_dir($real_path)) {
     exit;
 }
 
+require_once __DIR__ . "/../utils.php";
+$id = getUserId();
+
+// Verify user is authorized to download file
+if (!verifyParentFolders($path, $id)) {
+    http_response_code(401);
+    exit();
+}
+
 $mime = mime_content_type($real_path);
 $length = $size = filesize($real_path);
 

@@ -4,11 +4,6 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit();
 }
 
-// ID of authorized Discord users
-define("AUTHORIZED_IDS", [getenv("DISCORD_ID")]);
-
-//ini_set("display_errors", 1);
-
 function recursiveDirScan(string $directory, ?string $view_mode, ?string $user_id): array
 {
     $files = [];
