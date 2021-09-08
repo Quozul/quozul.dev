@@ -34,8 +34,12 @@ window.addEventListener("load", async () => {
     video.controls = true;
     document.body.append(video);
 
-    video.onloadeddata = video.onloadedmetadata = video.onprogress = video.oncanplay = video.onwaiting =
-    video.onsuspend = video.onstalled = video.ontimeupdate = ev => console.log(ev.type);
+    video.onloadeddata = video.onloadedmetadata = video.onprogress = video.onsuspend = video.onstalled = ev => console.log(ev.type);
+
+    video.addEventListener("canplay", ev => {
+        console.log(ev.type);
+        // video.play();
+    }, {passive: true});
 
     const url = `video.php`;
 
@@ -46,9 +50,19 @@ window.addEventListener("load", async () => {
     })).json();
 
     const {codecs, mimeType} = mpd["Period"]["AdaptationSet"]["Representation"]["@attributes"];
-    const {Initialization, SegmentURL} = mpd["Period"]["AdaptationSet"]["Representation"]["SegmentList"];
+    const SegmentList = mpd["Period"]["AdaptationSet"]["Representation"]["SegmentList"];
+    const {timescale, duration} = SegmentList["@attributes"];
+    const segmentSize = duration / timescale;
+    const {Initialization, SegmentURL} = SegmentList;
 
-    const sourceBuffer = mediaSource.addSourceBuffer(`${mimeType}; codecs="${codecs}"`);
+    console.log("segment size", segmentSize);
+
+    const mime = `${mimeType}; codecs="${codecs}"`;
+    if (!MediaSource.isTypeSupported(mime)) {
+        console.warn("Incompatible video type.");
+        return;
+    }
+    const sourceBuffer = mediaSource.addSourceBuffer(mime);
 
     const initBuffer = await (await fetch(url, {
         headers: {
@@ -57,18 +71,42 @@ window.addEventListener("load", async () => {
     })).arrayBuffer();
 
     sourceBuffer.appendBuffer(initBuffer);
-    await sleep(1000);
+    console.log("init buffer");
 
-    for (const segment of SegmentURL) {
-        const range = segment["@attributes"]["mediaRange"];
-        const buffer = await (await fetch(url, {
-            headers: {
-                ["Range"]: range,
+    const BUFFER_SIZE = 60; // Amount of seconds to buffer
+
+    async function requestData() {
+        if (!sourceBuffer.updating && (sourceBuffer.buffered.length === 0 || video.currentTime + BUFFER_SIZE >= sourceBuffer.buffered.end(0))) {
+            let end = sourceBuffer.buffered.length > 0 ? sourceBuffer.buffered.end(0) : 0;
+            let index = Math.ceil(end / segmentSize);
+            if (video.currentTime > end) {
+                end = video.currentTime;
+                index = Math.floor(end / segmentSize);
             }
-        })).arrayBuffer();
-        sourceBuffer.appendBuffer(buffer);
-        await sleep(1000);
+            console.log(end, index);
+            const range = SegmentURL[index]["@attributes"]["mediaRange"];
+            const buffer = await (await fetch(url, {
+                headers: {
+                    ["Range"]: range,
+                }
+            })).arrayBuffer();
+            sourceBuffer.appendBuffer(buffer);
+        }
     }
 
+    video.onwaiting = ev => {
+        if (video.buffered.length > 0 && video.buffered.start(0) < video.currentTime) {
+            requestData();
+        } /*else {
+            if (sourceBuffer.buffered.length > 0) {
+                sourceBuffer.abort();
+                sourceBuffer.remove(sourceBuffer.buffered.start(0), sourceBuffer.buffered.end(0)); // Empty buffers
+            }
+        }*/
+    }
+
+    sourceBuffer.onupdateend = video.ontimeupdate = ev => {
+        requestData();
+    }
 
 }, {passive: true, once: true});

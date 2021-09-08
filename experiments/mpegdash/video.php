@@ -1,10 +1,11 @@
 <?php
-ini_set("display_errors", 1);
-
 // Load .env
 $env_file = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.env");
 $env = preg_split("/[\n\r]+/", $env_file);
 foreach ($env as $item) putenv($item);
+
+// TODO: Add user authentication
+// TODO: Encrypt the video file
 
 if (isset($_SERVER["HTTP_RANGE"])) {
     $video_path = getenv("PUBLIC_FOLDER") . "/test/out_dashinit.mp4";
@@ -17,12 +18,13 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     header("Accept-Ranges: bytes");
     header("Content-Type: $mime");
 
+    // TODO: Should only accept the ranges present in the MPD file
     if (0 > $start || $end > $size) {
         http_response_code(416); // Requested Range Not Satisfiable
         exit();
     }
 
-    $length = $end - $start + 1;
+    $length = intval($end) - intval($start) + 1;
     header("Content-Length: " . $length);
 
     $file = fopen($video_path, "rb");
@@ -35,7 +37,6 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     ob_flush();
     flush();
     fclose($file);
-    exit();
 } else {
     // Read MPD file
     $mpd_path = getenv("PUBLIC_FOLDER") . "/test/out_dash.mpd";
@@ -43,6 +44,6 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     header("Content-Type: application/dash+xml");
 
     $xml = simplexml_load_file($mpd_path);
+    // TODO: Process the xml before sending it
     echo json_encode($xml);
-    exit();
 }
