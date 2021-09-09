@@ -37,25 +37,52 @@ class Player extends HTMLElement{
     constructor() {
         super();
 
-        const video = document.createElement("video");
-        video.controls = true;
-        this.append(video);
+        this.video = document.createElement("video");
+        this.video.controls = true;
+        this.append(this.video);
 
-        // video.onloadeddata = video.onloadedmetadata = video.onprogress = video.onsuspend = video.onstalled = ev => console.log(ev.type);
+        this.buffers = document.createElement("div");
+        this.buffers.classList.add("buffers");
+        this.append(this.buffers);
 
-        video.addEventListener("canplay", ev => {
+        // this.video.onloadeddata = this.video.onloadedmetadata = this.video.onprogress = this.video.onsuspend = this.video.onstalled = ev => console.log(ev.type);
+
+        this.video.addEventListener("canplay", ev => {
             console.log(ev.type);
-            // video.play();
+            // this.video.play();
         }, {passive: true});
 
-        this.initVideo(video);
+        this.initVideo();
     }
 
-    async initVideo(video) {
+    bufferBars() {
+        const time = this.video.currentTime;
+        const duration = this.video.duration;
+
+        for (let i = 0; i < this.video.buffered.length; i++) {
+            const start = this.video.buffered.start(i), end = this.video.buffered.end(i);
+
+            let bar = this.buffers.querySelector(`[buffer="${i}"]`);
+
+            if (!bar) {
+                bar = document.createElement("div");
+                bar.classList.add("bar");
+                bar.setAttribute("buffer", i.toString());
+                this.buffers.append(bar);
+            }
+
+            bar.innerText = `0 - ${start} - ${time} - ${end} - ${duration}`;
+        }
+    }
+
+    /**
+     * @param {HTMLVideoElement} video
+     */
+    async initVideo() {
         const url = `video.php`;
 
         // Init media source
-        const mediaSource = await initMediaStream(video);
+        const mediaSource = await initMediaStream(this.video);
 
         // Get metadata
         const mpd = await (await fetch(url, {
@@ -77,13 +104,15 @@ class Player extends HTMLElement{
         }
         const sourceBuffer = mediaSource.addSourceBuffer(mime);
 
+        console.log(sourceBuffer.mode = "segments");
+
         const initBuffer = await (await fetch(url, {
             headers: {
                 ["Range"]: Initialization["@attributes"]["range"],
             }
         })).arrayBuffer();
-
         sourceBuffer.appendBuffer(initBuffer);
+
         console.log("init buffer");
 
         const BUFFER_SIZE = 60; // Amount of seconds to buffer
@@ -98,10 +127,33 @@ class Player extends HTMLElement{
             return undefined;
         }
 
-        function isBuffered(seconds, sourceBuffer) {
-            const length = sourceBuffer.buffered.length;
+        function getBuffers(seconds, video) {
+            const length = video.buffered.length;
+            const buffers = [];
             for (let i = 0; i < length; i++) {
-                if (sourceBuffer.buffered.start(i) <= seconds && seconds <= sourceBuffer.buffered.end(i)) {
+                const start = video.buffered.start(i), end = video.buffered.end(i);
+                if (start <= seconds && seconds <= end) {
+                    buffers.push([start, end]);
+                }
+            }
+            return buffers;
+        }
+
+        function getBufferTimes(seconds, video) {
+            const length = video.buffered.length;
+            for (let i = 0; i < length; i++) {
+                const start = video.buffered.start(i), end = video.buffered.end(i);
+                if (start <= seconds && seconds <= end) {
+                    return [start, end];
+                }
+            }
+            return [undefined, seconds];
+        }
+
+        function isBuffered(seconds, video) {
+            const length = video.buffered.length;
+            for (let i = 0; i < length; i++) {
+                if (video.buffered.start(i) <= seconds && seconds <= video.buffered.end(i)) {
                     return true;
                 }
             }
@@ -109,45 +161,50 @@ class Player extends HTMLElement{
         }
 
         function getSegmentIndex(seconds) {
-            return Math.floor(seconds / segmentSize);
+            return Math.min(SegmentURL.length, Math.max(0, Math.floor(seconds / segmentSize)));
         }
 
-        function addBuffer(index) {
-            return new Promise(async resolve => {
-                const range = SegmentURL[index]["@attributes"]["mediaRange"];
-                const buffer = await (await fetch(url, {
-                    headers: {
-                        ["Range"]: range,
-                    }
-                })).arrayBuffer();
-                sourceBuffer.appendBuffer(buffer);
-                sourceBuffer.addEventListener("updateend", resolve, {passive: true, once: true});
-            });
+        function getRange(seconds) {
+            const startIndex = getSegmentIndex(seconds - segmentSize);
+            const endIndex = getSegmentIndex(seconds + BUFFER_SIZE);
+            const startRange = SegmentURL[startIndex]["@attributes"]["mediaRange"].split("-")[0];
+            const endRange = SegmentURL[endIndex]["@attributes"]["mediaRange"].split("-")[1];
+            console.log("Duration", (endIndex - startIndex) * segmentSize)
+            return `${startRange}-${endRange}`;
         }
 
-        async function requestData() {
+        async function addBuffer(seconds) {
             if (sourceBuffer.updating) return;
 
-            const bufferIndex = getBufferIndex(video.currentTime, sourceBuffer);
-            const segmentIndex = getSegmentIndex(video.currentTime);
-            let index = 0;
-
-            if (bufferIndex !== undefined) {
-                index = getSegmentIndex(sourceBuffer.buffered.end(bufferIndex)) + 1;
-                console.log(bufferIndex, sourceBuffer.buffered.start(bufferIndex), video.currentTime, sourceBuffer.buffered.end(bufferIndex))
-            } else {
-                index = segmentIndex;
-            }
-
-            if (!isBuffered(index * segmentSize, sourceBuffer) && video.currentTime + BUFFER_SIZE > index * segmentSize) {
-                await addBuffer(index);
-                // console.log(index, index * segmentSize, video.currentTime, (index + 1) * segmentSize);
-            }
+            const range = getRange(seconds);
+            const buffer = await (await fetch(url, {
+                headers: {
+                    ["Range"]: range,
+                }
+            })).arrayBuffer();
+            sourceBuffer.appendBuffer(buffer);
         }
 
-        video.onwaiting = sourceBuffer.onupdateend = video.ontimeupdate = ev => {
-            requestData();
+        const requestData = async (ev) => {
+            if (sourceBuffer.updating) return;
+
+            let max = undefined, min = undefined;
+            const buffers = getBuffers(this.video.currentTime, this.video);
+            for (const [start, end] of buffers) {
+                if (max === undefined || max < end) {
+                    max = end;
+                    min = start;
+                }
+            }
+
+            if (!max || this.video.currentTime + BUFFER_SIZE > max) {
+                await addBuffer(max ?? this.video.currentTime);
+            }
+
+            this.bufferBars();
         }
+
+        this.video.onseeking = this.video.onwaiting = sourceBuffer.onupdateend = this.video.ontimeupdate = requestData;
     }
 }
 

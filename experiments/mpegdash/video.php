@@ -29,7 +29,7 @@ if (isset($_SERVER["HTTP_RANGE"])) {
 
     $file = fopen($video_path, "rb");
 
-    fseek($file, $start);
+    fseek($file, intval($start));
     http_response_code(206);
 
     set_time_limit(0);
