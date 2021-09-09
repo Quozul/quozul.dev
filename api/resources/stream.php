@@ -20,7 +20,15 @@ if (is_dir($real_path)) {
     exit;
 }
 
-// TODO: Add user authentication
+require_once __DIR__ . "/../utils.php";
+$id = getUserId();
+
+// Verify user is authorized to download file
+if (!verifyParentFolders($path, $id)) {
+    http_response_code(401);
+    exit();
+}
+
 // TODO: Encrypt the video file
 
 $dash_path = substr($real_path, 0, strrpos($real_path, "."));

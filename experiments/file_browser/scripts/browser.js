@@ -174,26 +174,21 @@ class FileBrowser extends HTMLElement {
 
         const initBuffer = await (await fetch(url, {
             method: "GET",
-            headers: {
-                ["Range"]: `${init[0]}-${init[1]}`,
-            }
+            headers: Object.assign({ ["Range"]: `${init[0]}-${init[1]}`}, headers),
         })).arrayBuffer();
         sourceBuffer.appendBuffer(initBuffer);
 
         // Get subtitles
-        console.log(path);
         const subtitles = await (await fetch(`/api/download/?path=${path.replace(/\.[^/.]+$/, "") + ".fr-FR.ass"}`, {
             method: "GET",
             headers: headers,
         })).arrayBuffer();
 
-        console.log(subtitles);
-
         const options = {
             video: video, // HTML5 video element
             subUrl: URL.createObjectURL(new Blob([subtitles])), // Link to subtitles
             workerUrl: '/public/scripts/lib/subtitles-octopus-worker.js', // Link to WebAssembly-based file "libassjs-worker.js"
-            legacyWorkerUrl: '/public/scripts/lib/subtitles-octopus-worker-legacy.js' // Link to non-WebAssembly worker
+            legacyWorkerUrl: '/public/scripts/lib/subtitles-octopus-worker-legacy.js', // Link to non-WebAssembly worker
         };
         const instance = new SubtitlesOctopus(options);
 
@@ -221,16 +216,13 @@ class FileBrowser extends HTMLElement {
 
         // Define if the player is currently fetching data
         let updating = false;
-
         async function addBuffer(seconds) {
             if (updating || sourceBuffer.updating) return;
             updating = true;
             const range = getRange(seconds);
             const response = await fetch(url, {
-                headers: {
-                    // TODO: Add authorization header here
-                    ["Range"]: range,
-                }
+                method: "GET",
+                headers: Object.assign({ ["Range"]: range}, headers),
             });
             if (response.status !== 206) {
                 updating = false;
@@ -424,7 +416,7 @@ class FileBrowser extends HTMLElement {
         const url = `https://quozul.dev/api/stream/?path=${path}`;
 
         const video = document.createElement("video");
-        video.oncanplay = video.play
+        video.oncanplay = video.play;
         video.controls = true;
 
         FileBrowser.initVideo(video, url, this.auth, path);
