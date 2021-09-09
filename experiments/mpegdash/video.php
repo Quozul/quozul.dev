@@ -8,7 +8,12 @@ foreach ($env as $item) putenv($item);
 // TODO: Encrypt the video file
 
 if (isset($_SERVER["HTTP_RANGE"])) {
-    $video_path = getenv("PUBLIC_FOLDER") . "/test/out_dashinit.mp4";
+    $video_path = getenv("PUBLIC_FOLDER") . "/test/gpac_range/out_" . ($_GET["h"] ?? "1080") . "_dashinit.mp4";
+    if (!file_exists($video_path)) {
+        http_response_code(404);
+        exit();
+    }
+
     $size = filesize($video_path);
     $mime = mime_content_type($video_path);
 
@@ -39,11 +44,44 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     fclose($file);
 } else {
     // Read MPD file
-    $mpd_path = getenv("PUBLIC_FOLDER") . "/test/out_dash.mpd";
+    $mpd_path = getenv("PUBLIC_FOLDER") . "/test/gpac_range/out.mpd";
 
-    header("Content-Type: application/dash+xml");
+    header("Content-Type: application/json");
 
     $xml = simplexml_load_file($mpd_path);
-    // TODO: Process the xml before sending it
-    echo json_encode($xml);
+    $xml->registerXPathNamespace("x", "urn:mpeg:dash:schema:mpd:2011");
+    $representations = $xml->xpath("//x:Period/x:AdaptationSet/x:Representation");
+
+    $response = [];
+
+    foreach ($representations as $r) {
+        $r->registerXPathNamespace("x", "urn:mpeg:dash:schema:mpd:2011");
+        $init = $r->xpath("//x:SegmentList/x:Initialization")[0];
+        $segmentsList = $r->xpath("//x:SegmentList")[0];
+        $segments = $r->xpath("//x:SegmentList/x:SegmentURL");
+
+        $segs = [];
+        foreach ($segments as $seg) {
+            list($start, $end) = explode("-", (string) $seg["mediaRange"], 2);
+            $segs[] = [intval($start), intval($end)];
+        }
+
+        list($start, $end) = explode("-", (string) $init["range"], 2);
+
+        $response[] = [
+            "id" => (int) $r["id"],
+            "mime" => (string) $r["mimeType"][0],
+            "codecs" => (string) $r["codecs"][0],
+            "width" => (int) $r["width"][0],
+            "height" => (int) $r["height"][0],
+            "framerate" => (string) $r["frameRate"][0],
+            "bandwidth" => (int) $r["bandwidth"][0],
+            "duration" => (int) $segmentsList["duration"][0],
+            "timescale" => (int) $segmentsList["timescale"][0],
+            "init" => [intval($start), intval($end)],
+            "segments" => $segs,
+        ];
+    }
+
+    echo json_encode($response);
 }
