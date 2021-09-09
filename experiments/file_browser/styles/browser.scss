@@ -98,7 +98,7 @@ file-browser {
             }
         }
 
-        &[data-view-mode="default"] > div {
+        &[data-view-mode="default"] > div, &[data-view-mode="playlist"] > div {
             cursor: pointer;
             width: 256px;
             height: 256px;

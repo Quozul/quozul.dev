@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit();
 }
 
-function recursiveDirScan(string $directory, ?string $view_mode, ?string $user_id): array
+function recursiveDirScan(string $directory, ?string $user_id, ?string $view_mode = "default"): array
 {
     $files = [];
     $dirContent = scandir($directory);
@@ -26,7 +26,7 @@ function recursiveDirScan(string $directory, ?string $view_mode, ?string $user_i
             }
 
             $size = 0;
-            $content = recursiveDirScan($path, $view_mode, $user_id);
+            $content = recursiveDirScan($path, $user_id, $view_mode);
             foreach ($content as $c) $size += $c["size"];
 
             $data = [
@@ -39,20 +39,26 @@ function recursiveDirScan(string $directory, ?string $view_mode, ?string $user_i
             if (!empty($metadata)) $data["metadata"] = $metadata;
 
             // Get episodes in seasons
-            if ($view_mode === "library") {
-                $seasons = [];
-                foreach ($content as $season) {
-                    if (isset($season["dir"])) $seasons[] = $season["elements"];
-                }
+            switch ($view_mode) {
+                case "library": {
+                    $seasons = [];
+                    foreach ($content as $season) {
+                        if (isset($season["dir"])) $seasons[] = $season["elements"];
+                    }
 
-                $data["seasons"] = $seasons;
+                    $data["seasons"] = $seasons;
+                    break;
+                }
             }
 
             if (file_exists($path . "/.thumbnail.jpg") || file_exists($path . "/.thumbnail.png")) $data["has_thumbnail"] = true;
 
             array_push($files, $data);
         } else if ($file !== '.metadata.json') {
-            if ($view_mode === "library" && preg_split("/\\//", mime_content_type($path))[0] !== "video") continue;
+            if ($view_mode !== "default" &&
+                (preg_match("/_dash(init)?/", $path) ||
+                preg_split("/\\//", mime_content_type($path))[0] !== "video")
+            ) continue;
 
             $size = filesize($path);
             $time = filemtime($path);
@@ -107,7 +113,7 @@ if (file_exists($dir . '/.metadata.json')) {
     }
 }
 
-$files = recursiveDirScan($dir, $view_mode, $id);
+$files = recursiveDirScan($dir, $id, $view_mode);
 
 $data["content"] = $files;
 

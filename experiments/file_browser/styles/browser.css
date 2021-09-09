@@ -85,7 +85,7 @@ file-browser > .browser[data-view-mode=library] > div .icon {
 file-browser > .browser[data-view-mode=library] > div:after {
   box-shadow: inset var(--background-color) 0 calc(-360px - 4.5em) 0;
 }
-file-browser > .browser[data-view-mode=default] > div {
+file-browser > .browser[data-view-mode=default] > div, file-browser > .browser[data-view-mode=playlist] > div {
   cursor: pointer;
   width: 256px;
   height: 256px;
@@ -100,13 +100,13 @@ file-browser > .browser[data-view-mode=default] > div {
   position: relative;
   overflow-wrap: anywhere;
 }
-file-browser > .browser[data-view-mode=default] > div .name > span {
+file-browser > .browser[data-view-mode=default] > div .name > span, file-browser > .browser[data-view-mode=playlist] > div .name > span {
   background-color: var(--gold-color);
 }
-file-browser > .browser[data-view-mode=default] > div img.icon {
+file-browser > .browser[data-view-mode=default] > div img.icon, file-browser > .browser[data-view-mode=playlist] > div img.icon {
   height: 50%;
 }
-file-browser > .browser[data-view-mode=default] > div .stat {
+file-browser > .browser[data-view-mode=default] > div .stat, file-browser > .browser[data-view-mode=playlist] > div .stat {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -114,10 +114,10 @@ file-browser > .browser[data-view-mode=default] > div .stat {
   text-align: left;
   padding: 0.5em;
 }
-file-browser > .browser[data-view-mode=default] > div:after {
+file-browser > .browser[data-view-mode=default] > div:after, file-browser > .browser[data-view-mode=playlist] > div:after {
   box-shadow: inset var(--background-color) 0 calc(-256px - 2em) 0;
 }
-file-browser > .browser[data-view-mode=default] > div.folder, file-browser > .browser[data-view-mode=default] > div.file {
+file-browser > .browser[data-view-mode=default] > div.folder, file-browser > .browser[data-view-mode=default] > div.file, file-browser > .browser[data-view-mode=playlist] > div.folder, file-browser > .browser[data-view-mode=playlist] > div.file {
   background-color: var(--folder-color);
 }
 file-browser > .browser > div.open:after {

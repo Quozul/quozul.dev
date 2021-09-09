@@ -148,6 +148,107 @@ class FileBrowser extends HTMLElement {
             video.src = URL.createObjectURL(mediaSource);
         });
     }
+    
+    static async initVideo(video, url, auth, path) {
+        let headers = {};
+        if (auth) headers["Authorization"] = auth;
+
+        // Init media source
+        const mediaSource = await FileBrowser.initMediaStream(video);
+
+        // Get metadata
+        const mpd = await (await fetch(url, {
+            method: "GET",
+            headers: headers,
+        })).json();
+
+        const {id, mime, codecs, width, height, framerate, bandwidth, duration, timescale, segments, init} = mpd[0];
+        const segmentSize = duration / timescale;
+
+        const fullMime = `${mime}; codecs="${codecs}"`;
+        if (!MediaSource.isTypeSupported(fullMime)) {
+            console.warn("Incompatible video type.");
+            return;
+        }
+        const sourceBuffer = mediaSource.addSourceBuffer(fullMime);
+
+        const initBuffer = await (await fetch(url, {
+            method: "GET",
+            headers: {
+                ["Range"]: `${init[0]}-${init[1]}`,
+            }
+        })).arrayBuffer();
+        sourceBuffer.appendBuffer(initBuffer);
+
+        // Get subtitles
+        console.log(path);
+        const subtitles = await (await fetch(`/api/download/?path=${path.replace(/\.[^/.]+$/, "") + ".fr-FR.ass"}`, {
+            method: "GET",
+            headers: headers,
+        })).arrayBuffer();
+
+        console.log(subtitles);
+
+        const options = {
+            video: video, // HTML5 video element
+            subUrl: URL.createObjectURL(new Blob([subtitles])), // Link to subtitles
+            workerUrl: '/public/scripts/lib/subtitles-octopus-worker.js', // Link to WebAssembly-based file "libassjs-worker.js"
+            legacyWorkerUrl: '/public/scripts/lib/subtitles-octopus-worker-legacy.js' // Link to non-WebAssembly worker
+        };
+        const instance = new SubtitlesOctopus(options);
+
+        // Play the video
+        const BUFFER_SIZE = 30; // Amount of seconds to buffer
+
+        function getBufferEnd(seconds, video) {
+            const length = video.buffered.length;
+            for (let i = 0; i < length; i++) {
+                const end = video.buffered.end(i);
+                if (video.buffered.start(i) <= seconds && seconds <= end) {
+                    return end;
+                }
+            }
+            return seconds;
+        }
+
+        const getSegmentIndex = s => Math.min(segments.length, Math.max(0, Math.floor(s / segmentSize)));
+
+        function getRange(seconds) {
+            const startIndex = getSegmentIndex(seconds - segmentSize * 2);
+            const endIndex = getSegmentIndex(seconds + segmentSize);
+            return `${segments[startIndex][0]}-${segments[endIndex][1]}`;
+        }
+
+        // Define if the player is currently fetching data
+        let updating = false;
+
+        async function addBuffer(seconds) {
+            if (updating || sourceBuffer.updating) return;
+            updating = true;
+            const range = getRange(seconds);
+            const response = await fetch(url, {
+                headers: {
+                    // TODO: Add authorization header here
+                    ["Range"]: range,
+                }
+            });
+            if (response.status !== 206) {
+                updating = false;
+                return;
+            }
+            const buffer = await response.arrayBuffer();
+            sourceBuffer.appendBuffer(buffer);
+            updating = false;
+        }
+
+        const requestData = async (ev) => {
+            if (sourceBuffer.updating) return;
+            const end = getBufferEnd(video.currentTime, video);
+            if (video.currentTime + BUFFER_SIZE > end) await addBuffer(end);
+        }
+
+        video.onseeking = video.onwaiting = sourceBuffer.onupdateend = video.ontimeupdate = requestData;
+    }
 
     constructor() {
         // Always call super first in constructor
@@ -170,6 +271,10 @@ class FileBrowser extends HTMLElement {
         const close = FileBrowser.createElement("div", "close");
         close.addEventListener("click", () => {
             this.preview.classList.remove("show");
+            for (const child of this.previewContent.children) {
+                child.remove();
+            }
+            this.previewContent.innerHTML = "";
         }, {passive: true});
         this.preview.append(close); // Cross
         this.preview.append(this.previewContent = FileBrowser.createElement("div", "content")); // Content
@@ -319,48 +424,10 @@ class FileBrowser extends HTMLElement {
         const url = `https://quozul.dev/api/stream/?path=${path}`;
 
         const video = document.createElement("video");
-
-        const mediaSource = await FileBrowser.initMediaStream(video);
-
-        const sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.640028,mp4a.40.2"; profiles="isom,iso6,iso2,avc1,mp41"');
-
-        sourceBuffer.onupdateend = function () {}
-
-        let headers = {};
-        if (this.auth) headers["Authorization"] = this.auth;
-
-        video.controls = true;
-        video.onwaiting = async ev => {
-            const response = await fetch(url, {
-                method: "GET",
-                headers: headers,
-            });
-
-            const reader = response.body.getReader();
-
-            let receivedLength = 0; // received that many bytes at the moment
-            let chunks = []; // array of received binary chunks (comprises the body)
-            let entry;
-            while (!(entry = await reader.read()).done) {
-                const {value} = entry;
-
-                chunks.push(value);
-                receivedLength += value.length;
-            }
-
-            // Step 4: concatenate chunks into single Uint8Array
-            let chunksAll = new Uint8Array(receivedLength); // (4.1)
-            let position = 0;
-            for (let chunk of chunks) {
-                chunksAll.set(chunk, position);
-                position += chunk.length;
-            }
-
-            sourceBuffer.appendBuffer(chunksAll.buffer);
-        };
-
-        // Play the video when the first few frames are loaded
         video.oncanplay = video.play
+        video.controls = true;
+
+        FileBrowser.initVideo(video, url, this.auth, path);
 
         this.previewContent.innerHTML = "";
         this.preview.classList.add("show");

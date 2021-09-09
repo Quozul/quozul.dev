@@ -48,6 +48,7 @@ if (isset($_SERVER["HTTP_RANGE"])) {
 
     header("Content-Type: application/json");
 
+    // Format the XML and return it as JSON
     $xml = simplexml_load_file($mpd_path);
     $xml->registerXPathNamespace("x", "urn:mpeg:dash:schema:mpd:2011");
     $representations = $xml->xpath("//x:Period/x:AdaptationSet/x:Representation");

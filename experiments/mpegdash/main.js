@@ -23,16 +23,6 @@ function initMediaStream(video) {
     });
 }
 
-function sleep(time) {
-    return new Promise(resolve => {
-        setTimeout(resolve, time);
-    });
-}
-
-function roundTo(n, p) {
-    return Math.ceil(n / p) * p;
-}
-
 class Player extends HTMLElement{
     constructor() {
         super();
@@ -69,9 +59,7 @@ class Player extends HTMLElement{
         }
     }
 
-    async initVideo() {
-        let url = `video.php`;
-
+    async initVideo(url) {
         // Init media source
         const mediaSource = await initMediaStream(this.video);
 
@@ -82,8 +70,6 @@ class Player extends HTMLElement{
 
         const {id, mime, codecs, width, height, framerate, bandwidth, duration, timescale, segments, init} = mpd[0];
         const segmentSize = duration / timescale;
-
-        url = `${url}?h=${height}`;
 
         const fullMime = `${mime}; codecs="${codecs}"`;
         if (!MediaSource.isTypeSupported(fullMime)) {
@@ -112,16 +98,12 @@ class Player extends HTMLElement{
             return seconds;
         }
 
-        function getSegmentIndex(seconds) {
-            return Math.min(segments.length, Math.max(0, Math.floor(seconds / segmentSize)));
-        }
+        const getSegmentIndex = s => Math.min(segments.length, Math.max(0, Math.floor(s / segmentSize)));
 
         function getRange(seconds) {
             const startIndex = getSegmentIndex(seconds - segmentSize * 2);
             const endIndex = getSegmentIndex(seconds + segmentSize);
-            const startRange = segments[startIndex][0];
-            const endRange = segments[endIndex][1];
-            return `${startRange}-${endRange}`;
+            return `${segments[startIndex][0]}-${segments[endIndex][1]}`;
         }
 
         // Define if the player is currently fetching data
