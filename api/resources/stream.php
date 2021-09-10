@@ -4,6 +4,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit();
 }
 
+ini_set("display_errors", 1);
+
 $path = $_GET["path"] ?? "/";
 $re = "/(^|[\/\\\])(\.\.[\/\\\])+/";
 $real_path = preg_replace($re, "/", $path);
@@ -31,7 +33,13 @@ if (!verifyParentFolders($path, $id)) {
 
 // TODO: Encrypt the video file
 
+$slash = strrpos($real_path, "/");
+$directory_path = substr($real_path, 0, $slash);
+$video_name = substr($real_path, $slash + 1, strlen($real_path) - $slash);
+
 $dash_path = substr($real_path, 0, strrpos($real_path, "."));
+$video_name = substr($dash_path, $slash + 1, strlen($dash_path) - $slash);
+
 $video_path = $dash_path . "_dashinit.mp4";
 $mpd_path = $dash_path . "_dash.mpd";
 
@@ -60,16 +68,16 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     $length = intval($end) - intval($start) + 1;
     header("Content-Length: " . $length);
 
-    $file = fopen($video_path, "rb");
+    $filename = fopen($video_path, "rb");
 
-    fseek($file, intval($start));
+    fseek($filename, intval($start));
     http_response_code(206);
 
     set_time_limit(0);
-    echo fread($file, $length);
+    echo fread($filename, $length);
     ob_flush();
     flush();
-    fclose($file);
+    fclose($filename);
 } else {
     // Read MPD file
     if (!file_exists($mpd_path)) {
@@ -85,7 +93,20 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     $xml->registerXPathNamespace("x", "urn:mpeg:dash:schema:mpd:2011");
     $representations = $xml->xpath("//x:Period/x:AdaptationSet/x:Representation");
 
-    $response = [];
+    $response = [
+        "lang" => [],
+        "mpd" => [],
+    ];
+    $content = scandir($directory_path);
+
+    foreach ($content as $filename) {
+        if (str_ends_with($filename, ".ass")) {
+            list($v, $l) = preg_split("/\\./", $filename, 3);
+            if ($v === $video_name) {
+                $response["lang"][] = $l;
+            }
+        }
+    }
 
     foreach ($representations as $r) {
         $r->registerXPathNamespace("x", "urn:mpeg:dash:schema:mpd:2011");
@@ -101,7 +122,7 @@ if (isset($_SERVER["HTTP_RANGE"])) {
 
         list($start, $end) = explode("-", (string) $init["range"], 2);
 
-        $response[] = [
+        $response["mpd"][] = [
             "id" => (int) $r["id"],
             "mime" => (string) $r["mimeType"][0],
             "codecs" => (string) $r["codecs"][0],

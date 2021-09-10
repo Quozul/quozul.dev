@@ -7,15 +7,12 @@
 
 <!-- Custom scripts -->
 <script src="/public/scripts/utils.js"></script>
-<script src="/experiments/file_browser/v1/scripts/browser.js"></script>
 <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="/public/scripts/login.js"></script>
 
 <!-- Custom styles -->
 <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
-<link rel="stylesheet" href="/experiments/file_browser/v1/styles/browser.css">
 <link rel="stylesheet" href="/public/styles/main.min.css">
-<link rel="stylesheet" href="/public/styles/resources.min.css">
 
 <!-- Meta tags -->
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
