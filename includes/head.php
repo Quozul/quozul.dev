@@ -1,30 +1,26 @@
-<head>
-    <title><?=$page_name?></title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
-    <script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="image/png" href="/public/assets/icon.png">
-    <script src="/public/scripts/utils.js"></script>
+<title><?php echo $page_name ?></title>
+<meta charset="utf-8">
 
-    <meta name="description" content="This page contains some random web projects I've made.">
-    <meta name="author" content="Quozul">
-    <link rel="canonical" href="https://quozul.dev/experiments">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 
-    <style>
-    @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+<!-- Custom scripts -->
+<script src="/public/scripts/utils.js"></script>
+<script src="/experiments/file_browser/v1/scripts/browser.js"></script>
+<script src="/public/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/public/scripts/login.js"></script>
 
-    * {
-        font-family: 'Quicksand', sans-serif;
-    }
+<!-- Custom styles -->
+<link rel="stylesheet" href="/public/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/experiments/file_browser/v1/styles/browser.css">
+<link rel="stylesheet" href="/public/styles/main.min.css">
+<link rel="stylesheet" href="/public/styles/resources.min.css">
 
-    .copyleft {
-        display: inline-block;
-        transform: rotate(180deg);
-    }
+<!-- Meta tags -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" type="image/png" href="/public/assets/icon.png">
 
-    .copyleft::after {
-        content: "\00a9";
-    }
-    </style>
-</head>
+<meta name="description" content="My collection of publicly available files.">
+<meta name="author" content="Quozul">
+<link rel="canonical" href="https://quozul.dev/resources/">

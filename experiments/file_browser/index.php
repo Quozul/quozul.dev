@@ -3,7 +3,7 @@
 
 <head>
 <?php
-$page_name = "The Secret Laboratory Of Quozul";
+$page_name = "Quozul's Lab - File browser";
 include $_SERVER["DOCUMENT_ROOT"] . "/includes/head.php";
 ?>
 </head>
@@ -13,13 +13,17 @@ include $_SERVER["DOCUMENT_ROOT"] . "/includes/head.php";
 
 <main class="container text-center">
     <div class="col p-5">
-        <h1>Experiments</h1>
-        <p class="text-muted">
-            Below are some random web projects I've made.<br>
-            <strong>Disclaimer!</strong> Some older experiments (before september 2021) might not work anymore.
-        </p>
+        <h1>File browser</h1>
+        <p class="text-muted">Custom file browser made in JavaScript.</p>
         <hr>
-        <div class="text-start d-flex align-items-stretch flex-wrap justify-content-evenly" id="experiments"></div>
+        <ul class="text-start">
+            <li>
+                <a href="v1/index.html" class="show-link">Version 1</a> • The first prototype
+            </li>
+            <li>
+                <a href="v2/index.html" class="show-link">Version 2</a> • Mostly design improvements over the first version
+            </li>
+        </ul>
     </div>
 </main>
 

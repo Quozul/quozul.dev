@@ -355,3 +355,7 @@ h1 {
     width: 2em;
     border-radius: 50%;
 }
+
+.bg-q-light {
+    background-color: #151536;
+}

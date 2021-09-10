@@ -12,7 +12,7 @@ let clicked_colors = [];
 // $ function from jquery remake
 const $ = s => {
     let f = s.slice(0, 1);
-    if (f == '#' || f == '.')
+    if (f === '#' || f === '.')
         s = s.slice(1, s.length);
 
     switch (f) {
@@ -25,7 +25,7 @@ const $ = s => {
 const win_sound = new Audio('assets/win.mp3');
 const wrong_sound = new Audio('assets/wrong.mp3');
 
-const circles = $('.color-circle');
+let circles;
 const cookie_name = 'gtcgame';
 
 const win_msg = ['Well done!', 'Good job!', 'So smart!'];
@@ -54,7 +54,7 @@ function random_color(base, dif) {
 
 // deep comparison of 2 arrays
 function deep_compare(a, base) {
-    for (var i = 0; i < a.length; i++)
+    for (let i = 0; i < a.length; i++)
         if (a[i] != base[i])
             return false;
     return true;
@@ -64,7 +64,7 @@ function randomize_colors() {
     color = [Math.floor(rand(0, 255)), Math.floor(rand(0, 255)), Math.floor(rand(0, 255))];
     let circle = Math.floor(rand(0, 5));
 
-    for (index in circles)
+    for (const index in circles)
         if (circles.hasOwnProperty(index)) {
             const element = circles[index];
 
@@ -111,13 +111,14 @@ function verify_color() {
             lc.style.opacity = '1';
             lc.innerHTML =
                 `<b>That was the color:</b>
-                <span id="copy-color" class="gtc-tooltip" onclick="copy_color_code();">
+                <span id="copy-color" class="gtc-tooltip">
                     <span id="copy-tooltip" class="gtc-tooltip toggle-tooltip gtc-tooltip-clickable"><span class="gtc-tooltip-text">Copy color code</span>
                         ${n_match[1]} ${!n_match[2] ? '<h6>(approx.)</h6>' : ''}
                 </span><span id="copied" class="gtc-tooltip-text">Copied!</span></span>`;
+            lc.querySelector("#copy-color").addEventListener("click", copy_color_code, {passive: true});
         }, 200);
 
-        if (win_timer != undefined) clearTimeout(win_timer);
+        if (win_timer !== undefined) clearTimeout(win_timer);
 
         // wait 1s until the animation ends and randomize colors
         dif = Math.max(dif - 1, 8);
@@ -141,30 +142,16 @@ function verify_color() {
     $('#win-rate').innerHTML = Math.round(wins / clicks * 100);
 
     // resets text after 1s
-    if (guess_timer != undefined) clearTimeout(guess_timer);
+    if (guess_timer !== undefined) clearTimeout(guess_timer);
     guess_timer = setTimeout(() => g.innerHTML = 'Guess the color', 1000);
 
     update_cookie();
     update_gameinfo();
 }
 
-// cheat functions
-function log_colors() {
-    for (index in circles)
-        if (circles.hasOwnProperty(index))
-            console.log(parseInt(index) + 1, circles[index].style.backgroundColor);
-}
-
-function log_answers() {
-    for (index in circles)
-        if (circles.hasOwnProperty(index))
-            if (deep_compare(circles[index].style.backgroundColor.slice(4, -1).split(', '), color))
-                console.log(parseInt(index) + 1);
-}
-
 // animation functions
 function text_anim() {
-    if (g_anim != undefined)
+    if (g_anim !== undefined)
         clearTimeout(g_anim);
 
     $('#guess').style.transform = 'scale(1.1)';
@@ -172,7 +159,7 @@ function text_anim() {
 }
 
 function full_anim() {
-    for (index in circles)
+    for (const index in circles)
         if (circles.hasOwnProperty(index)) {
             const element = circles[index];
             setTimeout(() => {
@@ -185,7 +172,7 @@ function full_anim() {
 }
 
 function update_gameinfo() {
-    if (document.cookie == '') return;
+    if (document.cookie === '') return;
     // load cookie
     let cookie = JSON.parse(document.cookie.replace(/(?:(?:^|.*;\s*)gtcgame\s*\=\s*([^;]*).*$)|^.*$/, '$1'));
 
@@ -213,22 +200,22 @@ function copy_color_code() {
 }
 
 function toggle_tooltip(t1, t2 = undefined) {
-    let t2_toogleable = false;
-    if (t2 != undefined && t2.classList.contains('toggle-tooltip') || t1.style.opacity != 0)
-        t2_toogleable = true;
+    let t2_toggleable = false;
+    if (t2 !== undefined && t2.classList.contains('toggle-tooltip') || t1.style.opacity !== "0")
+        t2_toggleable = true;
 
-    t1.style.opacity = 1;
+    t1.style.opacity = "1";
     t1.style.transform = 'scale(1)';
 
-    if (t2_toogleable)
+    if (t2_toggleable)
         t2.classList.remove('toggle-tooltip');
 
     t1.parentNode.onmouseleave = () => {
-        t1.style.opacity = 0;
+        t1.style.opacity = "0";
         t1.style.transform = 'scale(0)';
 
-        console.log(t2_toogleable);
-        if (t2_toogleable) {
+        console.log(t2_toggleable);
+        if (t2_toggleable) {
             t2.classList.add('toggle-tooltip');
         }
     }
@@ -236,6 +223,7 @@ function toggle_tooltip(t1, t2 = undefined) {
 
 // add event listeners
 function init() {
+    circles = $('.color-circle');
     // on reset
     $('#reset-arrow').onclick = () => {
         dif = 255;
@@ -253,9 +241,9 @@ function init() {
     }
 
     // click on the circle to toggle verification
-    document.body.onload = randomize_colors;
+    randomize_colors();
     $('#difficulty').innerHTML = 255 - dif;
-    for (index in circles)
+    for (const index in circles)
         if (circles.hasOwnProperty(index))
             circles[index].onclick = verify_color;
 
@@ -263,7 +251,7 @@ function init() {
     document.addEventListener('keydown', (event) => {
         if (event.repeat) return;
         let circle = circles[parseInt(event.key) - 1];
-        if (circle != undefined)
+        if (circle !== undefined)
             circle.click();
     });
 
@@ -271,3 +259,5 @@ function init() {
 
     update_gameinfo();
 }
+
+window.addEventListener("load", init, {passive: true, once: true});
