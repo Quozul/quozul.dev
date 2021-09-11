@@ -8,7 +8,25 @@ $path = rawurldecode(base64_decode($_SESSION["action"]));
 $re = "/(^|[\/\\\])(\.\.[\/\\\])+/";
 $dir = getenv("PUBLIC_FOLDER") . preg_replace($re, "/", $path);
 
-$filename = "/.thumbnail.jpg";
+// TODO: Put thumbnail for folders/files in a database
+if (file_exists($dir . "/../.metadata.json")) {
+    $metadata = json_decode(file_get_contents($dir . "/../.metadata.json"), true);
+
+    if ($metadata["view_mode"] === "library") {
+        $files = scandir($dir);
+        $first_folder = $files[2];
+        foreach ($files as $file) {
+            if (!str_starts_with($file, ".") && is_dir("$dir/$file")) {
+                $first_folder = $file;
+                break;
+            }
+        }
+
+        $dir = "$dir/$first_folder";
+    }
+}
+
+$filename = null;
 
 if (file_exists($dir . "/.thumbnail.jpg")) {
     $filename = "/.thumbnail.jpg";
@@ -16,7 +34,6 @@ if (file_exists($dir . "/.thumbnail.jpg")) {
     $filename = "/.thumbnail.png";
 } else {
     http_response_code(404);
-    var_dump($dir);
     die();
 }
 

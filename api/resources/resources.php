@@ -14,6 +14,7 @@ function recursiveDirScan(string $directory, ?string $user_id, ?string $view_mod
 
         $path = $directory . '/' . $file;
 
+        // TODO: Put metadata for folders in database
         if (is_dir($path)) {
             $metadata = [];
             if (file_exists($path . '/.metadata.json')) {
@@ -47,11 +48,19 @@ function recursiveDirScan(string $directory, ?string $user_id, ?string $view_mod
                     }
 
                     $data["seasons"] = $seasons;
+
+                    $thumbnail_path = $path . "/" . $content[0]["name"];
+                    if (file_exists($thumbnail_path . "/.thumbnail.jpg") || file_exists($thumbnail_path . "/.thumbnail.png")) {
+                        $data["has_thumbnail"] = true;
+                    }
                     break;
                 }
+                default: {
+                    if (file_exists($path . "/.thumbnail.jpg") || file_exists($path . "/.thumbnail.png")) {
+                        $data["has_thumbnail"] = true;
+                    }
+                }
             }
-
-            if (file_exists($path . "/.thumbnail.jpg") || file_exists($path . "/.thumbnail.png")) $data["has_thumbnail"] = true;
 
             array_push($files, $data);
         } else if ($file !== '.metadata.json') {
