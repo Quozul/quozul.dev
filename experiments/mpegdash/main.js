@@ -31,32 +31,8 @@ class Player extends HTMLElement{
         this.video.controls = true;
         this.append(this.video);
 
-        this.buffers = document.createElement("div");
-        this.buffers.classList.add("buffers");
-        this.append(this.buffers);
-
         this.video.oncanplay = this.video.play;
-        this.initVideo();
-    }
-
-    bufferBars() {
-        const time = this.video.currentTime;
-        const duration = this.video.duration;
-
-        for (let i = 0; i < this.video.buffered.length; i++) {
-            const start = this.video.buffered.start(i), end = this.video.buffered.end(i);
-
-            let bar = this.buffers.querySelector(`[buffer="${i}"]`);
-
-            if (!bar) {
-                bar = document.createElement("div");
-                bar.classList.add("bar");
-                bar.setAttribute("buffer", i.toString());
-                this.buffers.append(bar);
-            }
-
-            bar.innerText = `0 - ${start} - ${time} - ${end} - ${duration}`;
-        }
+        this.initVideo("video.php");
     }
 
     async initVideo(url) {

@@ -454,6 +454,7 @@ class FileBrowser extends HTMLElement {
 
         if (response.status === 303) {
             this.stream(path, response.headers.get("Content-Type"));
+            downloadElement.remove();
             return;
         }
 

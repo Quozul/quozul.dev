@@ -1,5 +1,5 @@
 file-browser {
-    position: relative;
+    //position: relative;
     display: flex;
     user-select: none;
     height: 100%;
@@ -96,7 +96,7 @@ file-browser {
 
     > .preview {
         z-index: 100;
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;

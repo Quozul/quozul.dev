@@ -4,11 +4,13 @@ $env_file = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.env");
 $env = preg_split("/[\n\r]+/", $env_file);
 foreach ($env as $item) putenv($item);
 
+ini_set("display_errors", true);
+
 // TODO: Add user authentication
 // TODO: Encrypt the video file
 
 if (isset($_SERVER["HTTP_RANGE"])) {
-    $video_path = getenv("PUBLIC_FOLDER") . "/test/gpac_range/out_" . ($_GET["h"] ?? "1080") . "_dashinit.mp4";
+    $video_path = getenv("PUBLIC_FOLDER") . "/Animes/Is the Order a Rabbit/Season 1 - Is the Order a Rabbit/1 - I Knew at First Glance That It Was No Ordinary Fluffball_" . ($_GET["h"] ?? "1080") . "_dashinit.mp4";
     if (!file_exists($video_path)) {
         http_response_code(404);
         exit();
@@ -44,7 +46,7 @@ if (isset($_SERVER["HTTP_RANGE"])) {
     fclose($file);
 } else {
     // Read MPD file
-    $mpd_path = getenv("PUBLIC_FOLDER") . "/test/gpac_range/out.mpd";
+    $mpd_path = getenv("PUBLIC_FOLDER") . "/Animes/Is the Order a Rabbit/Season 1 - Is the Order a Rabbit/1 - I Knew at First Glance That It Was No Ordinary Fluffball_720_dashinit.mp4";
 
     header("Content-Type: application/json");
 
