@@ -49,7 +49,7 @@ class FileBrowser extends HTMLElement {
 
         const icons = getFileIcon(fileExt);
 
-        if (view_mode && file.has_thumbnail) {
+        if (file.has_thumbnail) {
             img.src = `/api/thumbnail/${browser.encodePath([...browser.path, file.name])}`;
         } else {
             img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
@@ -157,12 +157,12 @@ class FileBrowser extends HTMLElement {
         const mediaSource = await FileBrowser.initMediaStream(video);
 
         // Get metadata
-        const mpd = await (await fetch(url, {
+        const json = await (await fetch(url, {
             method: "GET",
             headers: headers,
         })).json();
 
-        const {id, mime, codecs, width, height, framerate, bandwidth, duration, timescale, segments, init} = mpd[0];
+        const {id, mime, codecs, width, height, framerate, bandwidth, duration, timescale, segments, init} = json.mpd[0];
         const segmentSize = duration / timescale;
 
         const fullMime = `${mime}; codecs="${codecs}"`;
@@ -411,7 +411,6 @@ class FileBrowser extends HTMLElement {
     }
 
     async stream(path, mime) {
-
         // If file is a video, then play it
         const url = `https://quozul.dev/api/stream/?path=${path}`;
 
@@ -574,7 +573,8 @@ class FileBrowser extends HTMLElement {
         const files = (await request.json());
         let size = 0;
 
-        this.browser.setAttribute("data-view-mode", files?.metadata?.view_mode ?? "default");
+        const view_mode = files?.metadata?.view_mode;
+        this.setAttribute("data-view-mode", view_mode ?? "default");
 
         // Build file and folder list
         for (const file of files.content) {
@@ -587,9 +587,29 @@ class FileBrowser extends HTMLElement {
         const elements = Array.from(this.browser.children);
         toggleAnimation(elements, "open", FileBrowser.TRANSITION_DURATION / elements.length);
 
-        this.stat.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
-        if (files?.metadata?.description) {
-            this.stat.innerText += ` | ${files.metadata.description}`;
+        switch (view_mode) {
+            case "show": {
+                const img = document.createElement("img");
+                img.src = `/api/thumbnail/${this.encodePath(this.path)}`;
+                this.stat.append(img);
+
+                const title = FileBrowser.createElement("h3", "title");
+                title.innerText = this.path[this.path.length - 1];
+                this.stat.append(title);
+
+                const description = FileBrowser.createElement("p", "description");
+                description.innerText = files.metadata.description;
+                this.stat.append(description);
+                break;
+            }
+            default: {
+                this.stat.innerText = `${files.content.length} elements - ${getReadableFileSizeString(size)} total size`;
+
+                if (files?.metadata?.description) {
+                    this.stat.innerText += ` | ${files.metadata.description}`;
+                }
+                break;
+            }
         }
 
         this.updating = false;

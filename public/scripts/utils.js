@@ -87,14 +87,21 @@ function toggleAnimation(elements, classToToggle, delay = 1000, end = null, fina
 }
 
 function createSpinner() {
+    const container = document.createElement("div");
+    container.classList.add("w-100", "h-100", "d-flex", "justify-content-center", "align-items-center", "p-5");
+
     const spinner = document.createElement("span");
-    spinner.classList.add("spinner-border", "me-1");
+    spinner.classList.add("spinner-border");
     spinner.setAttribute("role", "status");
+    spinner.style.width = "3em";
+    spinner.style.height = "3em";
 
     const span = document.createElement("span");
     span.classList.add("visually-hidden");
     span.innerText = "Loading...";
     spinner.append(span);
 
-    return spinner;
+    container.append(spinner);
+
+    return container;
 }

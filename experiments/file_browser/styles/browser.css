@@ -143,17 +143,21 @@ file-browser > .preview.show {
   transform: scale(1);
 }
 file-browser[data-view-mode=show] {
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 0.3fr 1.7fr;
+  grid-template-rows: auto 1.7fr;
+  gap: 0 0;
+  grid-template-areas: "path path" "stat browser";
 }
 file-browser[data-view-mode=show] > .stat {
+  grid-area: stat;
   padding: 1em;
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  min-width: 240px;
-  max-width: 240px;
-  width: 240px;
+  min-width: calc(240px + 2em);
+  max-width: 360px;
   background-color: var(--folder-color);
   overflow-y: auto;
   overflow-x: hidden;
@@ -163,6 +167,7 @@ file-browser[data-view-mode=show] > .stat img {
   width: 240px;
   aspect-ratio: 2/3;
   object-fit: cover;
+  margin-bottom: 1em;
 }
 file-browser[data-view-mode=show] > .stat .title {
   text-align: center;
@@ -171,6 +176,7 @@ file-browser[data-view-mode=show] > .stat .description {
   text-align: justify;
 }
 file-browser[data-view-mode=show] > .browser {
+  grid-area: browser;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -187,19 +193,46 @@ file-browser[data-view-mode=show] > .browser > div {
   align-items: center;
   justify-content: center;
   overflow-wrap: anywhere;
-  width: 256px;
-  height: calc(144px + 3em);
+  width: 192px;
 }
 file-browser[data-view-mode=show] > .browser > div img {
-  width: 256px;
-  height: 144px;
+  width: 192px;
+  height: 108px;
   aspect-ratio: 16/9;
   object-fit: cover;
 }
-file-browser[data-view-mode=show] > .path {
+file-browser[data-view-mode=show] > .browser > div .name {
+  display: inline-block;
+  height: 3em;
+  line-height: 1.5em;
+}
+file-browser[data-view-mode=show] > .browser > div .stat {
   display: none;
 }
+file-browser[data-view-mode=show] > .path {
+  grid-area: path;
+  top: 0;
+  padding: 1em;
+}
+file-browser[data-view-mode=show] > .path > span {
+  padding: 0.5em 0.5em 0.5em 0;
+  user-select: none;
+  cursor: pointer;
+}
+file-browser[data-view-mode=show] > .path > span + span:before {
+  padding-right: 0.5em;
+  content: "/";
+}
+file-browser[data-view-mode=library], file-browser[data-view-mode=default] {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 2.2fr auto;
+  gap: 0 0;
+  grid-template-areas: "path" "browser" "stat";
+}
 file-browser[data-view-mode=library] > .path, file-browser[data-view-mode=default] > .path {
+  grid-area: path;
   top: 0;
   padding: 1em;
 }
@@ -213,20 +246,39 @@ file-browser[data-view-mode=library] > .path > span + span:before, file-browser[
   content: "/";
 }
 file-browser[data-view-mode=library] > .stat, file-browser[data-view-mode=default] > .stat {
+  grid-area: stat;
   bottom: 0;
   padding: 1em;
 }
 file-browser[data-view-mode=library] > .path, file-browser[data-view-mode=library] > .stat, file-browser[data-view-mode=default] > .path, file-browser[data-view-mode=default] > .stat {
-  position: absolute;
   width: 100%;
   z-index: 100;
   background-color: var(--folder-color);
 }
-file-browser[data-view-mode=library] .browser {
+file-browser[data-view-mode=library] > .browser, file-browser[data-view-mode=default] > .browser {
+  grid-area: browser;
+}
+file-browser[data-view-mode=library] > .browser > div, file-browser[data-view-mode=default] > .browser > div {
+  transition: box-shadow var(--transition-duration), transform 0.2s;
+  transform: scale(1);
+}
+file-browser[data-view-mode=library] > .browser > div:active, file-browser[data-view-mode=default] > .browser > div:active {
+  transform: scale(0.95);
+}
+file-browser[data-view-mode=library] > .browser > div .name > span, file-browser[data-view-mode=default] > .browser > div .name > span {
+  background-color: var(--gold-color);
+}
+file-browser[data-view-mode=library] > .browser > div:after, file-browser[data-view-mode=default] > .browser > div:after {
   position: absolute;
-  top: 3.5em;
+  top: 0;
   left: 0;
-  bottom: 3.5em;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  transition: 0.2s;
+  pointer-events: none;
+}
+file-browser[data-view-mode=library] .browser {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -256,10 +308,6 @@ file-browser[data-view-mode=library] .browser > div .icon {
   object-fit: cover;
 }
 file-browser[data-view-mode=default] > .browser {
-  position: absolute;
-  top: 3.5em;
-  left: 0;
-  bottom: 3.5em;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -271,7 +319,6 @@ file-browser[data-view-mode=default] > .browser > div {
   height: 256px;
   text-align: center;
   padding: 0 1em 1em;
-  transition: box-shadow var(--transition-duration), transform 0.2s;
   margin: 1em;
   display: flex;
   flex-direction: column;
@@ -279,9 +326,6 @@ file-browser[data-view-mode=default] > .browser > div {
   justify-content: center;
   position: relative;
   overflow-wrap: anywhere;
-}
-file-browser[data-view-mode=default] > .browser > div .name > span {
-  background-color: var(--gold-color);
 }
 file-browser[data-view-mode=default] > .browser > div img.icon {
   height: 50%;
@@ -294,11 +338,11 @@ file-browser[data-view-mode=default] > .browser > div .stat {
   text-align: left;
   padding: 0.5em;
 }
-file-browser[data-view-mode=default] > .browser > div:after {
-  box-shadow: inset var(--background-color) 0 calc(-256px - 2em) 0;
-}
 file-browser[data-view-mode=default] > .browser > div.folder, file-browser[data-view-mode=default] > .browser > div.file {
   background-color: var(--folder-color);
+}
+file-browser[data-view-mode=default] > .browser > div:after {
+  box-shadow: inset var(--background-color) 0 calc(-256px - 2em) 0;
 }
 file-browser[data-view-mode=default] > .browser > div.open:after {
   box-shadow: inset var(--background-color) 0 0 0;

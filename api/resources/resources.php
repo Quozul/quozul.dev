@@ -4,6 +4,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit();
 }
 
+ini_set("display_errors", true);
+
 function recursiveDirScan(string $directory, ?string $user_id, ?string $view_mode = "default"): array
 {
     $files = [];
@@ -72,11 +74,17 @@ function recursiveDirScan(string $directory, ?string $user_id, ?string $view_mod
             $size = filesize($path);
             $time = filemtime($path);
 
-            array_push($files, [
+            $data = [
                 "name" => $file,
                 "size" => $size,
                 "time" => $time,
-            ]);
+            ];
+
+            if (file_exists($path . ".png")) {
+                $data["has_thumbnail"] = true;
+            }
+
+            array_push($files, $data);
         }
     }
 
@@ -118,12 +126,16 @@ if (file_exists($dir . '/.metadata.json')) {
 
     if (!empty($metadata)) {
         $data["metadata"] = $metadata;
-        $view_mode = $metadata["view_mode"];
+        if (isset($metadata["view_mode"])) {
+            $view_mode = $metadata["view_mode"];
+        }
     }
 }
 
 $files = recursiveDirScan($dir, $id, $view_mode);
-
+usort($files, function ($a, $b) {
+    return isset($b["dir"]) && !isset($a["dir"]);
+});
 $data["content"] = $files;
 
 echo json_encode($data);
