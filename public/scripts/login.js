@@ -83,7 +83,7 @@ window.addEventListener("load", () => {
         loginButton.prepend(spinner);
 
         // Login user and get a JWT
-        fetch("/api/login", {
+        fetch(`/api/v1/login`, {
             method: "POST",
             body: JSON.stringify({code: code, redirectUri: window.location.origin + window.location.pathname})
         })

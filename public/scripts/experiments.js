@@ -1,5 +1,5 @@
 function buildExperimentList() {
-    fetch("/api/experiments")
+    fetch(`/api/v2/experiments`)
         .then(res => res.json())
         .then(experiments => {
             const parent = document.getElementById("experiments");

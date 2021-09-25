@@ -50,7 +50,7 @@ class FileBrowser extends HTMLElement {
         const icons = getFileIcon(fileExt);
 
         if (file.has_thumbnail) {
-            img.src = `/api/thumbnail/${browser.encodePath([...browser.path, file.name])}`;
+            img.src = `/api/v1/thumbnail/${browser.encodePath([...browser.path, file.name])}`;
         } else {
             img.src = `/public/assets/icons/${file.dir ? "folder" : icons[0]?.name}.svg`;
         }
@@ -179,7 +179,7 @@ class FileBrowser extends HTMLElement {
         sourceBuffer.appendBuffer(initBuffer);
 
         // Get subtitles
-        const subtitles = await (await fetch(`/api/download/?path=${path.replace(/\.[^/.]+$/, "") + ".fr-FR.ass"}`, {
+        const subtitles = await (await fetch(`/api/v1/download/?path=${path.replace(/\.[^/.]+$/, "") + ".fr-FR.ass"}`, {
             method: "GET",
             headers: headers,
         })).arrayBuffer();
@@ -412,7 +412,7 @@ class FileBrowser extends HTMLElement {
 
     async stream(path, mime) {
         // If file is a video, then play it
-        const url = `https://quozul.dev/api/stream/?path=${path}`;
+        const url = `/api/v1/stream/?path=${path}`;
 
         const video = document.createElement("video");
         video.oncanplay = video.play;
@@ -447,7 +447,7 @@ class FileBrowser extends HTMLElement {
         let headers = {};
         const path = this.path.join("/") + "/" + filename;
         if (this.auth) headers["Authorization"] = this.auth;
-        const response = await fetch(`/api/download/?path=${path}`, {
+        const response = await fetch(`/api/v1/download/?path=${path}`, {
             method: "GET",
             headers: headers,
         });
@@ -539,7 +539,7 @@ class FileBrowser extends HTMLElement {
 
         // Get file and folder list
         let request, headers = {};
-        let url = "/api/resources/";
+        let url = `/api/v1/resources/`;
         if (this.path.length > 0) url += `?path=${this.path.join("/")}`;
         if (this.auth) headers["Authorization"] = this.auth;
 
@@ -591,7 +591,7 @@ class FileBrowser extends HTMLElement {
         switch (view_mode) {
             case "show": {
                 const img = document.createElement("img");
-                img.src = `/api/thumbnail/${this.encodePath(this.path)}`;
+                img.src = `/api/v1/thumbnail/${this.encodePath(this.path)}`;
                 this.stat.append(img);
 
                 const title = FileBrowser.createElement("h3", "title");
