@@ -1,13 +1,11 @@
 import { initFileBrowser } from "../../experiments/file_browser/scripts/browser.mjs";
 
 window.addEventListener("load", async function () {
-    const discord = JSON.parse(window.localStorage.getItem("discord"));
-
     // Initialize browser
     initFileBrowser();
     /** @type {FileBrowser} */
     const browser = document.querySelector("file-browser");
-    browser.setApiUrl(`/api/v1`);
+    browser.setApiUrl(`/api/v2`);
 
     document.addEventListener("loggedin", () => {
         const discord = JSON.parse(window.localStorage.getItem("discord"));
