@@ -88,7 +88,7 @@ export function toggleAnimation(elements, classToToggle, delay = 1000, end = nul
 
 export function createSpinner() {
     const container = document.createElement("div");
-    container.classList.add("w-100", "h-100", "d-flex", "justify-content-center", "align-items-center", "p-5");
+    container.classList.add("w-100", "h-100", "d-flex", "justify-content-center", "align-items-center", "m-0");
 
     const spinner = document.createElement("span");
     spinner.classList.add("spinner-border");
