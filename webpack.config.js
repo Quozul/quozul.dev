@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-module.exports = {
+const config = {
     watch: true,
     entry: {
         index: "./src/index.js",
@@ -87,4 +87,16 @@ module.exports = {
             },
         ],
     },
+};
+
+module.exports = (env, argv) => {
+    console.log(argv.mode);
+    config.mode = argv.mode;
+    config.watch = argv.mode === "development";
+
+    if (argv.mode === "production") {
+        
+    }
+
+    return config;
 };
