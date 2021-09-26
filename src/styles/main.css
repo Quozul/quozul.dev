@@ -2,6 +2,7 @@
     user-select: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: "Quicksand", sans-serif;
 }
 
 :root {
@@ -10,9 +11,9 @@
 }
 
 body {
-    overflow: hidden;
     z-index: 100;
     background-color: var(--background-color);
+    color: white;
 }
 
 .select {

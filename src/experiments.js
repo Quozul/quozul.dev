@@ -1,6 +1,6 @@
 // Bootstrap
-import "./bootstrap/bootstrap.bundle.min"
-import "./bootstrap/bootstrap.min.css"
+import Collapse from "bootstrap/js/dist/collapse";
+import "./styles/bootstrap-experiments.scss"
 
 // Scripts
 import "./scripts/login"

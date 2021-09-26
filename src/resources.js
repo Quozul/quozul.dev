@@ -1,6 +1,7 @@
 // Bootstrap
-import "./bootstrap/bootstrap.bundle.min"
-import "./bootstrap/bootstrap.min.css"
+import Collapse from "bootstrap/js/dist/collapse";
+import Modal from "bootstrap/js/dist/modal";
+import "./styles/bootstrap-resources.scss"
 
 // Experiments
 import "../experiments/file_browser/styles/browser.scss"

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Quozul/quozul.dev-www#readme",
   "devDependencies": {
+    "bootstrap": "^5.1.1",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^6.3.0",
     "html-loader": "^2.1.2",
@@ -28,5 +29,8 @@
     "style-loader": "^3.3.0",
     "webpack": "^5.54.0",
     "webpack-cli": "^4.8.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.10.1"
   }
 }

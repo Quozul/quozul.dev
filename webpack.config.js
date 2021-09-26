@@ -20,26 +20,28 @@ const config = {
         new HtmlWebpackPlugin({
             title: "The Secret Website Of Quozul",
             filename: "index.html",
-            chunks : ["index"],
+            chunks: ["index"],
             template: "./pages/index.html",
         }),
         new HtmlWebpackPlugin({
             title: "The Secret Library Of Quozul",
             filename: "resources.html",
-            chunks : ["resources"],
+            chunks: ["resources"],
             template: "./pages/resources.html",
         }),
         new HtmlWebpackPlugin({
             title: "The Secret Laboratory Of Quozul",
             filename: "experiments.html",
-            chunks : ["experiments"],
+            chunks: ["experiments"],
             template: "./pages/experiments.html",
         }),
         new CopyPlugin({
             patterns: [
-                { from: "public", to: "public" },
-                { from: "experiments", to: "experiments" },
-                { from: "favicon.ico", to: "favicon.ico" },
+                {from: "public", to: "public"},
+                {from: "experiments", to: "experiments"},
+                {from: "favicon.ico", to: "favicon.ico"},
+                {from: "robots.txt", to: "robots.txt"},
+                {from: "sitemap.xml", to: "sitemap.xml"},
             ],
         }),
         new MiniCssExtractPlugin({
@@ -89,13 +91,12 @@ const config = {
     },
 };
 
-module.exports = (env, argv) => {
-    console.log(argv.mode);
+module.exports = (_env, argv) => {
     config.mode = argv.mode;
     config.watch = argv.mode === "development";
 
     if (argv.mode === "production") {
-        
+        config.devtool = "source-map";
     }
 
     return config;
