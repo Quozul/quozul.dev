@@ -46,12 +46,15 @@ window.addEventListener("load", () => {
     const loggedin = new Event("loggedin");
     const loggedout = new Event("loggedout");
 
-    // Log out
     const loginButton = document.getElementById("loginButton");
+    const loginUrl = `https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname + "/")}&response_type=code&scope=identify`;
+    loginButton.href = loginUrl;
+
+    // Log out
     document.querySelector("#logoutButton").addEventListener("click", () => {
         window.localStorage.removeItem("discord");
         loginButton.innerHTML = '<img src="/public/assets/Discord-Logo-White.svg" class="me-1 h-1" alt="Discord logo"> Login with Discord'
-        loginButton.href = `https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname)}&response_type=code&scope=identify`;
+        loginButton.href = loginUrl;
         loginButton.classList.remove("logged-in");
         document.dispatchEvent(loggedout);
     }, {passive: true});
@@ -83,7 +86,7 @@ window.addEventListener("load", () => {
         loginButton.prepend(spinner);
 
         // Login user and get a JWT
-        fetch(`/api/v1/login`, {
+        fetch(`/api/v2/login`, {
             method: "POST",
             body: JSON.stringify({code: code, redirectUri: window.location.origin + window.location.pathname})
         })

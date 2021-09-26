@@ -6,6 +6,7 @@ window.addEventListener("load", async function () {
     /** @type {FileBrowser} */
     const browser = document.querySelector("file-browser");
     browser.setCallbackUrl(`/api/v1/resources`);
+    browser.setApiUrl(`/api/v1`);
 
     document.addEventListener("loggedin", () => {
         const discord = JSON.parse(window.localStorage.getItem("discord"));
