@@ -38,6 +38,8 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 { from: "public", to: "public" },
+                { from: "experiments", to: "experiments" },
+                { from: "favicon.ico", to: "favicon.ico" },
             ],
         }),
         new MiniCssExtractPlugin({
@@ -80,6 +82,7 @@ module.exports = {
                 loader: "html-loader",
                 options: {
                     minimize: true,
+                    sources: false,
                 },
             },
         ],

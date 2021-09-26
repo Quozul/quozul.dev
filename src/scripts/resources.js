@@ -1,4 +1,4 @@
-import { initFileBrowser } from "../../experiments/file_browser/scripts/browser";
+import { initFileBrowser } from "../../experiments/file_browser/scripts/browser.mjs";
 
 window.addEventListener("load", async function () {
     const discord = JSON.parse(window.localStorage.getItem("discord"));
@@ -7,7 +7,6 @@ window.addEventListener("load", async function () {
     initFileBrowser();
     /** @type {FileBrowser} */
     const browser = document.querySelector("file-browser");
-    browser.setCallbackUrl(`/api/v1/resources`);
     browser.setApiUrl(`/api/v1`);
 
     document.addEventListener("loggedin", () => {

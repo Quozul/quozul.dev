@@ -15,6 +15,8 @@
  * @property {number} expiry
  */
 
+const {createSpinner} = require("./utils");
+
 function loggedIn(discord) {
     const loginButton = document.getElementById("loginButton");
     /** @type {Discord} */
@@ -47,7 +49,7 @@ window.addEventListener("load", () => {
     const loggedout = new Event("loggedout");
 
     const loginButton = document.getElementById("loginButton");
-    const loginUrl = `https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname + "/")}&response_type=code&scope=identify`;
+    const loginUrl = `https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname)}&response_type=code&scope=identify`;
     loginButton.href = loginUrl;
 
     // Log out

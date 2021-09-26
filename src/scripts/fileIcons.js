@@ -1,4 +1,4 @@
-function getFileIcon(ext) {
+export function getFileIcon(ext) {
     const icons = fileIcons.icons.filter((i) => i.name === ext || i.fileExtensions?.includes(ext));
 
     if (icons.length === 0) {
@@ -988,7 +988,7 @@ const fileIcons = {
                 'gatsby.config.js',
                 'gatsby-config.js',
                 'gatsby-node.js',
-                'gatsby-browser.js',
+                'gatsby-browser.mjs',
                 'gatsby-ssr.js',
             ],
         },

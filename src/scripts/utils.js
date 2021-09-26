@@ -3,7 +3,7 @@
  * @param {int} min Lower value
  * @param {int} max Upper value
  */
-function rangedRandom(min, max) {
+export function rangedRandom(min, max) {
     return Math.random() * (max - min) + min;
 }
 
@@ -12,7 +12,7 @@ function rangedRandom(min, max) {
  * @param {string} filename
  * @param {Blob} blob Blob to download as a file
  */
-function download(filename, blob) {
+export function download(filename, blob) {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -28,7 +28,7 @@ function download(filename, blob) {
  * @param fileSizeInBytes
  * @returns {string}
  */
-function getReadableFileSizeString(fileSizeInBytes) {
+export function getReadableFileSizeString(fileSizeInBytes) {
     let i = -1;
     const byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
     do {
@@ -72,7 +72,7 @@ Date.prototype.format = function (format) {
  * @param {?number} end End callback
  * @param {?number} finalDelay Final delay, usually the transition's delay if any
  */
-function toggleAnimation(elements, classToToggle, delay = 1000, end = null, finalDelay = null) {
+export function toggleAnimation(elements, classToToggle, delay = 1000, end = null, finalDelay = null) {
     if (elements.length === 0) {
         if (end) {
             setTimeout(() => end(), finalDelay ?? delay);
@@ -82,11 +82,11 @@ function toggleAnimation(elements, classToToggle, delay = 1000, end = null, fina
     const element = elements.shift();
     setTimeout(() => {
         element.classList.toggle(classToToggle);
-        this.toggleAnimation(elements, classToToggle, delay, end, finalDelay)
+        toggleAnimation(elements, classToToggle, delay, end, finalDelay)
     }, delay);
 }
 
-function createSpinner() {
+export function createSpinner() {
     const container = document.createElement("div");
     container.classList.add("w-100", "h-100", "d-flex", "justify-content-center", "align-items-center", "p-5");
 

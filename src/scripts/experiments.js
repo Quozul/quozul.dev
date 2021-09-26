@@ -15,7 +15,7 @@ function buildExperimentList() {
                 div.style.width = "18rem";
 
                 div.innerHTML = `<div class="card-body text-white">
-                                    <h5 class="card-title"><a href="${e.url}" class="stretched-link link-light">${e.name}</a></h5>
+                                    <h5 class="card-title"><a href="${e.url}/" class="stretched-link link-light">${e.name}</a></h5>
                                     <p class="card-text">${e.description}</p>
                                 </div>
                                 <div class="card-footer text-white-50">Creation: ${new Date(e.date).toLocaleDateString()}</div>`;
