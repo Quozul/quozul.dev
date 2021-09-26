@@ -1,0 +1,31 @@
+{
+  "name": "quozul.dev",
+  "version": "1.0.0",
+  "description": "Quozul's website made with in JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quozul/quozul.dev-www.git"
+  },
+  "author": "Quozul",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Quozul/quozul.dev-www/issues"
+  },
+  "homepage": "https://github.com/Quozul/quozul.dev-www#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.3.0",
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.2",
+    "mini-css-extract-plugin": "^2.3.0",
+    "sass": "^1.42.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.3.0",
+    "webpack": "^5.54.0",
+    "webpack-cli": "^4.8.0"
+  }
+}

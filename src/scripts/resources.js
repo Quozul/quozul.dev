@@ -1,3 +1,5 @@
+import { initFileBrowser } from "../../experiments/file_browser/scripts/browser";
+
 window.addEventListener("load", async function () {
     const discord = JSON.parse(window.localStorage.getItem("discord"));
 
@@ -19,5 +21,4 @@ window.addEventListener("load", async function () {
         browser.setAuthorization(null);
         browser.setPath();
     }, {passive: true});
-
 });

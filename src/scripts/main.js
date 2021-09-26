@@ -1,4 +1,6 @@
-'use strict';
+"use strict";
+
+import { addPages } from "../../experiments/page_scroll/page"
 
 function buildMainMenu() {
     /** @type {HTMLDivElement} */
