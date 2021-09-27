@@ -15,7 +15,7 @@
  * @property {number} expiry
  */
 
-const {createSpinner} = require("./utils");
+import {createSpinner} from "./utils";
 
 function loggedIn(discord) {
     const loginButton = document.getElementById("loginButton");
@@ -42,13 +42,19 @@ function removeCodeFromUrl() {
     window.history.pushState({}, document.title, url.toString());
 }
 
-window.addEventListener("load", () => {
+const loggedin = new Event("loggedin");
+const loggedout = new Event("loggedout");
+
+document.addEventListener("cookiesdissmissed", () => {
+    document.dispatchEvent(loggedout);
+}, {passive: true, once: true});
+
+document.addEventListener("cookiesaccepted", () => {
     /** @type {Discord} */
     const discord = JSON.parse(window.localStorage.getItem("discord"));
-    const loggedin = new Event("loggedin");
-    const loggedout = new Event("loggedout");
 
     const loginButton = document.getElementById("loginButton");
+    loginButton.parentElement.classList.remove("d-none");
     const loginUrl = `https://discord.com/oauth2/authorize?client_id=883631190232399872&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname)}&response_type=code&scope=identify`;
     loginButton.href = loginUrl;
 
@@ -112,4 +118,4 @@ window.addEventListener("load", () => {
     } else {
         document.dispatchEvent(loggedout);
     }
-});
+}, {passive: true, once: true});

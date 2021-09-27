@@ -11,6 +11,7 @@ import "./scripts/utils"
 import "./scripts/fileIcons"
 import "./scripts/resources"
 import "./scripts/login"
+import "./scripts/cookies"
 
 // Styles
 import "./styles/main.css"

@@ -7,6 +7,7 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production"
   },
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Quozul/quozul.dev-www.git"

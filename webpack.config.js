@@ -2,14 +2,11 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const fs = require("fs").promises;
 
 const config = {
     watch: true,
-    entry: {
-        index: "./src/index.js",
-        resources: "./src/resources.js",
-        experiments: "./src/experiments.js",
-    },
+    entry: {},
     optimization: {
         splitChunks: {
             chunks: "all",
@@ -17,24 +14,6 @@ const config = {
     },
     mode: "development",
     plugins: [
-        new HtmlWebpackPlugin({
-            title: "The Secret Website Of Quozul",
-            filename: "index.html",
-            chunks: ["index"],
-            template: "./pages/index.html",
-        }),
-        new HtmlWebpackPlugin({
-            title: "The Secret Library Of Quozul",
-            filename: "resources.html",
-            chunks: ["resources"],
-            template: "./pages/resources.html",
-        }),
-        new HtmlWebpackPlugin({
-            title: "The Secret Laboratory Of Quozul",
-            filename: "experiments.html",
-            chunks: ["experiments"],
-            template: "./pages/experiments.html",
-        }),
         new CopyPlugin({
             patterns: [
                 {from: "public", to: "public"},
@@ -91,12 +70,33 @@ const config = {
     },
 };
 
-module.exports = (_env, argv) => {
+module.exports = async (_env, argv) => {
     config.mode = argv.mode;
     config.watch = argv.mode === "development";
 
     if (argv.mode === "production") {
         config.devtool = "source-map";
+    }
+
+    const pages = await fs.readdir("./pages");
+
+    for (const page of pages) {
+        const p = page.split(".")[0];
+
+        const options = {
+            filename: page,
+            chunks: [],
+            template: `./pages/${page}`,
+        };
+
+        try {
+            if (await fs.stat(`./src/${p}.js`)) {
+                options.chunks.push(p);
+                config.entry[p] = `./src/${p}.js`;
+            }
+        } catch (_err) { }
+
+        config.plugins.push(new HtmlWebpackPlugin(options));
     }
 
     return config;
