@@ -19,8 +19,8 @@
     <script src="/public/scripts/login.js"></script>
 
     <!-- Custom styles -->
-    <link rel="stylesheet" href="/public/styles/main.min.css">
-    <link rel="stylesheet" href="/experiments/page_scroll/page.min.css">
+    <link rel="stylesheet" href="/public/styles/main.css">
+    <link rel="stylesheet" href="/experiments/page_scroll/page.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://quozul.dev/public/assets/icon.png">
