@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     exit();
 }
 
-ini_set("display_errors", true);
+//ini_set("display_errors", true);
 
 function recursiveDirScan(string $directory, ?string $user_id, ?string $view_mode = "default"): array
 {
