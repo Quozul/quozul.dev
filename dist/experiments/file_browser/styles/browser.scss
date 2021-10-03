@@ -42,7 +42,7 @@ file-browser {
     }
 
     > .search {
-        position: absolute;
+        position: fixed;
         z-index: 100;
         background-color: var(--folder-color);
         top: 0;
@@ -60,7 +60,7 @@ file-browser {
     }
 
     > .download-center {
-        position: absolute;
+        position: fixed;
         bottom: 4em;
         left: 50%;
         display: flex;

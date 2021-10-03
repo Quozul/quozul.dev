@@ -292,8 +292,8 @@ class PageSection extends HTMLElement {
     static pageSelect = new Event("pageselect");
 }
 
-function addPages() {
+export function addPages() {
     // Load custom elements
-    window.customElements.define('page-section', PageSection);
-    window.customElements.define('page-container', PageContainer);
+    window.customElements.define("page-section", PageSection);
+    window.customElements.define("page-container", PageContainer);
 }
