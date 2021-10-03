@@ -4,12 +4,12 @@
 <head>
 <?php
 $page_name = "The Secret Laboratory Of Quozul";
-include $_SERVER["DOCUMENT_ROOT"] . "/includes/head.php";
+include $_SERVER["DOCUMENT_ROOT"] . "/../includes/head.php";
 ?>
 </head>
 
 <body class="d-flex flex-column min-vh-100 justify-content-between">
-<?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/header.php"; ?>
+<?php include $_SERVER["DOCUMENT_ROOT"] . "/../includes/header.php"; ?>
 
 <main class="container text-center">
     <div class="col p-5">
@@ -23,7 +23,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/includes/head.php";
     </div>
 </main>
 
-<?php include $_SERVER["DOCUMENT_ROOT"] . "/includes/footer.php"; ?>
+<?php include $_SERVER["DOCUMENT_ROOT"] . "/../includes/footer.php"; ?>
 </body>
 
 <script src="/public/scripts/experiments.js"></script>
