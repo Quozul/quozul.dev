@@ -5,7 +5,7 @@ date:   2023-12-07 08:50:00 +0100
 categories: linux
 ---
 I've been using Linux for years now, one of the main issue I am still getting after all these years is having the package manager fail during an update.
-<!-- more -->
+
 It can be due to the computer restarting in the middle of an update or the terminal crashing, making the update transaction fail. I've noticed this is especially the case using Ubuntu:
 
 ```
