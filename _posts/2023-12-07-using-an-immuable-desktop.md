@@ -30,4 +30,3 @@ The package manager is just as good as DNF from Fedora Workstation, while provid
 We say it has an immuable file system, but the only thing that is immuable, are system files that we really rarely update, unless you are a ricer, but you should be using Arch if that's the case anyway.
 
 I'll be sure to keep you updated if I have any new issues with this OS!
-
