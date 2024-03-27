@@ -20,7 +20,7 @@ Linux feels a bit sluggish on the [VisionFive 2](https://www.starfivetech.com/en
 First step, download the image from [OpenBSD's official website](https://www.openbsd.org/faq/faq4.html#Download).
 Then flash it onto an SD card.
 
-Then you'll have to get a copy of the DTB file, it is not the one in the GitHub releases, [rpx made a great script to build it from source](https://forum.rvspace.org/t/dtb-creation-from-source/3473).
+Then you'll have to get a copy of the DTB file, it is not the one in the GitHub releases, [rpx made a great script to build it from source](https://forum.rvspace.org/t/dtb-creation-from-source/3473). You can find [download links at the end of this article](#downloads).
 
 Mount the EFI partition from the SD card and add it in the root of the partition.
 It should end up being something like this:
@@ -143,3 +143,9 @@ Reboot and the board should automatically boot into OpenBSD.
 - rvspace.org: [Dtb creation from source](https://forum.rvspace.org/t/dtb-creation-from-source/3473)
 - rvspace.org: [OpenBSD 7.4 (very very very soon)?](https://forum.rvspace.org/t/openbsd-7-4-very-very-very-soon/3701/3)
 - stackexchange.com: [How to make sd card as default boot in uboot?](https://unix.stackexchange.com/questions/120909/how-to-make-sd-card-as-default-boot-in-uboot)
+
+#### Downloads
+
+- [dtb_obsd.sh](/assets/dtb_obsd/dtb_obsd.sh)
+- [jh7110-starfive-visionfive-2-v1.2a.dtb](/assets/dtb_obsd/jh7110-starfive-visionfive-2-v1.2a.dtb).
+- [jh7110-starfive-visionfive-2-v1.3b.dtb](/assets/dtb_obsd/jh7110-starfive-visionfive-2-v1.3b.dtb).
