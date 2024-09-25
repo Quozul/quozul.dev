@@ -1,0 +1,22 @@
+---
+layout: layouts/base.vto
+title: Posts
+url: /posts/
+menu:
+  visible: true
+  order: 1
+---
+
+<header class="mb-8">
+  {{ include "templates/breadcrumb.vto" }}
+
+  <h1 class="text-4xl font-bold">{{ i18n.all_posts }}</h1>
+</header>
+
+<section class="mx-auto flex flex-col">
+  {{
+    include "templates/post-list.vto" {
+      postlist: search.pages("type=post", "date=desc"),
+    }
+  }}
+</section>

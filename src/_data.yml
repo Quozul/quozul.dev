@@ -1,0 +1,18 @@
+lang: en
+
+home:
+  welcome: Hello, World!
+  subtitle: >
+    Welcome to my little corner of the web! I'm a full-stack developer with a penchant for all things Linux. If you've found your way here, chances are you share my passion for open-source software and the power it brings to our fingertips.  
+
+menu_links: []
+extra_head: []
+
+# Metas plugin https://lume.land/plugins/metas/#description
+metas:
+  site: Quozul.dev
+  description: Quozul's sticky notes.
+  title: "Quozul's sticky notes."
+  image: "=image"
+  twitter: "@Quozul"
+  lang: en

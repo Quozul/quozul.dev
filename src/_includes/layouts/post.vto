@@ -1,0 +1,93 @@
+---
+layout: layouts/base.vto
+---
+<article
+  class="flex flex-col gap-4"
+  data-title="{{ title }}"
+  itemscope
+  itemtype="http://schema.org/BlogPosting"
+>
+  <header class="flex flex-col gap-2 border-b pb-4">
+    {{ include "templates/breadcrumb.vto" }}
+
+    <h1 class="text-4xl font-bold">{{ title }}</h1>
+
+    {{ include "templates/post-details.vto" }}
+  </header>
+
+  {{ if toc.length }}
+    <nav class="flex flex-col">
+      <h2 class="font-bold uppercase">{{ i18n.nav.toc }}</h2>
+      <ol class="flex flex-col pl-4 list-decimal text-muted">
+        {{ for item of toc }}
+          <li>
+            <a href="#{{ item.slug }}" class="underline hover:no-underline">
+              {{ item.text }}
+            </a>
+
+            {{ if item.children.length }}
+              <ul class="flex flex-col list-disc pl-4">
+                {{ for child of item.children }}
+                  <li>
+                    <a
+                      href="#{{ child.slug }}"
+                      class="underline hover:no-underline"
+                    >{{ child.text }}</a>
+                  </li>
+                {{ /for }}
+              </ul>
+            {{ /if }}
+          </li>
+        {{ /for }}
+      </ol>
+    </nav>
+  {{ /if }}
+
+  <div class="prose dark:prose-invert">
+    {{ content }}
+  </div>
+
+  {{ if it.footnotes.length }}
+    <aside role="note" class="flex flex-col gap-2 text-sm">
+      <dl>
+        {{ for note of footnotes }}
+          <div id="{{ note.id }}" class="flex gap-2">
+            <dt>
+              <a
+                class="align-sub font-mono text-xs underline"
+                href="#{{ note.refId }}"
+              >
+                {{ note.label }}
+              </a>
+            </dt>
+            <dd>{{ note.content }}</dd>
+          </div>
+        {{ /for }}
+      </dl>
+    </aside>
+  {{ /if }}
+</article>
+
+<nav class="border-t pt-4 mt-4">
+  <ul class="flex flex-col gap-4 lg:flex-row justify-between text-foreground">
+    {{ set previousPost = search.previousPage(url, "type=post") }}
+    {{ if previousPost }}
+      <li class="text-left">
+        <a href="{{ previousPost.url }}" rel="prev" class="flex flex-col">
+          <span>{{ i18n.nav.previous_post }}</span>
+          <strong>{{ previousPost.title }}</strong>
+        </a>
+      </li>
+    {{ /if }}
+
+    {{ set nextPost = search.nextPage(url, "type=post") }}
+    {{ if nextPost }}
+      <li class="ml-auto text-right">
+        <a href="{{ nextPost.url }}" rel="next" class="flex flex-col">
+          <span>{{ i18n.nav.next_post }}</span>
+          <strong>{{ nextPost.title }}</strong>
+        </a>
+      </li>
+    {{ /if }}
+  </ul>
+</nav>

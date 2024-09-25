@@ -1,0 +1,47 @@
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {{- set breadcrumb = nav.breadcrumb(url) -}}
+      {{- set length = breadcrumb.length -}}
+      {{- for index, item of breadcrumb -}}
+        {{ set position = parseInt(index) + 1 }}
+        { 
+          "@type": "ListItem", 
+          "position": {{position}}, 
+          "item": "{{item.data.url |> url(true) }}", 
+          "name": "{{item.data.title}}"
+        }{{ if length != position }},{{/if}}
+      {{- /for }}
+    ]
+  }
+</script>
+
+<nav class="py-3" aria-label="Breadcrumb">
+  <ol class="flex flex-wrap text-sm items-center gap-2">
+    {{ for item of breadcrumb }}
+      <li>
+        {{ if item.data }}
+          {{ if item.data.url != url }}
+            <a href="{{ item.data.url }}" class="text-muted hover:text-muted-secondary">
+              {{ item.data.title }}
+            </a>
+          {{ else }}
+            <span>
+              {{ item.data.title }}
+            </span>
+          {{ /if }}
+        {{ /if }}
+      </li>
+      <li class="last:hidden">
+        <img src="/icons/slash.svg"
+          class="w-4 h-4 dark:invert" 
+          width="16"
+          height="16"
+          alt="/"
+        />
+      </li>
+    {{ /for }}
+  </ol>
+</nav>

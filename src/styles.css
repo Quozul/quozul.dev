@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @media (prefers-color-scheme: light) {
+    :root {
+      --background: theme(colors.gray.50);
+      --foreground: theme(colors.gray.950);
+      --muted: theme(colors.gray.600);
+      --muted-secondary: theme(colors.gray.800);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: theme(colors.gray.950);
+      --foreground: theme(colors.gray.50);
+      --muted: theme(colors.gray.400);
+      --muted-secondary: theme(colors.gray.200);
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}

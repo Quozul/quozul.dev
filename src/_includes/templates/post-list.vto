@@ -1,0 +1,35 @@
+{{ for post of postlist }}
+  <article
+    class="flex flex-col gap-4 border-b border-dashed last:border-none mb-8 pb-8"
+  >
+    <header class="flex flex-col gap-1">
+      <h2 class="text-lg font-bold">
+        <a
+          href="{{ post.url }}"
+          {{ if post.url == url }}
+            aria-current="page"
+          {{ /if }}
+        >
+          {{ post.title || post.url }}
+        </a>
+      </h2>
+
+      {{
+        include "templates/post-details.vto" {
+          date: post.date,
+          tags: post.tags,
+          author: post.author,
+          readingInfo: post.readingInfo,
+        }
+      }}
+    </header>
+
+    <div class="prose dark:prose-invert">
+      {{ post.excerpt |> md }}
+    </div>
+
+    <a href="{{ post.url }}" class="underline hover:no-underline">
+      {{ i18n.nav.continue_reading }}
+    </a>
+  </article>
+{{ /for }}

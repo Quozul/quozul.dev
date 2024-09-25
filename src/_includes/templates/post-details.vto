@@ -1,0 +1,23 @@
+<div class="flex gap-2 items-center text-muted">
+  {{ if author }}
+    {{ set page = search.page(`type=author author="author"`) }}
+    {{ if page }}
+      <p>{{ i18n.post.by }} <a href="{{ page.url }}">{{ author }}</a></p>
+    {{ else }}
+      <p>{{ i18n.post.by }} {{ author }}</p>
+    {{ /if }}
+    •
+  {{ /if }}
+
+  <p>
+    <time datetime="{{ date |> date('DATETIME') }}">
+      {{ date |> date("HUMAN_DATE") }}
+    </time>
+  </p>
+  •
+  <p>{{ it.readingInfo.minutes }} {{ i18n.post.reading_time }}</p>
+  •
+  <div class="flex gap-1">
+    {{ tags.join(", ") }}
+  </div>
+</div>
