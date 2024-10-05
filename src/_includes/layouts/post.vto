@@ -21,7 +21,7 @@ layout: layouts/base.vto
       <ol class="flex flex-col pl-4 list-decimal text-muted">
         {{ for item of toc }}
           <li>
-            <a href="#{{ item.slug }}" class="underline hover:no-underline">
+            <a href="#{{ item.slug }}" class="decoration-dotted underline hover:no-underline">
               {{ item.text }}
             </a>
 
@@ -31,7 +31,7 @@ layout: layouts/base.vto
                   <li>
                     <a
                       href="#{{ child.slug }}"
-                      class="underline hover:no-underline"
+                      class="decoration-dotted underline hover:no-underline"
                     >{{ child.text }}</a>
                   </li>
                 {{ /for }}
@@ -43,29 +43,9 @@ layout: layouts/base.vto
     </nav>
   {{ /if }}
 
-  <div class="prose dark:prose-invert">
+  <div class="prose dark:prose-invert prose-a:decoration-dotted hover:prose-a:no-underline">
     {{ content }}
   </div>
-
-  {{ if it.footnotes.length }}
-    <aside role="note" class="flex flex-col gap-2 text-sm">
-      <dl>
-        {{ for note of footnotes }}
-          <div id="{{ note.id }}" class="flex gap-2">
-            <dt>
-              <a
-                class="align-sub font-mono text-xs underline"
-                href="#{{ note.refId }}"
-              >
-                {{ note.label }}
-              </a>
-            </dt>
-            <dd>{{ note.content }}</dd>
-          </div>
-        {{ /for }}
-      </dl>
-    </aside>
-  {{ /if }}
 </article>
 
 <nav class="border-t pt-4 mt-4">

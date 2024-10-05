@@ -12,7 +12,6 @@ import readingInfo from "lume/plugins/reading_info.ts";
 import { merge } from "lume/core/utils/object.ts";
 import toc from "https://deno.land/x/lume_markdown_plugins@v0.7.0/toc.ts";
 import image from "https://deno.land/x/lume_markdown_plugins@v0.7.0/image.ts";
-import footnotes from "https://deno.land/x/lume_markdown_plugins@v0.7.0/footnotes.ts";
 import { alert } from "npm:@mdit/plugin-alert@0.12.0";
 import redirects from "lume/plugins/redirects.ts";
 import tailwindcss from "lume/plugins/tailwindcss.ts";
@@ -76,7 +75,6 @@ export default function (userOptions?: Options) {
       .use(date(options.date))
       .use(metas())
       .use(image())
-      .use(footnotes())
       .use(resolveUrls())
       .use(slugifyUrls())
       .use(terser())

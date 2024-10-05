@@ -1,6 +1,6 @@
 {{ for post of postlist }}
   <article
-    class="flex flex-col gap-4 border-b border-dashed last:border-none mb-8 pb-8"
+    class="flex flex-col gap-4 border-b items-start border-dashed last:border-none mb-8 pb-8"
   >
     <header class="flex flex-col gap-1">
       <h2 class="text-lg font-bold">
@@ -24,11 +24,11 @@
       }}
     </header>
 
-    <div class="prose dark:prose-invert">
+    <div class="prose dark:prose-invert prose-a:decoration-dotted hover:prose-a:no-underline">
       {{ post.excerpt |> md }}
     </div>
 
-    <a href="{{ post.url }}" class="underline hover:no-underline">
+    <a href="{{ post.url }}" class="decoration-dotted underline hover:no-underline">
       {{ i18n.nav.continue_reading }}
     </a>
   </article>
