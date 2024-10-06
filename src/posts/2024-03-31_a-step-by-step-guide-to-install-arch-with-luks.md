@@ -16,7 +16,7 @@ I took inspiration from the [dm-crypt/Encrypting an entire system#LUKS on a part
 
 Before partitioning the disks, you can follow the [Installation guide](https://wiki.archlinux.org/title/Installation_guide){target="_blank"} up to step [Installation guide#Partition the disks](https://wiki.archlinux.org/title/Installation_guide#Partition_the_disks){target="_blank"} to set up keyboard layout and whatnot. The only thing I used from those extra steps is the command `loadkeys fr` since I'm using an AZERTY keyboard layout but you may find something useful, like WI-FI or internet setup.
 
-First, we need to check the dis k we want to be using for our Arch install. We can do this using the `lsblk`. In my case, I'll be using the disk `/dev/sda` since I'm redoing it in a virtual machine for this guide.
+First, we need to check the disk we want to be using for our Arch install. We can do this using the `lsblk`. In my case, I'll be using the disk `/dev/sda` since I'm redoing it in a virtual machine for this guide.
 
 ```bash
 root@archiso ~ # lsblk

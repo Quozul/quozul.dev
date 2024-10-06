@@ -94,7 +94,6 @@ export default function (userOptions?: Options) {
         })
       )
       .copy("fonts")
-      .copy("favicon.png")
       .copy("uploads")
       .copy("icons")
       .mergeKey("extra_head", "stringArray")
