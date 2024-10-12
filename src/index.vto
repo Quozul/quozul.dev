@@ -14,7 +14,7 @@ title: Home
   <div class="flex flex-col">
     {{
       include "templates/post-list.vto" {
-        postlist: search.pages("type=post", "date=desc", 3),
+        postlist: search.pages("type=post !draft", "date=desc", 3),
       }
     }}
   </div>

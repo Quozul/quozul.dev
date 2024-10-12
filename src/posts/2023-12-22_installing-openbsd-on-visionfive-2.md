@@ -1,7 +1,6 @@
 ---
 date: '2023-12-22'
 title: Installing OpenBSD 7.4 on a VisionFive 2 rev 1.2a
-draft: false
 tags: [riscv, openbsd]
 oldUrl: /riscv/2023/12/22/installing-openbsd-on-visionfive-2
 ---

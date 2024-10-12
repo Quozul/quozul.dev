@@ -16,7 +16,7 @@ menu:
 <section class="mx-auto flex flex-col">
   {{
     include "templates/post-list.vto" {
-      postlist: search.pages("type=post", "date=desc"),
+      postlist: search.pages("type=post !draft", "date=desc"),
     }
   }}
 </section>

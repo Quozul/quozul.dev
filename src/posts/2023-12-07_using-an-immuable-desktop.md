@@ -1,7 +1,6 @@
 ---
 title: Using an immuable desktop
 date: '2023-12-07'
-draft: false
 tags: [linux]
 oldUrl: /linux/2023/12/07/using-an-immuable-desktop
 ---

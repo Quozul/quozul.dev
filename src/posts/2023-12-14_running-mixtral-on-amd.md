@@ -1,7 +1,6 @@
 ---
 title: Running Mixtral 8x7B LLM on a single 7900 XTX
 date: '2023-12-14'
-draft: false
 tags: [ai, rocm]
 oldUrl: /ai/2023/12/14/running-mixtral-on-amd
 ---

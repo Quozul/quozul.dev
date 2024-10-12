@@ -1,7 +1,6 @@
 ---
 title: A step-by-step guide to install Arch with LUKS
 date: '2024-03-31'
-draft: false
 tags: [linux]
 oldUrl: /linux/2024/03/31/a-step-by-step-guide-to-install-arch-with-luks
 ---

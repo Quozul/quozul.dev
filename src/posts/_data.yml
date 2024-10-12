@@ -4,3 +4,4 @@ basename: posts
 
 metas:
   title: "=title"
+  description: "=excerpt"

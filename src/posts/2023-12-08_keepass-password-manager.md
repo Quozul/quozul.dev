@@ -1,7 +1,6 @@
 ---
 title: Keepass as a password manager
 date: '2023-12-08'
-draft: false
 tags: [security]
 oldUrl: /security/2023/12/08/keepass-password-manager
 ---
