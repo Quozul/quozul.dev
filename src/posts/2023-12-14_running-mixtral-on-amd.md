@@ -2,7 +2,9 @@
 title: Running Mixtral 8x7B LLM on a single 7900 XTX
 date: '2023-12-14'
 tags: [ai, rocm]
-oldUrl: /ai/2023/12/14/running-mixtral-on-amd
+oldUrl:
+  - /ai/2023/12/14/running-mixtral-on-amd
+  - /ai/2023/12/14/running-mixtral-on-amd.html
 ---
 The newly announced model by [Mistral AI](https://mistral.ai/news/mixtral-of-experts/){target="_blank"} can show some really great results, let's see how we can run it locally!
 

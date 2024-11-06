@@ -2,7 +2,9 @@
 title: Keepass as a password manager
 date: '2023-12-08'
 tags: [security]
-oldUrl: /security/2023/12/08/keepass-password-manager
+oldUrl:
+  - /security/2023/12/08/keepass-password-manager
+  - /security/2023/12/08/keepass-password-manager.html
 ---
 For a long time I've been using the integrated password manager in my browser of choice. Starting with Google Chrome, Firefox and ended up on Brave.
 

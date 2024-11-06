@@ -1,5 +1,5 @@
 ---
-title: Building my own image for the Turing RK1
+title: "Building my own image for the Turing RK1 (part 1: U-Boot)"
 date: '2024-10-12'
 tags: [linux, arm]
 ---
@@ -23,7 +23,26 @@ First, you'll have to install the appropriate GCC toolchain as well as any other
 
 If you try to jump directly to building U-Boot, you will eventually run into the following two missing blobs.
 
+Clone [rkbin](https://github.com/rockchip-linux/rkbin):
+```shell
+❯ git clone https://github.com/rockchip-linux/rkbin.git
+```
+
+Then look for the following two files:
+- `rk3588_bl31_v1.45.elf`
+- `rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin`
+
+Both should be in the `rkbin/bin/rk35` directory inside the repository.
+
+### OP-TEE (optional)
+
+OP-TEE seems to not support the RK3588 for now.
+Repository: [https://github.com/OP-TEE/optee_os](https://github.com/OP-TEE/optee_os).
+U-Boot will still build fine without OP-TEE, although you may get a warning.
+
 ### atf-bl31
+
+While this blob is included in the `rkbin` repository, you may want to compile it yourself. Although I did not have much success with it as it caused the Linux kernel to not boot.
 
 1. Clone [arm-trusted-firmware](https://github.com/ARM-software/arm-trusted-firmware):
    ```shell
@@ -36,21 +55,6 @@ If you try to jump directly to building U-Boot, you will eventually run into the
    ❯ make PLAT=rk3588 CROSS_COMPILE=aarch64-linux-gnu- bl31 -j
    ```
    Write down the path for `bl31.elf` outputed at the end of the build.
-
-### rockchip-tpl
-
-1. Clone [rkbin](https://github.com/rockchip-linux/rkbin):
-   ```shell
-   ❯ git clone https://github.com/rockchip-linux/rkbin.git
-   ```
-
-2. Look for a file named `rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin` which should be in the `bin/rk35` directory inside the repository.
-
-### OP-TEE (optional)
-
-OP-TEE seems to not support the RK3588 for now.
-Repository: [https://github.com/OP-TEE/optee_os](https://github.com/OP-TEE/optee_os).
-U-Boot will still build fine without OP-TEE, although you may get a warning.
 
 ## Building U-Boot
 
@@ -83,25 +87,25 @@ U-Boot will still build fine without OP-TEE, although you may get a warning.
    ❯ sudo pacman -S swig
    ❯ pip install pyelftools
    ❯ ROCKCHIP_TPL=../rkbin/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin \
-         BL31=../arm-trusted-firmware/build/rk3588/release/bl31/bl31.elf \
+         BL31=../rkbin/bin/rk35/rk3588_bl31_v1.45.elf \
          ARCH=arm64 \
          CROSS_COMPILE=aarch64-linux-gnu- \
          make -j
    ```
 
-## Create the bootable image
+## Create the bootloader image
 
 ```shell
-❯ dd if=/dev/zero of=final.img bs=512 count=32767
-❯ dd if=./idbloader.img of=final.img bs=512 seek=64
-❯ dd if=./u-boot.itb of=final.img bs=512 seek=16384
+❯ dd if=/dev/zero of=bootloader.img bs=512 count=32767
+❯ dd if=./idbloader.img of=bootloader.img bs=512 seek=64 conv=notrunc
+❯ dd if=./u-boot.itb of=bootloader.img bs=512 seek=16384
 ```
 
 ## Flashing on a Node
 
 Flash the iamge on the node using `tpi`:
 ```shell
-❯ tpi flash --image-path ./final.img --node 4
+❯ tpi flash --image-path ./bootloader.img --node 4
 ```
 
 Now your RK1 module should boot into U-Boot, you can check with the following command:

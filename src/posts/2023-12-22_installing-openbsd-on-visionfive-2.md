@@ -2,7 +2,9 @@
 date: '2023-12-22'
 title: Installing OpenBSD 7.4 on a VisionFive 2 rev 1.2a
 tags: [riscv, openbsd]
-oldUrl: /riscv/2023/12/22/installing-openbsd-on-visionfive-2
+oldUrl:
+  - /riscv/2023/12/22/installing-openbsd-on-visionfive-2
+  - /riscv/2023/12/22/installing-openbsd-on-visionfive-2.html
 ---
 Linux feels a bit sluggish on the [VisionFive 2](https://www.starfivetech.com/en/site/boards){target="_blank"}, so I wanted to install [OpenBSD](https://www.openbsd.org/){target="_blank"} on my board since a RISC-V port is available.
 
@@ -33,7 +35,7 @@ It should end up being something like this:
 ├─ jh7110-starfive-visionfive-2-v1.2a.dtb
 ```
 
-If you have a version 1.3 of the board, you have to use the `jh7110-starfive-visionfive-2-v1.3.dtb` file instead. 
+If you have a version 1.3 of the board, you have to use the `jh7110-starfive-visionfive-2-v1.3.dtb` file instead.
 
 Unmount and disconnect the SD card.
 
@@ -44,8 +46,8 @@ Insert the SD card in your VisionFive 2 board.
 Make sure you are connected to the board with a serial connection in order to interrupt the boot process when you see
 this prompt:
 ```sh
-Hit any key to stop autoboot:  0 
-StarFive # 
+Hit any key to stop autoboot:  0
+StarFive #
 ```
 
 Next load up the DTB and OpenBSD kernel from the SD card:
@@ -84,7 +86,7 @@ qzl# disklabel sd0  #< check the partitions on the eMMC module
 #                size           offset  fstype [fsize bsize   cpg]
   a:          2097152            65536  4.2BSD   2048 16384 12960 # /
   b:          4015300          2162688    swap                    # none
-  c:         61071360                0  unused                    
+  c:         61071360                0  unused
   d:          3326880          6178016  4.2BSD   2048 16384 12944 # /tmp
   e:          5170720          9504896  4.2BSD   2048 16384 12960 # /var
   f:          6923456         14675616  4.2BSD   2048 16384 12960 # /usr
@@ -98,8 +100,8 @@ qzl# disklabel sd0  #< check the partitions on the eMMC module
 qzl# disklabel sd1  # check the partitions on the sd card
 #...
 #                size           offset  fstype [fsize bsize   cpg]
-  a:           991232            40960  4.2BSD   2048 16384 16142 
-  c:        249645056                0  unused                    
+  a:           991232            40960  4.2BSD   2048 16384 16142
+  c:        249645056                0  unused
   i:             8192            32768   MSDOS                                  # this looks like the efi partition (indicated by the msdos fstype)
 ```
 

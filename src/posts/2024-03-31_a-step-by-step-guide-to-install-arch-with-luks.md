@@ -2,7 +2,9 @@
 title: A step-by-step guide to install Arch with LUKS
 date: '2024-03-31'
 tags: [linux]
-oldUrl: /linux/2024/03/31/a-step-by-step-guide-to-install-arch-with-luks
+oldUrl:
+  - /linux/2024/03/31/a-step-by-step-guide-to-install-arch-with-luks
+  - /linux/2024/03/31/a-step-by-step-guide-to-install-arch-with-luks.html
 ---
 After using [Silverblue](https://quozul.dev/linux/2023/12/07/using-an-immuable-desktop) for six months, the package manager was starting to get really slow, so I decided to switch distro, Arch was my choice.
 The goal was to install Arch Linux with Full Disk Encryption and EFI boot. Here's how I did it.
@@ -38,7 +40,7 @@ Since fdisk is quite hard to use, I'll write a step-by-step guide.
     Partition number (1-128, default 1):
     First sector (2048-41943006, default 2048):
     Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-41943006, default 41940991): +512M
-    
+
     Created a new partition 1 of type 'Linux filesystem' and of size 512 MiB.
     ```
 
@@ -56,7 +58,7 @@ Since fdisk is quite hard to use, I'll write a step-by-step guide.
     Partition number (2-128, default 2):
     First sector (1050624-41943006, default 1050624):
     Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-41943006, default 41940991):
-    
+
     Created a new partition 2 of type 'Linux filesystem' and of size 19.5 GiB.
     ```
 
@@ -65,7 +67,7 @@ Since fdisk is quite hard to use, I'll write a step-by-step guide.
     Command (m for help): t
     Partition number (1,2, default 2): 2
     Partition type or alias (type L to list all): 23
-    
+
     Changed type of partition 'Linux filesystem' to 'Linux root (x86-64)'.
     ```
 
@@ -94,11 +96,11 @@ Let's start with the main partition.
 1. Create the LUKS volume, note that the passphrase will not echo, I have written '*' for demonstration
     ```bash
     root@archiso ~ # cryptsetup luksFormat /dev/sda2
-    
+
     WARNING!
     ========
     This will overwrite data on /dev/sda2 irrevocably.
-    
+
     Are you sure? (Type 'yes' in capital letters): YES
     Enter passphrase for /dev/sda2:
     Verify passphrase: ********
@@ -109,7 +111,7 @@ Let's start with the main partition.
     root@archiso ~ # cryptsetup open /dev/sda2 root
     Enter passphrase for /dev/sda2: ********
     ```
-   
+
 3. Now we can create the file system and mount it, this step is up to you, but I decided to go with a single ext4 partition for simplicity
     ```bash
     root@archiso ~ # mkfs.ext4 /dev/mapper/root
@@ -119,12 +121,12 @@ Let's start with the main partition.
     Superblock backups stored on blocks:
     32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
     4096000
-    
+
     Allocating group tables: done
     Writing inode tables: done
     Creating journal (32768 blocks): done
     Writing superblocks and filesystem accounting information: done
-    
+
     root@archiso ~ # mount /dev/mapper/root /mnt
     ```
 
@@ -141,7 +143,7 @@ root@archiso ~ # lsblk --fs
 NAME     FSTYPE      FSVER FSAVAIL FSUSE% MOUNTPOINTS
 sda
 ├─sda1   vfat        FAT32    511M     0% /mnt/efi
-└─sda2   crypto_LUKS 2    
+└─sda2   crypto_LUKS 2
   └─root ext4        1.0       18G     0% /mnt
 ```
 
@@ -172,17 +174,17 @@ Now the fun part, actually installing Arch!
 5. Update `/etc/mkinitcpio.d/linux.preset` as follows to enable EFI image:
     ```bash
     # mkinitcpio preset file for the 'linux' package
-    
+
     #ALL_config="/etc/mkinitcpio.conf"
     ALL_kver="/boot/vmlinuz-linux"
-    
+
     PRESETS=('default' 'fallback')
-    
+
     #default_config="/etc/mkinitcpio.conf"
     #default_image="/boot/initramfs-linux.img"
     default_uki="/efi/EFI/Linux/arch-linux.efi"
     default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
-    
+
     #fallback_config="/etc/mkinitcpio.conf"
     #fallback_image="/boot/initramfs-linux-fallback.img"
     fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
@@ -193,7 +195,7 @@ Now the fun part, actually installing Arch!
     ```bash
     mkinitcpio -P
     ```
-   
+
 7. Remember to set a password for the root user `passwd root`
 8. [Safely reboot](https://wiki.archlinux.org/title/Installation_guide#Reboot){target="_blank"}, unplug the USB thumb drive, and it should all work!
 
