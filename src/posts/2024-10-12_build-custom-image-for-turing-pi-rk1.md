@@ -1,5 +1,5 @@
 ---
-title: "Building my own image for the Turing RK1 (part 1: U-Boot)"
+title: "Compiling U-Boot for the Turing RK1"
 date: '2024-10-12'
 tags: [linux, arm]
 ---
@@ -115,7 +115,7 @@ Now your RK1 module should boot into U-Boot, you can check with the following co
 
 ## Next steps
 
-Actually install an operating system!
+Actually install an operating system on the NVME!
 
 ## Resources
 
