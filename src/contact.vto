@@ -1,0 +1,64 @@
+---
+layout: layouts/base.vto
+title: Contact
+url: /contact/
+menu:
+  visible: true
+  order: 1
+---
+
+<section class="mb-20">
+  {{ include "templates/breadcrumb.vto" }}
+
+  <h1 class="text-4xl font-bold mb-4">{{ i18n.contact.title }}</h1>
+
+  <p class="mb-4">
+    {{ i18n.contact.description }}
+    <a class="decoration-dotted underline hover:no-underline" href="mailto:me@quozul.dev">{{ i18n.contact.email }}</a>
+    {{ i18n.contact.exclamation }}
+  </p>
+  <p>
+    {{ i18n.contact.description2 }}
+  </p>
+</section>
+
+<section class="mb-20">
+    <h2 class="text-3xl font-bold mb-4">{{ i18n.social.title }}</h2>
+    <p class="mb-4">{{ i18n.social.description }}</p>
+    <ul class="list-disc list-inside">
+        {{ for link of it.social_links }}
+        <li>
+          <a
+            href="{{ link.href }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="decoration-dotted underline hover:no-underline"
+          >
+            {{ link.name }}
+          </a>
+        </li>
+      {{ /for }}
+      </ul>
+      </section>
+
+<section class="mb-20">
+  <h2 class="text-3xl font-bold mb-4">{{ i18n.contact.pgp_title }}</h2>
+  <p class="mb-4">{{ i18n.contact.pgp_description }}</p>
+  <pre>-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xjMEZ12gUxYJKwYBBAHaRw8BAQdAVGpEm5qKHedNniZSKwZK2fyaumBqWBGN
+0xPlo4thMuHNHW1lQHF1b3p1bC5kZXYgPG1lQHF1b3p1bC5kZXY+wsARBBMW
+CgCDBYJnXaBTAwsJBwmQtC/qV0x4qUxFFAAAAAAAHAAgc2FsdEBub3RhdGlv
+bnMub3BlbnBncGpzLm9yZ9VtdTi0eNbpyOVhW1237NIjMzOxBA8Vyti0VFXQ
+KnyaAxUKCAQWAAIBAhkBApsDAh4BFiEENi4C8yViCgXreKYNtC/qV0x4qUwA
+AMAzAQCLpJQPYbWQ+Qq1zEIypONgaYy4ssiFCUfRRJGCuuF1zQEAta7iAdrp
+REE5mnwK1PrcF+KFVAyr3lU3N1YoGKh2fwfOOARnXaBTEgorBgEEAZdVAQUB
+AQdACXlDJCCWTCPbBIkjW/CyaGXimylFMfNXmNImPdGD+ykDAQgHwr4EGBYK
+AHAFgmddoFMJkLQv6ldMeKlMRRQAAAAAABwAIHNhbHRAbm90YXRpb25zLm9w
+ZW5wZ3Bqcy5vcmcAYDEL85wnx1/QO4SKk8gxV7NOoKOnpYOhlUdR+dTGCgKb
+DBYhBDYuAvMlYgoF63imDbQv6ldMeKlMAABX2gEAkL0wsLMrL9cctASHvOJG
+M/+C8UdZ3LZPceGnLrdXomEA/3A4m4LqtZqml1MiZ2ubtulAkBv4OiqXT8jY
+e4SMI+oB
+=S6KI
+-----END PGP PUBLIC KEY BLOCK-----</pre>
+</section>

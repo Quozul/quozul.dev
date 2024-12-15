@@ -3,10 +3,12 @@ layout: layouts/base.vto
 title: Home
 ---
 
-<header class="flex flex-col gap-4 mt-20 border-b mb-20 pb-20">
-  <h1 class="text-4xl font-bold">{{ home.welcome }}</h1>
+<section class="flex flex-col mb-20">
+  {{ include "templates/breadcrumb.vto" }}
+
+  <h1 class="text-4xl font-bold mb-4">{{ home.welcome }}</h1>
   <p class="text-lg">{{ home.subtitle |> md }}</p>
-</header>
+</section>
 
 <section class="flex flex-col gap-4">
   <h2 class="text-3xl font-bold">{{ i18n.posts }}</h2>
@@ -18,10 +20,10 @@ title: Home
       }
     }}
   </div>
-</section>
 
-<div class="flex justify-center">
-  <a href="/posts/" class="decoration-dotted underline hover:no-underline">{{
-    i18n.view_all_posts
-  }}</a>
-</div>
+  <div class="flex justify-center">
+    <a href="/posts/" class="decoration-dotted underline hover:no-underline">
+      {{i18n.view_all_posts}}
+    </a>
+  </div>
+</section>

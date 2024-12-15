@@ -3,7 +3,10 @@ lang: en
 home:
   welcome: Hello, World!
   subtitle: >
-    Welcome to my little corner of the web! I'm a full-stack developer with a penchant for all things Linux. If you've found your way here, chances are you share my passion for open-source software and the power it brings to our fingertips.  
+    Welcome to my little corner of the web!
+    I'm a full-stack developer and I enjoy tinkering with my homelab.
+    If you've found your way here, chances are you share my passion for open-source software and the power it brings to our fingertips.
+    I hope you find something useful here.
 
 menu_links: []
 extra_head: []
@@ -16,3 +19,11 @@ metas:
   image: "=image"
   twitter: "@Quozul"
   lang: en
+
+social_links:
+  - name: GitHub
+    href: https://github.com/Quozul
+  - name: X (Twitter)
+    href: https://x.com/quozul
+  - name: Reddit
+    href: https://www.reddit.com/user/Quozul/

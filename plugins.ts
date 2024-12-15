@@ -86,6 +86,10 @@ export default function (userOptions?: Options) {
             userAgent: "*",
             disallow: "/uploads",
           },
+          {
+              userAgent: "*",
+              disallow: "/contact/",
+            },
         ],
       }))
       .use(

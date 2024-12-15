@@ -36,47 +36,61 @@
   </head>
 
   <body class="p-6 min-h-screen">
-    <nav class="flex justify-between gap-4 mb-8 max-w-prose mx-auto">
-      <a href="/" class="text-lg font-bold">
-        {{ if it.logo }}
-          {{ it.logo }}
-        {{ else }}
-          <strong>{{ metas.site }}</strong>
-        {{ /if }}
-      </a>
+    <header>
+      <nav class="flex justify-between gap-4 mb-8 max-w-prose mx-auto">
+        <a href="/" class="text-lg font-bold">
+            {{ if it.logo }}
+            {{ it.logo }}
+            {{ else }}
+            <strong>{{ metas.site }}</strong>
+            {{ /if }}
+        </a>
 
-      <ul class="flex gap-4">
-        {{ for entry of search.pages("menu.visible=true", "menu.order") }}
-          <li>
-            <a
-              href="{{ entry.url }}"
-              class="decoration-dotted underline hover:no-underline"
-              {{ if entry.url == url }}
-                aria-current="page"
-              {{ /if }}
-            >
-              {{ entry.menu.title || entry.title }}
-            </a>
-          </li>
-        {{ /for }}
-        {{ for link of it.menu_links }}
-          <li>
-            <a
-              href="{{ link.href }}"
-              {{ if link.target }}
-                target="{{ link.target }}"
-              {{ /if }}
-            >
-              {{ link.text }}
-            </a>
-          </li>
-        {{ /for }}
-      </ul>
-    </nav>
+        <ul class="flex gap-4">
+            {{ for entry of search.pages("menu.visible=true", "menu.order") }}
+            <li>
+                <a
+                href="{{ entry.url }}"
+                class="decoration-dotted underline hover:no-underline"
+                {{ if entry.url == url }}
+                    aria-current="page"
+                {{ /if }}
+                >
+                {{ entry.menu.title || entry.title }}
+                </a>
+            </li>
+            {{ /for }}
+            {{ for link of it.menu_links }}
+            <li>
+                <a
+                href="{{ link.href }}"
+                {{ if link.target }}
+                    target="{{ link.target }}"
+                {{ /if }}
+                >
+                {{ link.text }}
+                </a>
+            </li>
+            {{ /for }}
+        </ul>
+      </nav>
+    </header>
 
     <main class="max-w-prose w-full mx-auto">
       {{ content }}
     </main>
+
+    <footer class="max-w-prose w-full mx-auto border-t mt-20 pt-8 text-muted flex gap-4 justify-between">
+      <p>
+        &copy; {{ new Date().getFullYear() }} {{ metas.site }}
+      </p>
+        <p xmlns:cc="http://creativecommons.org/ns#">
+          licensed under
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener noreferrer" class="decoration-dotted underline hover:no-underline">
+            CC BY 4.0
+          </a>
+        </p>
+    </footer>
 
     <!-- Current page: {{ url }} -->
   </body>

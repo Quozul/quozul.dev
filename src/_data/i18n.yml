@@ -11,9 +11,26 @@ post:
   by: by
   reading_time: min read
 search:
-  by_author: Posts by 
-  by_tag: Tagged 
+  by_author: Posts by
+  by_tag: Tagged
   tags: Tags
 all_posts: All posts
 posts: Posts
 view_all_posts: View all posts →
+contact:
+  title: Contact
+  description: Want to get in touch? Feel free to send me an email at
+  email: me@quozul.dev
+  exclamation: whether you have a question, a suggestion, or just want to say hi!
+  description2: >
+    I do not reply to scammy looking emails.
+    So make sure to look as human as possible.
+    If you want to look less scamy, I suggest you to encrypt your email with my PGP key available below.
+  pgp_title: PGP Key
+  pgp_description: >
+    Here is my PGP key.
+    You can use it to encrypt your message with it.
+    Send it by email as a file attachment with the `.asc` extension.
+social:
+  title: Social
+  description: You can find me on the following platforms.

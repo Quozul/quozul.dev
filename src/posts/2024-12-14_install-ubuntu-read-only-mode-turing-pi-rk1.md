@@ -123,7 +123,7 @@ First, create a file system on the partition:
 Then, switch to read-write mode and add the volume to `/etc/fstab`. You can check
 out [my guide about how to configure `fstab`](https://quozul.dev/posts/configuring-fstab/) properly.
 
-For my case, I will have to add the following line, also I mount the `/ver/lib` directory directly as this is used by other services such as `containerd`.
+For my case, I will have to add the following line, also, I mount the `/ver/lib` directory directly as this is used by other services such as `containerd`.
 
 ```
 UUID=d6fa8295-65be-4c38-b7c5-161a20097ac9 /var/lib ext4 rw,noatime,discard 0 2
