@@ -18,3 +18,14 @@ I will be using Ubuntu 24.10 for this guide, but it should work on other distrib
 # Bootstrap a Ceph cluster
 ❯ sudo cephadm bootstrap --mon-ip 10.0.1.7
 ```
+
+```
+# Enter Ceph shell
+❯ sudo cephadm shell
+
+# Add a full disk
+❯ ceph orch daemon add osd --method raw ubuntu:/dev/sdc
+
+# If adding a full disk crashes, try disabling the "MongoDB Compass" apparmor profile (on the host)
+❯ sudo apparmor_parser -R /etc/apparmor.d/MongoDB_Compass
+```
