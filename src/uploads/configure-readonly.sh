@@ -4,6 +4,7 @@
 # curl -sSL https://quozul.dev/uploads/configure-readonly.sh | sudo bash -s -- /dev/nvme0n1p1
 # Replace /dev/nvme0n1p1 with your own device! The partition must be already existing.
 
+set -x
 # Exit immediately if a command exits with a non-zero status
 set -e
 
@@ -98,8 +99,8 @@ mv /etc/fstab.new /etc/fstab
 
 # Add aliases to /etc/bash.bashrc if not already present
 if ! grep -q "alias ro='mount -o remount,ro /'" /etc/bash.bashrc; then
-  echo "alias ro='mount -o remount,ro /'" >> /etc/bash.bashrc
-  echo "alias rw='mount -o remount,rw /'" >> /etc/bash.bashrc
+  echo "alias ro='sudo mount -o remount,ro /'" >> /etc/bash.bashrc
+  echo "alias rw='sudo mount -o remount,rw /'" >> /etc/bash.bashrc
 fi
 
 echo "Configuration complete. Your system has been set to boot in read-only mode."
