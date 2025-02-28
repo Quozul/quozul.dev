@@ -26,11 +26,10 @@ Once the image is flashed, log into Ubuntu using SSH and do some basic configura
 ❯ sudo apt-mark hold linux-rockchip linux-image-rockchip linux-headers-rockchip linux-tools-rockchip
 
 # Update packages
-❯ sudo apt update
-❯ sudo apt upgrade -y
+❯ sudo apt update && sudo apt upgrade -y
 
 # Change the hostname
-❯ sudo hostnamectl set-homename nodeX # replace X with your node's number
+❯ sudo hostnamectl set-hostname nodeX # replace X with your node's number
 
 # Set the timezone
 ❯ sudo dpkg-reconfigure tzdata
@@ -42,6 +41,17 @@ Once the image is flashed, log into Ubuntu using SSH and do some basic configura
 If you are running a x86 machine, use the official ISO to install Ubuntu and you can skip the `apt-mark hold` command.
 
 ## Booting in read-only
+
+From this point onwards, if you use the exact same setup as me, which is Joshua's Ubuntu 24.10 installed on the EMMC on a Turing RK1 module
+and a NVME with at least one partition already configured on, I made a script to automate this process!
+
+You can check [out the script here](https://quozul.dev/uploads/configure-readonly.sh).
+It can be used in a single command like so:
+```shell
+❯ curl -sSL https://quozul.dev/uploads/configure-readonly.sh | sudo bash -s -- /dev/nvme0n1p1
+```
+
+Please be careful before using this script as it can wipe data from your NVME and possibly break your Ubuntu installation!
 
 ### Turing RK1
 Next we will set Ubuntu to boot in read-only. This is done by editing the boot command line arguments.
@@ -130,7 +140,7 @@ You have to switch to read-write mode to install Docker.
 The installation of Docker can be done with one single command:
 
 ```shell
-❯ curl -Ssl https://get.docker.com/ | bash
+❯ curl -sSL https://get.docker.com/ | bash
 ```
 
 If you reboot now, you will notice that Docker does not start because it tries to write to `/var/lib/docker` which is in read-only:

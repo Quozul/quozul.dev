@@ -22,10 +22,6 @@ contact:
   description: Want to get in touch? Feel free to send me an email at
   email: me@quozul.dev
   exclamation: whether you have a question, a suggestion, or just want to say hi!
-  description2: >
-    I do not reply to scammy looking emails.
-    So make sure to look as human as possible.
-    If you want to look less scamy, I suggest you to encrypt your email with my PGP key available below.
   pgp_title: PGP Key
   pgp_description: >
     Here is my PGP key.

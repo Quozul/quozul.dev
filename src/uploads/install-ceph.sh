@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Example usage:
-# ./install-ceph.sh ens18 /dev/sdb2
+# curl -sSL https://quozul.dev/uploads/install-ceph.sh | bash -s -- end0 /dev/nvme0n1p2
 
 set -x
 set -e
@@ -53,7 +53,7 @@ cat <<EOF | sudo tee -a /etc/ceph/ceph.conf > /dev/null
 [global]
 fsid = $FSID
 mon_initial_members = $HOSTNAME
-mon_host = $ip_address
+mon_host = [v2:$ip_address:3300/0,v1:$ip_address:6789/0]
 public_network = $NET_ADDR
 auth_cluster_required = cephx
 auth_service_required = cephx
@@ -112,14 +112,13 @@ FILE_SYSTEM_NAME=cephfs
 sudo ceph fs new $FILE_SYSTEM_NAME cephfs_metadata cephfs_data
 sudo ceph osd pool set cephfs_data bulk true
 
-# Mount the file system
-sudo mkdir -p /mnt/mycephfs
-
-sleep 2
-sudo mount -t ceph admin@$FSID.$FILE_SYSTEM_NAME=/ /mnt/mycephfs
-
 sudo systemctl enable ceph-mon@$HOSTNAME.service ceph-mds@$HOSTNAME.service ceph-mgr@$HOSTNAME.service
 
-# Append to fstab:
-# <file system>              <mount point> <type> <options>                                 <dump> <pass>
-# admin@.$FILE_SYSTEM_NAME=/ /mnt/mycephfs ceph   mon_addr=$ip_address:6789,noatime,_netdev 0      0
+# Mount the file system
+echo -e "The filesystem is now ready and can be mounted with:\n\
+sudo mount -t ceph admin@$FSID.$FILE_SYSTEM_NAME=/ /mnt/mycephfs\n\
+\n\
+You can also append this to /etc/fstab:\n\
+# <file system> <mount point> <type> <options> <dump> <pass>\n\
+admin@.$FILE_SYSTEM_NAME=/ /mnt/mycephfs ceph noatime,_netdev 0 0
+"

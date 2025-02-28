@@ -18,6 +18,7 @@ import tailwindcss from "lume/plugins/tailwindcss.ts";
 import typography from "npm:@tailwindcss/typography";
 import nav from "lume/plugins/nav.ts";
 import robots from "lume/plugins/robots.ts";
+import minifyHTML from "lume/plugins/minify_html.ts";
 
 import "lume/types.ts";
 
@@ -97,6 +98,7 @@ export default function (userOptions?: Options) {
           output: "netlify",
         })
       )
+      .use(minifyHTML())
       .copy("fonts")
       .copy("uploads")
       .copy("icons")
