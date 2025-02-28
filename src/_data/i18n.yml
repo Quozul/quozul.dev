@@ -7,6 +7,7 @@ nav:
   page: Page
   next: Next →
   previous: ← Previous
+  see_on_github: See {project} on GitHub →
 post:
   by: by
   reading_time: min read
@@ -15,6 +16,7 @@ search:
   by_tag: Tagged
   tags: Tags
 all_posts: All posts
+all_projects: My projects
 posts: Posts
 view_all_posts: View all posts →
 contact:

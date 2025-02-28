@@ -1,0 +1,7 @@
+type: project
+layout: layouts/post.vto
+basename: projects
+
+metas:
+  title: "=title"
+  description: "=excerpt"
