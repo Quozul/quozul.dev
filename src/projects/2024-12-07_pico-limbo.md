@@ -1,15 +1,10 @@
 ---
-title: "Minecraft World Trimmer"
-github_url: "https://github.com/Quozul/minecraft_world_trimmer"
-tags: [ minecraft, cli ]
+title: "Pico Limbo"
+github_url: "https://github.com/Quozul/PicoLimbo"
+tags: [ minecraft, server ]
 ---
 
-A command-line tool designed to reduce the size of large Minecraft worlds by parsing and trimming region files, specifically useful for reducing the size of unexplored chunks.
+An experimental Minecraft server written from scratch in Rust.
+The goal is to build a lightweight Minecraft server that supports all Minecraft versions from 1.7.2 and above.
 
-**Key Features:**
-* Parallel processing to speed up analysis
-* Invalid file removal and chunk parsing for optimization
-* Compression level adjustment for further space savings
-* Supports deflate compression algorithm
-
-Supports 1.20 and above vanilla worlds, with expected size reductions of around **79.7%**.
+<!--more-->

@@ -16,7 +16,7 @@ menu:
 <section class="mx-auto flex flex-col">
   {{
     include "templates/project-list.vto" {
-      projectlist: search.pages("type=project !draft", "date=asc"),
+      projectlist: search.pages("type=project !draft", "date=desc"),
     }
   }}
 </section>

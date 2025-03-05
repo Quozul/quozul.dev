@@ -6,6 +6,8 @@ tags: [ minecraft, velocity, plugin ]
 
 A Velocity plugin designed to optimize Minecraft server management by automatically stopping empty servers, redirecting players to a waiting server (such as Limbo), and saving energy costs.
 
+<!--more-->
+
 This plugin integrates with the Pterodactyl client API or shell commands, allowing users to configure their servers for efficient management. It's perfect for those who want to save on energy bills while ensuring seamless player experiences.
 
 **Key Features:**

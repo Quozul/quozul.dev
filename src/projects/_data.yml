@@ -1,5 +1,5 @@
 type: project
-layout: layouts/post.vto
+layout: layouts/project.vto
 basename: projects
 
 metas:
