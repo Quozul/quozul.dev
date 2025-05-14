@@ -1,6 +1,4 @@
 import date, { Options as DateOptions } from "lume/plugins/date.ts";
-import postcss from "lume/plugins/postcss.ts";
-import terser from "lume/plugins/terser.ts";
 import prism, { Options as PrismOptions } from "lume/plugins/prism.ts";
 import basePath from "lume/plugins/base_path.ts";
 import slugifyUrls from "lume/plugins/slugify_urls.ts";
@@ -49,25 +47,7 @@ export default function (userOptions?: Options) {
 
   return (site: Lume.Site) => {
     site
-      .use(
-        tailwindcss({
-          options: {
-            plugins: [typography],
-            /*darkMode: ["selector", '[data-theme="dark"]'],*/
-            theme: {
-              extend: {
-                colors: {
-                  "background": "var(--background)",
-                  "foreground": "var(--foreground)",
-                  "muted": "var(--muted)",
-                  "muted-secondary": "var(--muted-secondary)",
-                },
-              },
-            },
-          },
-        })
-      )
-      .use(postcss())
+      .use(tailwindcss())
       .use(basePath())
       .use(nav())
       .use(toc())
@@ -78,7 +58,6 @@ export default function (userOptions?: Options) {
       .use(image())
       .use(resolveUrls())
       .use(slugifyUrls())
-      .use(terser())
       .use(sitemap())
       .use(feed(options.feed))
       .use(robots({
@@ -109,7 +88,8 @@ export default function (userOptions?: Options) {
             /<!--\s*more\s*-->/i
           )[0];
         }
-      });
+      })
+      .add([".css"]);
 
     // Alert plugin
     site.hooks.addMarkdownItPlugin(alert);
