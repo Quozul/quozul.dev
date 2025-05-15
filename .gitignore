@@ -1,5 +1,5 @@
 /.idea
-posts/*.md
-_site
 _bin
+_cache
+_site
 deno.lock

@@ -13,10 +13,10 @@ import image from "https://deno.land/x/lume_markdown_plugins@v0.7.0/image.ts";
 import { alert } from "npm:@mdit/plugin-alert@0.12.0";
 import redirects from "lume/plugins/redirects.ts";
 import tailwindcss from "lume/plugins/tailwindcss.ts";
-import typography from "npm:@tailwindcss/typography";
 import nav from "lume/plugins/nav.ts";
 import robots from "lume/plugins/robots.ts";
 import minifyHTML from "lume/plugins/minify_html.ts";
+import favicon from "lume/plugins/favicon.ts";
 
 import "lume/types.ts";
 
@@ -78,6 +78,9 @@ export default function (userOptions?: Options) {
         })
       )
       .use(minifyHTML())
+      .use(favicon({
+        input: "/favicon.png",
+      }))
       .copy("fonts")
       .copy("uploads")
       .copy("icons")
