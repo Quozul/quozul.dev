@@ -4,7 +4,7 @@ date: 2025-05-14
 tags: [minecraft, limbo, bungeecord, velocity]
 ---
 
-If you've played on large Minecraft networks like Hypixel, you may have noticed that sometimes, instead of being kicked to the main menu when a server crashes or restarts, you're quietly placed in an empty world. That "empty room" is what we often call a **Limbo server**.
+If you've played on large Minecraft networks, you may have noticed that sometimes, instead of being kicked to the main menu when a server crashes or restarts, you're quietly placed in an empty world. That "empty room" is what we often call a **Limbo server**.
 
 <!-- more -->
 
@@ -55,7 +55,7 @@ In short: **Limbo keeps your server resilient, your players happy, and your infr
 
 ---
 
-## Popular Limbo Server Software
+## Recommended Limbo Server Software
 
 Here's a curated list of open-source server softwares you can use to host your own Limbo server:
 

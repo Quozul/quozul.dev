@@ -43,7 +43,10 @@ layout: layouts/base.vto
     </nav>
   {{ /if }}
 
-  <div class="prose dark:prose-invert prose-a:decoration-dotted prose-a:hover:no-underline">
+  <div class="prose dark:prose-invert prose-a:decoration-dotted prose-a:hover:no-underline
+            overflow-x-auto w-full
+            prose-table:block prose-table:w-full
+            prose-table:overflow-x-scroll">
     {{ content }}
   </div>
 </article>
