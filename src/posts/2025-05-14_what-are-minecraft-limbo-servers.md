@@ -61,18 +61,18 @@ Here's a curated list of open-source server softwares you can use to host your o
 
 | Name | Language | Platform | Version(s) | Active |
 |------|----------|----------|------------|--------|
-| [**PicoLimbo**](https://github.com/Quozul/PicoLimbo) | Rust | Standalone | 1.7–1.21.5 | ✅ Active |
-| [**LOOHP/Limbo**](https://github.com/LOOHP/Limbo) | Java | Standalone | 1.21.5 | ✅ Active |
-| [**NanoLimbo**](https://github.com/Nan1t/NanoLimbo) | Java | Standalone | 1.7–1.21.5 | 🌀 Forks only |
-| [**FallbackServer**](https://github.com/sasi2006166/Fallback-Server) | Java | Proxy plugin | 1.7–1.21 | ✅ Active |
+| [**PicoLimbo**](https://github.com/Quozul/PicoLimbo) | Rust | Standalone | 1.7.2–1.21.7 | ✅ Active |
+| [**LOOHP/Limbo**](https://github.com/LOOHP/Limbo) | Java | Standalone | 1.21.7 | ✅ Active |
+| [**NanoLimbo**](https://github.com/Nan1t/NanoLimbo) | Java | Standalone | 1.7.2–1.21.7 | 🌀 Forks only |
+| [**LimboService**](https://github.com/YourCraftMC/LimboService) | Java | Standalone | 1.21.7 | ✅ Active |
+| [**FallbackServer**](https://github.com/sasi2006166/Fallback-Server) | Java | Proxy plugin | 1.7.2–1.21 | ✅ Active |
 | [**OverflowLimbo**](https://github.com/CodeTheDev/OverflowLimbo) | Java (Minestom) | Standalone | 1.21 | ✅ Active |
-| [**LimboService**](https://github.com/YourCraftMC/LimboService) | Java | Standalone | Unspecified | ✅ Active |
 | [**BungeeNanoLimbo**](https://github.com/Ailakks/BungeeNanoLimbo) | Java | Proxy plugin / Standalone | 1.8–1.19.1 | ❌ Inactive |
 | [**TyphoonLimbo**](https://github.com/TyphoonMC/TyphoonLimbo) | Go | Standalone | 1.7.2–1.15.2 | ❌ Inactive |
 | [**LiteLimbo**](https://github.com/ThomasOM/LiteLimbo) | Java | Standalone | 1.7.2-1.15.2 | ❌ Inactive |
 | [**hpfxd/Limbo**](https://github.com/hpfxd/Limbo) | Java | Standalone | 1.7.6–1.8.9 | ❌ Inactive |
 
-*As of writing, Minecraft 1.21.5 is the latest release. Servers that support 1.21.x are considered actively maintained unless otherwise noted.*
+*As of writing, Minecraft 1.21.7 is the latest release. Servers that support 1.21.x are considered actively maintained unless otherwise noted.*
 
 ---
 
