@@ -5,7 +5,7 @@
     <header class="flex flex-col gap-1">
       <h2 class="text-lg font-bold">
         <a
-          href="{{ post.url }}"
+          href="{{ post.site_url || post.url }}"
           {{ if post.url == url }}
             aria-current="page"
           {{ /if }}
@@ -25,8 +25,14 @@
       {{ post.excerpt |> md }}
     </div>
 
-    <a href="{{ post.url }}" class="decoration-dotted underline hover:no-underline">
-      {{ i18n.nav.continue_reading }}
-    </a>
+    {{ if post.site_url }}
+      <a href="{{ post.site_url }}" class="decoration-dotted underline hover:no-underline">
+        {{ i18n.nav.see_project_website.replace("{project}", post.title) }}
+      </a>
+    {{ else }}
+      <a href="{{ post.url }}" class="decoration-dotted underline hover:no-underline">
+        {{ i18n.nav.continue_reading }}
+      </a>
+    {{ /if }}
   </article>
 {{ /for }}

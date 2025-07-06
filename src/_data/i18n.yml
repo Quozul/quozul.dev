@@ -8,6 +8,7 @@ nav:
   next: Next →
   previous: ← Previous
   see_on_github: See {project} on GitHub →
+  see_project_website: See {project}'s website →
 post:
   by: by
   reading_time: min read
@@ -31,4 +32,4 @@ contact:
     Send it by email as a file attachment with the `.asc` extension.
 social:
   title: Social
-  description: You can find me on the following platforms.
+  description: "You can find me on the following platforms:"

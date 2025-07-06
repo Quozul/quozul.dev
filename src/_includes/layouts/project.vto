@@ -48,8 +48,14 @@ layout: layouts/base.vto
   </div>
 
   <div>
-    <a href="{{ github_url }}" rel="noopener noreferrer" target="_blank" class="decoration-dotted underline hover:no-underline">
-      {{ i18n.nav.see_on_github.replace("{project}", title) }}
-    </a>
+    {{ if site_url }}
+      <a href="{{ site_url }}" class="decoration-dotted underline hover:no-underline">
+        {{ i18n.nav.see_project_website.replace("{project}", title) }}
+      </a>
+    {{ else }}
+      <a href="{{ github_url }}" rel="noopener noreferrer" target="_blank" class="decoration-dotted underline hover:no-underline">
+        {{ i18n.nav.see_on_github.replace("{project}", title) }}
+      </a>
+    {{ /if }}
   </div>
 </article>

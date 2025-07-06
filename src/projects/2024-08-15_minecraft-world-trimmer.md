@@ -2,6 +2,7 @@
 title: "Minecraft World Trimmer"
 github_url: "https://github.com/Quozul/minecraft_world_trimmer"
 tags: [ minecraft, cli ]
+date: "2024-08-15"
 ---
 
 A command-line tool designed to reduce the size of large Minecraft worlds by parsing and trimming region files, specifically useful for reducing the size of unexplored chunks.
