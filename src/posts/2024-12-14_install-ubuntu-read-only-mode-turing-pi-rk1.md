@@ -2,6 +2,8 @@
 title: "Install Ubuntu in Read-Only Mode on the Turing RK1"
 date: '2024-12-14'
 tags: [ linux, arm ]
+oldUrl:
+  - /posts/install-ubuntu-read-only-mode-turing-pi-rk1/
 ---
 
 This article will cover how to install Ubuntu on the EMMC storage of the RK1, configure it in read-only mode and use the NVME as storage for Docker.

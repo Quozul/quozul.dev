@@ -2,6 +2,8 @@
 title: "Compiling U-Boot for the Turing RK1"
 date: '2024-10-12'
 tags: [linux, arm]
+oldUrl:
+  - /posts/build-custom-image-for-turing-pi-rk1/
 ---
 
 I recently received the Turing Pi 2.5 with 4 Turing RK1 modules, I wanted to build and maintain my own operating system images for the RK1s.

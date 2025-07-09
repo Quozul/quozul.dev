@@ -5,6 +5,7 @@ tags: [ai, rocm]
 oldUrl:
   - /ai/2023/12/14/running-mixtral-on-amd
   - /ai/2023/12/14/running-mixtral-on-amd.html
+  - /posts/running-mixtral-on-amd/
 ---
 The newly announced model by [Mistral AI](https://mistral.ai/news/mixtral-of-experts/){target="_blank"} can show some really great results, let's see how we can run it locally!
 

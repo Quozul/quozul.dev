@@ -5,6 +5,7 @@ tags: [linux]
 oldUrl:
   - /linux/2023/12/07/using-an-immuable-desktop
   - /linux/2023/12/07/using-an-immuable-desktop.html
+  - /posts/using-an-immuable-desktop/
 ---
 I've been using Linux for years now, one of the main issue I am still getting after all these years is having the package manager fail during an update.
 

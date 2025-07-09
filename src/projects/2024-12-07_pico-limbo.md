@@ -4,6 +4,8 @@ site_url: "https://picolimbo.quozul.dev"
 github_url: "https://github.com/Quozul/PicoLimbo"
 tags: [ minecraft, server ]
 date: "2024-12-07"
+oldUrl:
+  - /projects/pico-limbo/
 ---
 
 A lightweight limbo Minecraft server written from scratch in Rust supporting Minecraft versions from 1.7.2 up to the most recent ones.

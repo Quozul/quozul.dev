@@ -3,6 +3,8 @@ title: "Pterodactyl Power Action"
 github_url: "https://github.com/Pickaria/PterodactylPowerAction"
 tags: [ minecraft, velocity, plugin ]
 date: "2024-11-09"
+oldUrl:
+  - /projects/pterodactyl-power-action/
 ---
 
 A Velocity plugin designed to optimize Minecraft server management by automatically stopping empty servers, redirecting players to a waiting server (such as Limbo), and saving energy costs.

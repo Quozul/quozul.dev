@@ -5,6 +5,7 @@ tags: [linux]
 oldUrl:
   - /linux/2024/03/31/a-step-by-step-guide-to-install-arch-with-luks
   - /linux/2024/03/31/a-step-by-step-guide-to-install-arch-with-luks.html
+  - /posts/a-step-by-step-guide-to-install-arch-with-luks/
 ---
 After using [Silverblue](https://quozul.dev/linux/2023/12/07/using-an-immuable-desktop) for six months, the package manager was starting to get really slow, so I decided to switch distro, Arch was my choice.
 The goal was to install Arch Linux with Full Disk Encryption and EFI boot. Here's how I did it.

@@ -5,6 +5,7 @@ tags: [security]
 oldUrl:
   - /security/2023/12/08/keepass-password-manager
   - /security/2023/12/08/keepass-password-manager.html
+  - /posts/keepass-password-manager/
 ---
 For a long time I've been using the integrated password manager in my browser of choice. Starting with Google Chrome, Firefox and ended up on Brave.
 

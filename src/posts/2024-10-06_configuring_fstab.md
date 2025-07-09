@@ -2,6 +2,8 @@
 title: Configuring fstab like a champ!
 date: '2024-10-06'
 tags: [linux]
+oldUrl:
+  - /posts/configuring-fstab/
 ---
 
 I never remember how to configure fstab properly and always end up breaking my system. Let's write a guide on how I configure my fstab so that I don't make the same mistakes twice!
@@ -86,7 +88,7 @@ Now we are ready to use this new fstab, make sure you reload systemd and **test 
 ❯ sudo mount -a
 ```
 
-If an error is shown, fix the fstab before rebooting, otherwise your operating system might not boot anymore (and it's a pain to fix!)  
+If an error is shown, fix the fstab before rebooting, otherwise your operating system might not boot anymore (and it's a pain to fix!)
 Otherwise, if everything went well, you should see the mountpoint using the `lsblk` command:
 
 ```shell

@@ -5,6 +5,7 @@ tags: [riscv, openbsd]
 oldUrl:
   - /riscv/2023/12/22/installing-openbsd-on-visionfive-2
   - /riscv/2023/12/22/installing-openbsd-on-visionfive-2.html
+  - /posts/installing-openbsd-on-visionfive-2/
 ---
 Linux feels a bit sluggish on the [VisionFive 2](https://www.starfivetech.com/en/site/boards){target="_blank"}, so I wanted to install [OpenBSD](https://www.openbsd.org/){target="_blank"} on my board since a RISC-V port is available.
 
