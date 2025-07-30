@@ -16,7 +16,7 @@ In this post, we'll explore what Limbo servers are, why they're used, and how th
 
 A **limbo server** is a minimal, often void-world server environment used to temporarily hold players instead of disconnecting them. It's especially common in server networks (like those running BungeeCord or Velocity) but can be useful in standalone setups as well.
 
-Players sent to Limbo aren't kicked—they're just relocated to a lightweight environment until the server is ready to take them back or until they reconnect elsewhere.
+Players sent to Limbo aren't kicked, they're just relocated to a lightweight environment until the server is ready to take them back or until they reconnect elsewhere.
 
 ---
 
@@ -61,18 +61,18 @@ Here's a curated list of open-source server softwares you can use to host your o
 
 | Name | Language | Platform | Version(s) | Active |
 |------|----------|----------|------------|--------|
-| [**PicoLimbo**](https://github.com/Quozul/PicoLimbo) | Rust | Standalone | 1.7.2–1.21.7 | ✅ Active |
-| [**LOOHP/Limbo**](https://github.com/LOOHP/Limbo) | Java | Standalone | 1.21.7 | ✅ Active |
-| [**NanoLimbo**](https://github.com/Nan1t/NanoLimbo) | Java | Standalone | 1.7.2–1.21.7 | 🌀 Forks only |
-| [**LimboService**](https://github.com/YourCraftMC/LimboService) | Java | Standalone | 1.21.7 | ✅ Active |
-| [**FallbackServer**](https://github.com/sasi2006166/Fallback-Server) | Java | Proxy plugin | 1.7.2–1.21 | ✅ Active |
-| [**OverflowLimbo**](https://github.com/CodeTheDev/OverflowLimbo) | Java (Minestom) | Standalone | 1.21 | ✅ Active |
+| [**PicoLimbo**](https://github.com/Quozul/PicoLimbo) | Rust | Standalone | 1.7.2–1.21.8 | ✅ Active |
+| [**LOOHP/Limbo**](https://github.com/LOOHP/Limbo) | Java | Standalone | 1.21.8 | ✅ Active |
+| [**NanoLimbo**](https://github.com/Nan1t/NanoLimbo) | Java | Standalone | 1.7.2–1.21.8 | 🌀 Forks only |
+| [**LimboService**](https://github.com/YourCraftMC/LimboService) | Java | Standalone | 1.21.8 | ✅ Active |
+| [**FallbackServer**](https://github.com/sasi2006166/Fallback-Server) | Java | Proxy plugin | 1.7.2–1.21 | ❌ Inactive |
+| [**OverflowLimbo**](https://github.com/CodeTheDev/OverflowLimbo) | Java (Minestom) | Standalone | 1.21 | ❌ Inactive |
 | [**BungeeNanoLimbo**](https://github.com/Ailakks/BungeeNanoLimbo) | Java | Proxy plugin / Standalone | 1.8–1.19.1 | ❌ Inactive |
 | [**TyphoonLimbo**](https://github.com/TyphoonMC/TyphoonLimbo) | Go | Standalone | 1.7.2–1.15.2 | ❌ Inactive |
 | [**LiteLimbo**](https://github.com/ThomasOM/LiteLimbo) | Java | Standalone | 1.7.2-1.15.2 | ❌ Inactive |
 | [**hpfxd/Limbo**](https://github.com/hpfxd/Limbo) | Java | Standalone | 1.7.6–1.8.9 | ❌ Inactive |
 
-*As of writing, Minecraft 1.21.7 is the latest release. Servers that support 1.21.x are considered actively maintained unless otherwise noted.*
+*As of writing, Minecraft 1.21.8 is the latest release. Servers that support the two last protocol versions of Minecraft are considered actively maintained unless otherwise noted.*
 
 ---
 
@@ -93,4 +93,8 @@ There's a wide variety of Limbo server software, ranging from ultra-lightweight 
 - **Experimental / DIY**
   If you're building a highly customized network, consider creating your own Limbo environment with a full [PaperMC server](https://papermc.io/) or [Minestom](https://github.com/Minestom/Minestom), a low-level, modern server engine. [OverflowLimbo](https://github.com/CodeTheDev/OverflowLimbo) is a good example of this in action.
 
-While many of these projects are stable, open-source projects can become inactive if their maintainers lose interest or time. Be mindful when choosing a solution—active development helps ensure future compatibility with new Minecraft versions.
+While many of these projects are stable, open-source projects can become inactive if their maintainers lose interest or time. Be mindful when choosing a solution, active development helps ensure future compatibility with new Minecraft versions.
+
+## Limbo Servers Alone are not Enough
+
+A Limbo server by itself is just a lightweight Minecraft server, it cannot automatically redirect players. The real functionality comes from the **proxy layer** (BungeeCord or Velocity) which manages player routing. Most of these features require additional plugins on the proxy to handle AFK detection, fallback routing, and other advanced functionality.
