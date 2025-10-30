@@ -6,6 +6,8 @@ tags: [ai, rocm, ryzen]
 
 I just received my Framework Desktop Motherboard, equipped with the AMD Ryzen AI Max+ 395 and 128 GB of unified memory. Time to get the massive GPT-OSS model with 120 billion parameters running on this beast!
 
+<!-- more -->
+
 The plan is to use `llama.cpp` to run GPT-OSS 120b. But first, we need to get everything set up.
 
 ## Increasing VRAM Allocation
