@@ -69,6 +69,35 @@ This will launch a server accessible on port 8080. If you're running on a local 
 I noticed the model loads very slowly, but adding `--no-mmap` significantly improved load times.
 The `-c 0` flag ensures the model loads with its maximum context length of 128k tokens!
 
+---
+
+## Updating ROCm Drivers
+
+ROCm 7.1.0 has been released not so long after the first write-up of this article, let's update it!
+
+As stated in the official documentation, the recommended way to update ROCm drivers is to uninstall then reinstall the new version.
+
+Start by uninstalling the drivers:
+```shell
+❯ sudo amdgpu-uninstall
+```
+
+Then reinstall the new version:
+```shell
+❯ sudo apt update
+❯ wget https://repo.radeon.com/amdgpu-install/7.1/ubuntu/noble/amdgpu-install_7.1.70100-1_all.deb
+❯ sudo apt install ./amdgpu-install_7.1.70100-1_all.deb
+```
+
+And finally, reinstall the new and updated ROCm drivers:
+```shell
+❯ amdgpu-install -y --usecase=rocm --no-dkms
+```
+
+**Bonus step:**
+
+Re-compile llama.cpp with the updated drivers!
+
 ## Sources
 
 - [Ubuntu kernel lifecycle and enablement stack](https://ubuntu.com/kernel/lifecycle)
