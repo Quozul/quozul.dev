@@ -61,9 +61,9 @@ Here's a curated list of open-source server softwares you can use to host your o
 
 | Name | Language | Platform | Version(s) | Active |
 |------|----------|----------|------------|--------|
-| [**PicoLimbo**](https://github.com/Quozul/PicoLimbo) | Rust | Standalone | 1.7.2–1.21.8 | ✅ Active |
-| [**LOOHP/Limbo**](https://github.com/LOOHP/Limbo) | Java | Standalone | 1.21.8 | ✅ Active |
-| [**NanoLimbo**](https://github.com/Nan1t/NanoLimbo) | Java | Standalone | 1.7.2–1.21.8 | 🌀 Forks only |
+| [**PicoLimbo**](https://github.com/Quozul/PicoLimbo) | Rust | Standalone | 1.7.2–1.21.10 | ✅ Active |
+| [**LOOHP/Limbo**](https://github.com/LOOHP/Limbo) | Java | Standalone | 1.21.10 | ✅ Active |
+| [**NanoLimbo**](https://github.com/BoomEaro/NanoLimbo) | Java | Standalone | 1.7.2–1.21.10 | 🌀 Forks only |
 | [**LimboService**](https://github.com/YourCraftMC/LimboService) | Java | Standalone | 1.21.8 | ✅ Active |
 | [**FallbackServer**](https://github.com/sasi2006166/Fallback-Server) | Java | Proxy plugin | 1.7.2–1.21 | ❌ Inactive |
 | [**OverflowLimbo**](https://github.com/CodeTheDev/OverflowLimbo) | Java (Minestom) | Standalone | 1.21 | ❌ Inactive |
@@ -72,7 +72,7 @@ Here's a curated list of open-source server softwares you can use to host your o
 | [**LiteLimbo**](https://github.com/ThomasOM/LiteLimbo) | Java | Standalone | 1.7.2-1.15.2 | ❌ Inactive |
 | [**hpfxd/Limbo**](https://github.com/hpfxd/Limbo) | Java | Standalone | 1.7.6–1.8.9 | ❌ Inactive |
 
-*As of writing, Minecraft 1.21.8 is the latest release. Servers that support the two last protocol versions of Minecraft are considered actively maintained unless otherwise noted.*
+*As of writing, Minecraft 1.21.10 is the latest release. Servers that support the two last protocol versions of Minecraft are considered actively maintained unless otherwise noted.*
 
 ---
 

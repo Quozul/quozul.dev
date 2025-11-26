@@ -11,6 +11,18 @@ title: Home
 </section>
 
 <section class="flex flex-col gap-4">
+  <h2 class="text-3xl font-bold">{{ i18n.highlighted_posts }}</h2>
+
+  <div class="flex flex-col">
+    {{
+      include "templates/post-list.vto" {
+        postlist: search.pages("highlighted=true", "date=desc", 3),
+      }
+    }}
+  </div>
+</section>
+
+<section class="flex flex-col gap-4">
   <h2 class="text-3xl font-bold">{{ i18n.posts }}</h2>
 
   <div class="flex flex-col">

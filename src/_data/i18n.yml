@@ -19,6 +19,7 @@ search:
 all_posts: All posts
 all_projects: My projects
 posts: Posts
+highlighted_posts: Highlighted Posts
 view_all_posts: View all posts →
 contact:
   title: Contact
