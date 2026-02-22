@@ -67,9 +67,9 @@ export default function (userOptions?: Options) {
             disallow: "/uploads",
           },
           {
-              userAgent: "*",
-              disallow: "/contact/",
-            },
+            userAgent: "*",
+            disallow: "/contact/",
+          },
         ],
       }))
       .use(
@@ -83,6 +83,7 @@ export default function (userOptions?: Options) {
       }))
       .copy("fonts")
       .copy("uploads")
+      .copy(".well-known")
       .copy("icons")
       .mergeKey("extra_head", "stringArray")
       .preprocess([".md"], (pages) => {
