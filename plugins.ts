@@ -17,6 +17,7 @@ import nav from "lume/plugins/nav.ts";
 import robots from "lume/plugins/robots.ts";
 import minifyHTML from "lume/plugins/minify_html.ts";
 import favicon from "lume/plugins/favicon.ts";
+import footnotes from "markdown-plugins/footnotes.ts";
 
 import "lume/types.ts";
 
@@ -93,7 +94,8 @@ export default function (userOptions?: Options) {
           )[0];
         }
       })
-      .add([".css"]);
+      .add([".css"])
+      .use(footnotes());
 
     // Alert plugin
     site.hooks.addMarkdownItPlugin(alert);

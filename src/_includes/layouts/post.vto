@@ -48,6 +48,30 @@ layout: layouts/base.vto
             prose-table:block prose-table:w-full
             prose-table:overflow-x-scroll">
     {{ content }}
+
+{{ if footnotes.length }}
+    <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+        <h2 class="text-xs uppercase tracking-widest font-semibold text-slate-400 mb-4">Footnotes</h2>
+        <ul class="space-y-4 list-none p-0 m-0">
+        {{ for index, note of footnotes }}
+            <li id="{{ note.id }}" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed group flex items-start gap-2">
+                <span class="text-slate-400 font-mono text-[10px] mt-0.5">
+                    {{ index + 1 }}.
+                </span>
+
+                <div class="flex-1">
+                    {{ note.content }}
+                    <a href="#{{ note.refId }}"
+                       class="inline-block ml-1 text-blue-500 hover:text-blue-700 transition-colors opacity-40 group-hover:opacity-100"
+                       title="Jump back to reference">
+                       ↩
+                    </a>
+                </div>
+            </li>
+        {{ /for }}
+        </ul>
+    </footer>
+{{ /if }}
   </div>
 </article>
 

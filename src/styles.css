@@ -33,3 +33,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+li[id^="fn"] p {
+    display: inline;
+}
